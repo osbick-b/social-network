@@ -36,14 +36,15 @@ export default class Login extends Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
+                console.log("data", data);
+                // --- ??? should i clear login data from this.state? if yes, how?
                 this.setState({success: data.success});
-                console.log("POST/login > data:", data);
                 console.log("this.state", this.state);
                 location.reload();
             })
             .catch((err) => {
                 console.log("error in login", err);
-                this.setState({ error: "OH NO!" });
+                this.setState({ success: false });
                 console.log("this.state CATCH", this.state);
             });
     }
@@ -51,8 +52,9 @@ export default class Login extends Component {
         return (
             <>
                 <h1>Login</h1>
-                {/* {!this.state.success && <ErrorMsg />} */}
+                {this.state.error && <ErrorMsg />}
                 <form>
+                    <label htmlFor="email">email</label>
                     <input
                         name="email"
                         id="email"

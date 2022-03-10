@@ -9,11 +9,16 @@ export default class Logout extends Component {
         this.state = {};
         this.logout = this.logout.bind(this);
     }
+    componentDidMount() {
+        console.log("-- Logout mounted");
+    }
     logout(e) {
+        e.preventDefault();
         console.log("user wants out");
         fetch("./logout")
             .then((resp) => resp.json())
-            .then((data) => {
+            .then(({ userCookie }) => {
+                console.log(`${fln} >>> userCookie`, userCookie);
                 location.reload();
             })
             .catch((err) => {

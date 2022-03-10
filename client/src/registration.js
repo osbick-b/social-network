@@ -41,16 +41,11 @@ export class Registration extends Component {
             .then((resp) => resp.json())
             .then((data) => {
                 console.log(`>>> ${fln} /register.json > data:`, data);
-                if (data.success) {
-                    console.log("will render INSIDE --->  user profile");
-                    // ??? --- do i need ReactDom here? or do i need to then reload and render from start.js?
-                } else {
-                    console.log("will re-render same page with error message");
-                }
-
-                // Successful ----> what do we want to do if things go well and req is successful?
-                // in error case -->
-
+                console.log("will render INSIDE --->  user profile");
+                this.setState({ success: data.success });
+                console.log("this.state", this.state);
+                location.reload();
+                // ??? --- do i need ReactDom here? or do i need to then reload and render from start.js?
             })
             .catch((err) => {
                 console.log("error in POST user/register", err);

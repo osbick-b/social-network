@@ -1,11 +1,12 @@
-const fln = "start.js";
+const fln = "_start.js";
 ////////////////////////////////////
 
 import ReactDOM from "react-dom";
-import Welcome from "./welcome";
-import Inside from "./inside";
+import Welcome from "./_welcome";
+import Inside from "./_inside";
 
 ReactDOM.render(<Welcome />, document.querySelector("main"));
+console.log(`>>>>> loading ${fln} <<<<<<`);
 
 /// THIS IS NNNOOOOOOTTTT THE LOGIN/REGISTER REQUEST!!!!!!! <<<<<<<<<<<<
 fetch("/user/id.json")
@@ -15,7 +16,6 @@ fetch("/user/id.json")
         // is the cookie info coming to the client side???
         if (userCookie.user_id) {
             console.log("please come inside, user");
-            // location.reload();
             ReactDOM.render(<Inside/>, document.querySelector("main")); 
         } else {
             console.log("NOT ALLOWED IN :(");

@@ -39,7 +39,7 @@ app.use(mw.logRouteInfo);
 
 // --- Start
 app.get("/user/id.json", (req, res) => {
-    res.json({ userCookie: req.session });
+    res.json({ userCookie: req.session }); // --- ??? can i access session (cookie) from client side??
 });
 
 // --- Register
@@ -53,6 +53,7 @@ app.post("/register.json", (req, res) => {
         })
         .then(({ rows }) => {
             req.session = rows[0];
+            console.log(`>>> ${fln} >> register > req.session AFTER:`, req.session);
             // --- !!! the cookie setting happens here in the server. it'll only pass on a nudge saying that it all went well (or not)
             return res.json({ success: true });
         })
@@ -64,19 +65,23 @@ app.post("/register.json", (req, res) => {
 
 // --- Login
 app.post("/login.json", (req, res) => {
-    console.log(`>>> ${fln} >> /login > req.body:`, req.body);
     const { email, password } = req.body;
+    let cookie;
 
     return Promise.all([db.getUserPass(email), db.getUserInfo(email)])
         .then(([{ rows: rowsUserPass }, { rows: rowsUserInfo }]) => {
             const storedPass = rowsUserPass[0].stored_pass;
-            req.session = rowsUserInfo[0];
+            cookie = rowsUserInfo[0];
             return compare(password, storedPass);
         })
         .then((isMatch) => {
-            isMatch
-                ? res.json({ success: true })
-                : (req.session = {} && res.json({ success: false }));
+            if (isMatch) {
+                req.session = cookie;
+                console.log("req.session", req.session);
+                res.json({ success: true });
+            } else {
+                res.json({ success: false });
+            }
         })
         .catch((err) => {
             console.log("error in /login.json", err);
@@ -84,13 +89,13 @@ app.post("/login.json", (req, res) => {
         });
 });
 
-
 // --- Logout
-app.get("/logout", (req,res) => {
-    req.session = {};
-    res.json({user_id: null});
+app.get("/logout", (req, res) => {
+    console.log("req.session BEFORE", req.session);
+    req.session = null;
+    console.log(`${fln} >> /logout > req.session AFTER`, req.session);
+    res.json({ userCookie: req.session });
 });
-
 
 // ---- Star Route
 app.get("*", function (req, res) {
@@ -101,5 +106,5 @@ app.get("*", function (req, res) {
 // =================== Listener ================= //
 
 app.listen(process.env.PORT || 3001, function () {
-    console.log("I'm listening.");
+    console.log("I'm listening. --- http://localhost:3000");
 });

@@ -30,7 +30,7 @@ module.exports.getUserPass = (email) => {
 
 module.exports.getUserInfo = (email) => {
     return db.query(
-        `SELECT id AS user_id, first, last
+        `SELECT id AS user_id, first, last, email
         FROM users
         WHERE email = $1`,
         [email]

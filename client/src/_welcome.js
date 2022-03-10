@@ -4,15 +4,15 @@
 import { Registration } from "./registration";
 import Login from "./login";
 import { PassReset } from "./pass_reset";
-import Inside from "./inside";
+import Inside from "./_inside";
 
 export default function Welcome() {
     return (
         <>
             <h1>Welcome!</h1>
             {/* +++ conditional rendering */}
-            {/* <Registration /> */}
-            <Login/>
+            <Registration />
+            {/* <Login/> */}
         </>
     );
 }
