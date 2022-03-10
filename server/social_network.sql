@@ -1,5 +1,6 @@
 -- drop existing tables
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS secret_codes;
 
 
 -- new users table
@@ -12,4 +13,14 @@ CREATE TABLE users (
 );
 
 
--- INSERT INTO users (first, last, email, password) VALUES ('Lcn', 'Csl', 'lcn@csl', 'lcncsl');
+-- new  secret_codes table
+CREATE TABLE  secret_codes (
+    id          SERIAL PRIMARY KEY,
+    email       VARCHAR NOT NULL UNIQUE REFERENCES users(email),
+    code        VARCHAR(255) NOT NULL,
+    timestamp   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+INSERT INTO users (first, last, email, password) VALUES ('Lcn', 'Csl', 'lcn@csl', 'lcncsl');
+INSERT INTO secret_codes (email,code) VALUES ('lcn@csl', 'sl12uifdosj');

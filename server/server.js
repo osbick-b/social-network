@@ -1,3 +1,6 @@
+const fln = "server.js";
+///////////////////////////////////
+
 const express = require("express");
 const app = express();
 
@@ -30,35 +33,68 @@ app.use(
     })
 );
 
-// also bcrypt somewhere
-
 app.use(mw.logRouteInfo);
 
 // =================== ROUTES ================= //
 
-app.post("/user/register", (req, res) => {
-    console.log("server.js -- POST/register: req.body", req.body);
+// --- Start
+app.get("/user/id.json", (req, res) => {
+    res.json({ userCookie: req.session });
+});
+
+// --- Register
+app.post("/register.json", (req, res) => {
     const { first, last, email, password } = req.body;
 
     hash(password)
         .then((hashedPass) => {
-            console.log("hashedPass", hashedPass);
-            return db.registerUser(first, last, email, password);
+            // console.log("hashedPass", hashedPass);
+            return db.registerUser(first, last, email, hashedPass);
         })
         .then(({ rows }) => {
-            console.log("--> from DB --> ", rows[0]);
-            // +++ pass user info to cookie
-            // +++ return sth
-        })       
+            req.session = rows[0];
+            // --- !!! the cookie setting happens here in the server. it'll only pass on a nudge saying that it all went well (or not)
+            return res.json({ success: true });
+        })
         .catch((err) => {
             console.log("error in server.js -- POST/register", err);
+            res.json({ success: false });
         });
+});
+
+// --- Login
+app.post("/login.json", (req, res) => {
+    console.log(`>>> ${fln} >> /login > req.body:`, req.body);
+    const { email, password } = req.body;
+
+    return Promise.all([db.getUserPass(email), db.getUserInfo(email)])
+        .then(([{ rows: rowsUserPass }, { rows: rowsUserInfo }]) => {
+            const storedPass = rowsUserPass[0].stored_pass;
+            req.session = rowsUserInfo[0];
+            return compare(password, storedPass);
+        })
+        .then((isMatch) => {
+            isMatch
+                ? res.json({ success: true })
+                : (req.session = {} && res.json({ success: false }));
+        })
+        .catch((err) => {
+            console.log("error in /login.json", err);
+            return res.json({ success: false });
+        });
+});
+
+
+// --- Logout
+app.get("/logout", (req,res) => {
+    req.session = {};
+    res.json({user_id: null});
 });
 
 
 // ---- Star Route
 app.get("*", function (req, res) {
-    console.log(">>> IN STAR ROUTE <<<");
+    console.log(">>> *");
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
