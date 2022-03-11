@@ -74,14 +74,14 @@ module.exports.getUserData = (user_id) => {
 
 // ======== Profile Pic ======= //
 
-module.exports.storeProfilePic = (user_id, newPicUrl) => {
+module.exports.storeProfilePic = (user_id, newPicInput) => {
     // try to do it with an update query 1st -- will it insert if no value yet?
     return db.query(
         `UPDATE users
         SET profile_pic = $2
         WHERE id = $1
         RETURNING profile_pic`,
-        [user_id, newPicUrl]
+        [user_id, newPicInput]
     );
 };
 

@@ -14,6 +14,30 @@ const compression = require("compression");
 const path = require("path");
 
 const mw = require("../route_middleware");
+// ============ s3 and Multer and All ======== //
+
+const s3 = require("./s3");
+
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, path.join(__dirname, "uploads"));
+    },
+    filename: function (req, file, callback) {
+        uidSafe(24).then(function (uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    },
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152,
+    },
+});
 
 // ============= Middleware ================= //
 
@@ -35,8 +59,8 @@ app.use(
 
 app.use(mw.logRouteInfo);
 
-// =================== ROUTES ================= //
-//====================================    START    =========================================//
+//////////////////////////////// ROUTES ////////////////////////////////
+//============================    START    ====================================//
 // --- Start
 app.get("/user/id.json", (req, res) => {
     res.json({ userCookie: req.session }); // --- ??? can i access session (cookie) from client side??
@@ -48,8 +72,9 @@ app.get("/user/id.json", (req, res) => {
 app.get("/user/profile", (req, res) => {
     db.getUserData(req.session.user_id)
         .then(({ rows }) => {
-            console.log("rows[0]", rows[0]);
-            // req.session = rows[0];
+            // console.log("rows[0]", rows[0]);
+            req.session = rows[0];
+            console.log("/user/profile >> req.session ", req.session);
             return res.json(rows[0]);
         })
         .catch((err) => {
@@ -58,22 +83,31 @@ app.get("/user/profile", (req, res) => {
 });
 
 // --- Store Profile Pic
-app.post("/user/profile_pic", (req, res) => {
-    let newPicUrl = req.body.newPicUrl;
+app.post(
+    "/user/profile_pic",
+    uploader.single("file"),
+    s3.upload,
+    (req, res) => {
+        ////// ---- ???? ERROR is in s3
+        console.log(`>>> ${fln} >> storeProfilePic > req.body:`, req.file);
 
-    db.storeProfilePic(req.session.user_id, newPicUrl)
-        .then(({ rows }) => {
-            console.log("rows[0]", rows[0]);
-            req.session.profile_pic = rows[0].profile_pic;
-            // req.session = {...rows[0]};
-            console.log("req.session >> AFTER add img", req.session);
-            return res.json(rows[0]);
-        })
-        .catch((err) => {
-            console.log(`>>> ${fln} >> Error in /POST/profile_pic`, err);
-            res.json({serverSuccess: false});
-        });
-});
+        db.storeProfilePic(
+            req.session.user_id,
+            `https://s3.amazonaws.com/spicedling/${req.file.filename}`
+        )
+            .then(({ rows }) => {
+                console.log("rows[0]", rows[0]);
+                req.session.profile_pic = rows[0].profile_pic;
+                // req.session = {...rows[0]};
+                console.log("req.session >> AFTER add img", req.session);
+                return res.json(rows[0]);
+            })
+            .catch((err) => {
+                console.log(`>>> ${fln} >> Error in /POST/profile_pic`, err);
+                res.json({ serverSuccess: false });
+            });
+    }
+);
 
 //============================== Register, Login, Logout ===================================//
 

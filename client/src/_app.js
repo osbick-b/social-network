@@ -18,6 +18,7 @@ export class App extends Component {
             error: null,
         };
 
+        this.showNewProfilePic = this.showNewProfilePic.bind(this);
         this.toggleUploader = this.toggleUploader.bind(this);
     }
     componentDidMount() {
@@ -37,6 +38,10 @@ export class App extends Component {
         this.setState({ uploaderVisible: !this.state.uploaderVisible });
         console.log("this.state in toggleupload", this.state);
     }
+    showNewProfilePic(newPicUrl) {
+        console.log("newPicUrl", newPicUrl);
+        this.setState({ profile_pic: newPicUrl });
+    }
     render() {
         // Tomporary render
         return (
@@ -52,7 +57,11 @@ export class App extends Component {
                 />
 
                 {this.state.uploaderVisible && (
-                    <Uploader toggleUploader={this.toggleUploader} />
+                    <Uploader
+                        user_id={this.state.user_id}
+                        toggleUploader={this.toggleUploader}
+                        showNewProfilePic={this.showNewProfilePic}
+                    />
                 )}
 
                 <Logout />

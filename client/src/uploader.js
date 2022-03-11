@@ -5,48 +5,41 @@ export class Uploader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user_id: null,
-            first: "",
-            last: "",
-            newPicUrl: "",
+            newPicInput: undefined,
             error: null,
             success: null,
         };
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.uploadImg = this.uploadImg.bind(this);
+        // this.handleInputChange = this.handleInputChange.bind(this);
+        // this.handleImgUpload = this.handleImgUpload.bind(this);
     }
     componentDidMount() {
         console.log("-- Uploader mounted");
     }
     handleInputChange({ target }) {
         this.setState({ [target.name]: target.value });
-        console.log("this.state INPUT CHANGE", this.state);
+        console.log("this.state INPUT CHANGE", target.name, target.value);
     }
-    uploadImg(e) {
-        console.log("-- user wants to upload img");
+    handleImgUpload(e) {
+        console.log("-- user wants to upload img > this.state", this.state);
+        console.log("this.state.newPicInput", this.state.newPicInput);
         e.preventDefault();
 
         const fd = new FormData();
-        fd.append("newPicUrl", this.state.newPicUrl);
-        fd.append("user_id", this.state.user_id);
-
+        fd.append("file", this.state.newPicInput);
+        fd.append("user_id", this.props.user_id);
         console.log("fd", fd);
 
-
-        console.log("this.state BEFORE", this.state);
         fetch("/user/profile_pic", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.state),
+            body: fd,
         })
             .then((resp) => resp.json())
             .then((data) => {
+                console.log("data AFTER img upload", data);
                 this.setState(
                     data.serverSuccess ? { success: true } : { error: true }
                 );
-                data.serverSuccess && location.reload();
+                data.serverSuccess && this.props.showNewProfilePic(this.state.newPicInput);
             })
             .catch((err) => {
                 console.log("!!! error in login", err);
@@ -60,16 +53,16 @@ export class Uploader extends Component {
                     <button onClick={this.props.toggleUploader}>X</button>
                     <h1>📸 Uploader 📸</h1>
                     {this.state.error && <ErrorMsg />}
-                    <form>
-                        <label htmlFor="newPicUrl">newPicUrl</label>
+                    <form onSubmit={(e) => {this.handleImgUpload(e)}}>
+                        <label htmlFor="newPicInput">newPicInput</label>
                         <input
-                            name="newPicUrl"
-                            id="newPicUrl"
+                            name="newPicInput"
+                            id="newPicInput"
                             type="file"
-                            onChange={this.inputUpdate}
+                            onChange={(e) => {this.handleInputChange(e)}}
                         />
 
-                        <button onClick={this.uploadImg}>Submit</button>
+                        <button>Submit</button>
                     </form>
                 </div>
             </div>
