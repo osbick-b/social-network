@@ -2,13 +2,17 @@ const fln = "registration.js";
 ////////////////////////////////////////////
 
 import { Component } from "react"; // make sure your import and export processes match (with or wo default)
+import ErrorMsg from "./error_msg";
+
 
 export class Registration extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: "uh-oh! :(",
-        }; // MUST be called state
+            success: null,
+            user_id: null,
+            error: null,
+        };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -16,21 +20,12 @@ export class Registration extends Component {
         console.log("-- Registration mounted");
     }
     handleInputChange({ target }) {
-        console.log("user changed input");
-        this.setState({ [target.name]: target.value }, () => {
-            console.log(
-                `>>> ${fln} 
-            handleInputChange: 
-            updated state:`,
-                this.state
-            );
-        });
+        this.setState({ [target.name]: target.value });
     }
     handleSubmit(e) {
-        e.preventDefault(); // to make sure we dont reload the page when press the button
-        console.log("user pressed submit");
-        console.log(`>>> ${fln} >> handleSubmit >> this.state`, this.state);
-        // we can click the button, now it's time to make it send a request
+        e.preventDefault();
+        // +++ do some input check here
+        // console.log(`>>> ${fln} >> handleSubmit >> this.state`, this.state);
         fetch("/register.json", {
             method: "POST",
             headers: {
@@ -40,22 +35,19 @@ export class Registration extends Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(`>>> ${fln} /register.json > data:`, data);
-                console.log("will render INSIDE --->  user profile");
-                this.setState({ success: data.success });
-                console.log("this.state", this.state);
-                location.reload();
-                // ??? --- do i need ReactDom here? or do i need to then reload and render from start.js?
+                this.setState(data.serverSuccess?{ success: true }:{ error: true });
+                data.serverSuccess && location.reload();
             })
             .catch((err) => {
                 console.log("error in POST user/register", err);
+                this.setState({ error: true });
             });
     }
     render() {
         return (
             <>
                 <h1>🎀 Registration 🎀</h1>
-                {/* === Conditional Rendering ===  */}
+                {this.state.error && <ErrorMsg />}
 
                 <form>
                     <label htmlFor="first">first</label>

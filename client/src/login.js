@@ -7,7 +7,11 @@ import ErrorMsg from "./error_msg";
 export default class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            success: null,
+            user_id: null,
+            error: null
+        };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -15,18 +19,10 @@ export default class Login extends Component {
         console.log("-- Login mounted");
     }
     handleInputChange({ target }) {
-        console.log("user changed input");
-        console.log("target", target);
-        this.setState({ [target.name]: target.value }, () => {
-            console.log(
-                `>>> ${fln} handleInputChange: updated state:`,
-                this.state
-            );
-        });
+        this.setState({ [target.name]: target.value });
     }
     handleSubmit(e) {
         e.preventDefault();
-        console.log("user pressed login");
         fetch("/login.json", {
             method: "POST",
             headers: {
@@ -36,16 +32,12 @@ export default class Login extends Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("data", data);
-                // --- ??? should i clear login data from this.state? if yes, how?
-                this.setState({success: data.success});
-                console.log("this.state", this.state);
-                location.reload();
+                this.setState(data.serverSuccess? {success: true}:{error:true});
+                data.serverSuccess && location.reload();
             })
             .catch((err) => {
-                console.log("error in login", err);
-                this.setState({ success: false });
-                console.log("this.state CATCH", this.state);
+                console.log("!!! error in login", err);
+                this.setState({ error: true });
             });
     }
     render() {

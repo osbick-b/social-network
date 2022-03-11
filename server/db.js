@@ -14,7 +14,7 @@ module.exports.registerUser = (first, last, email, hashedPass) => {
     return db.query(
         `INSERT INTO users (first, last, email, password) 
         VALUES ($1, $2, $3, $4)
-        RETURNING id AS user_id, first, last, email`,
+        RETURNING id AS user_id`,
         [first, last, email, hashedPass]
     );
 };
@@ -28,9 +28,18 @@ module.exports.getUserPass = (email) => {
     );
 };
 
-module.exports.getUserInfo = (email) => {
+module.exports.getUserData = (email) => {
     return db.query(
         `SELECT id AS user_id, first, last, email
+        FROM users
+        WHERE email = $1`,
+        [email]
+    );
+};
+
+module.exports.getUserId = (email) => {
+    return db.query(
+        `SELECT id AS user_id
         FROM users
         WHERE email = $1`,
         [email]

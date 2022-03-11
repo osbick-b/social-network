@@ -45,21 +45,21 @@ app.get("/user/id.json", (req, res) => {
 // --- Register
 app.post("/register.json", (req, res) => {
     const { first, last, email, password } = req.body;
-
     hash(password)
         .then((hashedPass) => {
-            // console.log("hashedPass", hashedPass);
             return db.registerUser(first, last, email, hashedPass);
         })
         .then(({ rows }) => {
             req.session = rows[0];
             console.log(`>>> ${fln} >> register > req.session AFTER:`, req.session);
-            // --- !!! the cookie setting happens here in the server. it'll only pass on a nudge saying that it all went well (or not)
-            return res.json({ success: true });
+            return res.json({
+                serverSuccess: true,
+                user_id: req.session.user_id,
+            });
         })
         .catch((err) => {
             console.log("error in server.js -- POST/register", err);
-            res.json({ success: false });
+            res.json({ serverSuccess: false });
         });
 });
 
@@ -67,33 +67,29 @@ app.post("/register.json", (req, res) => {
 app.post("/login.json", (req, res) => {
     const { email, password } = req.body;
     let cookie;
-
-    return Promise.all([db.getUserPass(email), db.getUserInfo(email)])
-        .then(([{ rows: rowsUserPass }, { rows: rowsUserInfo }]) => {
+    return Promise.all([db.getUserPass(email), db.getUserId(email)])
+        .then(([{ rows: rowsUserPass }, { rows: rowsUserId }]) => {
             const storedPass = rowsUserPass[0].stored_pass;
-            cookie = rowsUserInfo[0];
+            cookie = rowsUserId[0];
             return compare(password, storedPass);
         })
         .then((isMatch) => {
             if (isMatch) {
                 req.session = cookie;
-                console.log("req.session", req.session);
-                res.json({ success: true });
+                res.json({ serverSuccess: true, user_id: req.session.user_id});
             } else {
-                res.json({ success: false });
+                res.json({ serverSuccess: false });
             }
         })
         .catch((err) => {
             console.log("error in /login.json", err);
-            return res.json({ success: false });
+            return res.json({ serverSuccess: false });
         });
 });
 
 // --- Logout
 app.get("/logout", (req, res) => {
-    console.log("req.session BEFORE", req.session);
     req.session = null;
-    console.log(`${fln} >> /logout > req.session AFTER`, req.session);
     res.json({ userCookie: req.session });
 });
 
