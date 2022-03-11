@@ -1,6 +1,6 @@
 -- drop existing tables
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS secret_codes;
+DROP TABLE IF EXISTS users;
 
 
 -- new users table
@@ -9,6 +9,7 @@ CREATE TABLE users (
     first       VARCHAR NOT NULL,
     last        VARCHAR NOT NULL,
     email       VARCHAR NOT NULL UNIQUE,
+    profile_pic VARCHAR,
     password    VARCHAR(255) NOT NULL CHECK (password != '')
 );
 
@@ -16,7 +17,7 @@ CREATE TABLE users (
 -- new  secret_codes table
 CREATE TABLE  secret_codes (
     id          SERIAL PRIMARY KEY,
-    email       VARCHAR NOT NULL UNIQUE REFERENCES users(email),
+    email       VARCHAR NOT NULL REFERENCES users(email),
     code        VARCHAR(255) NOT NULL,
     timestamp   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

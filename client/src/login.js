@@ -1,8 +1,11 @@
-const fln = "login.js";
+// const fln = "login.js";
 /////////////////////////////////
 
 import { Component } from "react";
 import ErrorMsg from "./error_msg";
+
+// import { PassReset } from "./pass_reset";
+import { Link } from "react-router-dom";
 
 export default class Login extends Component {
     constructor(props) {
@@ -10,7 +13,8 @@ export default class Login extends Component {
         this.state = {
             success: null,
             user_id: null,
-            error: null
+            error: null,
+            forgotPass: true,
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,7 +27,7 @@ export default class Login extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        fetch("/login.json", {
+        fetch("/user/login.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -32,7 +36,9 @@ export default class Login extends Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                this.setState(data.serverSuccess? {success: true}:{error:true});
+                this.setState(
+                    data.serverSuccess ? { success: true } : { error: true }
+                );
                 data.serverSuccess && location.reload();
             })
             .catch((err) => {
@@ -66,8 +72,11 @@ export default class Login extends Component {
 
                     <button onClick={this.handleSubmit}>Submit</button>
                 </form>
-                <p>Not yet a member? </p>
-                {/* <Link to=""/> */}
+
+
+                <Link to="/">Not yet a member? Register here!</Link>
+                <Link to="/password/reset">Forgot your password?</Link>
+                {/* {this.state.forgotPass && <PassReset />} */}
             </>
         );
     }

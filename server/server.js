@@ -36,14 +36,49 @@ app.use(
 app.use(mw.logRouteInfo);
 
 // =================== ROUTES ================= //
-
+//====================================    START    =========================================//
 // --- Start
 app.get("/user/id.json", (req, res) => {
     res.json({ userCookie: req.session }); // --- ??? can i access session (cookie) from client side??
 });
 
+//================================ Get User Data Etc =========================================//
+
+// --- Get User Data
+app.get("/user/profile", (req, res) => {
+    db.getUserData(req.session.user_id)
+        .then(({ rows }) => {
+            console.log("rows[0]", rows[0]);
+            // req.session = rows[0];
+            return res.json(rows[0]);
+        })
+        .catch((err) => {
+            console.log(`error in ${fln} >> getUserData`, err);
+        });
+});
+
+// --- Store Profile Pic
+app.post("/user/profile_pic", (req, res) => {
+    let newPicUrl = req.body.newPicUrl;
+
+    db.storeProfilePic(req.session.user_id, newPicUrl)
+        .then(({ rows }) => {
+            console.log("rows[0]", rows[0]);
+            req.session.profile_pic = rows[0].profile_pic;
+            // req.session = {...rows[0]};
+            console.log("req.session >> AFTER add img", req.session);
+            return res.json(rows[0]);
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in /POST/profile_pic`, err);
+            res.json({serverSuccess: false});
+        });
+});
+
+//============================== Register, Login, Logout ===================================//
+
 // --- Register
-app.post("/register.json", (req, res) => {
+app.post("/user/register.json", (req, res) => {
     const { first, last, email, password } = req.body;
     hash(password)
         .then((hashedPass) => {
@@ -51,7 +86,7 @@ app.post("/register.json", (req, res) => {
         })
         .then(({ rows }) => {
             req.session = rows[0];
-            console.log(`>>> ${fln} >> register > req.session AFTER:`, req.session);
+            // console.log(`>>> ${fln} >> register > req.session AFTER:`, req.session);
             return res.json({
                 serverSuccess: true,
                 user_id: req.session.user_id,
@@ -64,7 +99,7 @@ app.post("/register.json", (req, res) => {
 });
 
 // --- Login
-app.post("/login.json", (req, res) => {
+app.post("/user/login.json", (req, res) => {
     const { email, password } = req.body;
     let cookie;
     return Promise.all([db.getUserPass(email), db.getUserId(email)])
@@ -76,7 +111,7 @@ app.post("/login.json", (req, res) => {
         .then((isMatch) => {
             if (isMatch) {
                 req.session = cookie;
-                res.json({ serverSuccess: true, user_id: req.session.user_id});
+                res.json({ serverSuccess: true, user_id: req.session.user_id });
             } else {
                 res.json({ serverSuccess: false });
             }
@@ -92,6 +127,32 @@ app.get("/logout", (req, res) => {
     req.session = null;
     res.json({ userCookie: req.session });
 });
+
+//=============================== Reset Password =========================================//
+
+// ---- Reset Password
+app.post("/pass/getcode.json", (req, res) => {
+    const { email } = req.body;
+    const secretCode = "dSDO32GF";
+
+    db.storeSecretCode(email, secretCode)
+        .then(({ rows }) => {
+            console.log("after storeSecretCode >> rows[0]", rows[0]);
+            return res.json({ serverSuccess: true });
+        })
+        .catch((err) => {
+            console.log(`error in ${fln} >> getSecretCode`, err);
+            res.json({ serverSuccess: false });
+        });
+
+    // check if email is in db
+    // IF YES --> generate secret code
+    // send secret code by email to user
+    // put secret code on db
+    // send success response
+});
+
+//================================= STAR ROUTE =========================================//
 
 // ---- Star Route
 app.get("*", function (req, res) {

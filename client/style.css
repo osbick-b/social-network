@@ -44,3 +44,22 @@ input {
     height: var(--height-input);
     border-radius: calc(var(--height-input)*0.5);
 }
+
+
+#modal-bg {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#modal {
+    padding: 3vh;
+    background-color: var(--c-el-bg);
+}

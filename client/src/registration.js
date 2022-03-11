@@ -1,8 +1,10 @@
-const fln = "registration.js";
+// const fln = "registration.js";
 ////////////////////////////////////////////
 
-import { Component } from "react"; // make sure your import and export processes match (with or wo default)
+import { Component } from "react";
 import ErrorMsg from "./error_msg";
+
+import { Link } from "react-router-dom";
 
 
 export class Registration extends Component {
@@ -26,7 +28,7 @@ export class Registration extends Component {
         e.preventDefault();
         // +++ do some input check here
         // console.log(`>>> ${fln} >> handleSubmit >> this.state`, this.state);
-        fetch("/register.json", {
+        fetch("/user/register.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -35,7 +37,9 @@ export class Registration extends Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                this.setState(data.serverSuccess?{ success: true }:{ error: true });
+                this.setState(
+                    data.serverSuccess ? { success: true } : { error: true }
+                );
                 data.serverSuccess && location.reload();
             })
             .catch((err) => {
@@ -86,6 +90,8 @@ export class Registration extends Component {
 
                     <button onClick={this.handleSubmit}>Submit</button>
                 </form>
+
+                <Link to="/login">Already a member? Log in here!</Link>
             </>
         );
     }
