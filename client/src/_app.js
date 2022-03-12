@@ -27,23 +27,20 @@ export class App extends Component {
             .then((resp) => resp.json())
             .then((userData) => {
                 this.setState({ ...userData });
-                console.log("this.state AFTER", this.state);
+                // console.log(`${fln} >>> on mount > this.state`, this.state);
             })
             .catch((err) => {
                 console.log(`${fln} >>> error in mount app > fetch/user`, err);
             });
     }
     toggleUploader() {
-        console.log("this.state.uploaderVisible", this.state.uploaderVisible);
         this.setState({ uploaderVisible: !this.state.uploaderVisible });
-        console.log("this.state in toggleupload", this.state);
     }
     showNewProfilePic(newPicUrl) {
-        console.log("newPicUrl", newPicUrl);
         this.setState({ profile_pic: newPicUrl });
+        this.toggleUploader();
     }
     render() {
-        // Tomporary render
         return (
             <>
                 <h1>🧶 ..aaand we are in! 🧶</h1>
@@ -54,6 +51,7 @@ export class App extends Component {
                     first={this.state.first}
                     last={this.state.last}
                     toggleUploader={this.toggleUploader}
+                    onChange={this.showNewProfilePic}
                 />
 
                 {this.state.uploaderVisible && (
