@@ -49,6 +49,7 @@ export class Uploader extends Component {
                 );
                 data.serverSuccess &&
                     this.props.showNewProfilePic(data.newPicUrl);
+                data.serverSuccess && this.props.toggleUploader();
             })
             .catch((err) => {
                 console.log("!!! error in login", err);
@@ -62,13 +63,15 @@ export class Uploader extends Component {
                     <button onClick={this.props.toggleUploader}>X</button>
                     <h1>📸 Uploader 📸</h1>
                     {this.state.error && <ErrorMsg />}
+
                     <form onSubmit={(e) => this.handleImgUpload(e)}>
                         <label htmlFor="newPicInput">newPicInput</label>
                         <input
-                            required="required"
                             name="newPicInput"
                             id="newPicInput"
                             type="file"
+                            accept="image/*"
+                            required="required"
                             onChange={(e) => this.handleInputChange(e)}
                         />
 

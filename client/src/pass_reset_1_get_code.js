@@ -1,32 +1,28 @@
-const fln = "pass_reset.js";
+const fln = "pass_reset_1.js";
 ///////////////////////////////////
-
-import GetSecretCode from "./pass_secret_code";
-import ErrorMsg from "./error_msg";
-
-
-// has 3 views:
-// 1 h1 reset pass and button to reset
-// 2 input field for email and button for POST request -- getSecretCode
-// 3 input field x2 for email (prefilled?) and secret code, and button for POST req -- updatePass
 
 
 import { Component } from "react";
 
-export class PassReset extends Component {
+// import ErrorMsg from "./error_msg";
+
+
+
+export class GetSecretCode extends Component {
     constructor(props) {
         super(props);
         this.state = {
             error: null,
             success: null,
             email: "",
+            secretCodeInput: "",
         };
-        // this.someFn = this.someFn.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
-        console.log("-- PassReset mounted");
+        console.log("-- GetSecretCode mounted");
+        console.log(`>>> ${fln} >> mount > this.state:`, this.state);
     }
     handleInputChange({ target }) {
         this.setState({ [target.name]: target.value });
@@ -44,13 +40,13 @@ export class PassReset extends Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                this.setState(
-                    data.serverSuccess ? { success: true } : { error: true }
-                );
-                data.serverSuccess && location.reload();
+                console.log("01 >> after storeSecretCode >> data", data);
+
+                data.serverSuccess && this.props.completeStep("getCode");
+                // data.serverSuccess && location.reload();
             })
             .catch((err) => {
-                console.log("!!! error in passreset", err);
+                console.log("!!! error in get Code", err);
                 this.setState({ error: true });
             });
     }
@@ -59,8 +55,8 @@ export class PassReset extends Component {
             <>
                 <h1>🌠 Reset Password 🌠</h1>
 
-                {this.state.error && <ErrorMsg />}
-                {this.state.success && <p>All went well 😺</p>}
+                {/* {this.state.error && <ErrorMsg />}
+                {this.state.success && <p>All went well 😺</p>} */}
 
                 {/* <GetSecretCode /> */}
                 <label htmlFor="email">email</label>
@@ -77,14 +73,3 @@ export class PassReset extends Component {
         );
     }
 }
-
-
-
-// export function PassReset() {
-//     return (
-//         <>
-//             <h1>🌠 Reset Password 🌠</h1>
-//             {/* <GetSecretCode /> */}
-//         </>
-//     );
-// }

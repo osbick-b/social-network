@@ -51,6 +51,7 @@ module.exports.storeSecretCode = (email, secretCode) => {
 };
 
 module.exports.getSecretCode = (email) => {
+    // +++ add timestamp thingie
     return db.query(
         `SELECT code AS stored_code, email, id AS code_id
         FROM secret_codes
@@ -58,6 +59,16 @@ module.exports.getSecretCode = (email) => {
         ORDER BY id DESC
         LIMIT 1`,
         [email]
+    );
+};
+
+module.exports.updatePass = (email, newPass) => {
+    return db.query(
+        `UPDATE users
+        SET password = $2
+        WHERE email = $1
+        RETURNING email`,
+        [email, newPass]
     );
 };
 

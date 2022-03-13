@@ -71,7 +71,6 @@ app.get("/user/id.json", (req, res) => {
 app.get("/user/profile", (req, res) => {
     db.getUserData(req.session.user_id)
         .then(({ rows }) => {
-            // console.log("rows[0]", rows[0]);
             req.session = rows[0];
             console.log("/user/profile >> req.session ", req.session);
             return res.json(rows[0]);
@@ -100,10 +99,11 @@ app.post(
         )
             .then(({ rows }) => {
                 req.session.profile_pic = rows[0].profile_pic;
-                rows[0].profile_pic && res.json({
-                    serverSuccess: true,
-                    newPicUrl: rows[0].profile_pic,
-                });
+                rows[0].profile_pic &&
+                    res.json({
+                        serverSuccess: true,
+                        newPicUrl: rows[0].profile_pic,
+                    });
             })
             .catch((err) => {
                 console.log(`>>> ${fln} >> Error in /POST/profile_pic`, err);
@@ -167,26 +167,55 @@ app.get("/logout", (req, res) => {
 
 //=============================== Reset Password =========================================//
 
-// ---- Reset Password
+// ---- Get Code
 app.post("/pass/getcode.json", (req, res) => {
     const { email } = req.body;
+    // +++ generate secret code
     const secretCode = "dSDO32GF";
 
     db.storeSecretCode(email, secretCode)
         .then(({ rows }) => {
-            console.log("after storeSecretCode >> rows[0]", rows[0]);
-            return res.json({ serverSuccess: true });
+            // returns from db --> email
+            console.log("01 >> after storeSecretCode >> rows[0]", rows[0]);
+            res.json({ serverSuccess: true });
         })
         .catch((err) => {
             console.log(`error in ${fln} >> getSecretCode`, err);
             res.json({ serverSuccess: false });
         });
+});
 
-    // check if email is in db
-    // IF YES --> generate secret code
-    // send secret code by email to user
-    // put secret code on db
-    // send success response
+app.post("/pass/checkcode", (req, res) => {
+    const { email, inputSecretCode } = req.body;
+    db.getSecretCode(email)
+        .then(({ rows }) => {
+            console.log("02 >> rows[0]", rows[0]);
+            const storedSecretCode = rows[0].stored_code;
+            storedSecretCode === inputSecretCode
+                ? res.json({ serverSuccess: true })
+                : res.json({ serverSuccess: false });
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in /pass/checkcode`, err);
+            res.json({ serverSuccess: false });
+        });
+});
+
+app.post("/pass/setnewpass", (req, res) => {
+    const { email, newPass, passConfirm } = req.body;
+    return newPass !== passConfirm
+        ? res.json({ serverSuccess: false })
+        : db
+              .updatePass(email, newPass)
+              .then(({ rows }) => {
+                  console.log(" 03>> rows[0]", rows[0]); // returning email from db
+                  // res.json(rows[0]);
+                  res.json({ serverSuccess: true });
+              })
+              .catch((err) => {
+                  console.log(`>>> ${fln} >> Error in /pass/setnewpass`, err);
+                  res.json({ serverSuccess: false });
+              });
 });
 
 //================================= STAR ROUTE =========================================//

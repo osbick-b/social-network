@@ -38,7 +38,6 @@ export class App extends Component {
     }
     showNewProfilePic(newPicUrl) {
         this.setState({ profile_pic: newPicUrl });
-        this.toggleUploader();
     }
     render() {
         return (
@@ -51,7 +50,7 @@ export class App extends Component {
                     first={this.state.first}
                     last={this.state.last}
                     toggleUploader={this.toggleUploader}
-                    onChange={this.showNewProfilePic}
+                    // onChange={this.showNewProfilePic}
                 />
 
                 {this.state.uploaderVisible && (

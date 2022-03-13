@@ -2,7 +2,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 import { Registration } from "./registration";
 import Login from "./login";
-import { PassReset } from "./pass_reset";
+import { PassReset } from "./pass_reset_0";
 
 export default function Welcome() {
     return (
@@ -12,13 +12,14 @@ export default function Welcome() {
             <BrowserRouter>
                 <>
                     <Route exact path="/">
-                        <Registration />
+                        <Login />
+                        {/* <Registration /> */}
                     </Route>
                     <Route path="/login">
                         <Login />
                     </Route>
                     <Route path="/password/reset">
-                        <PassReset/>
+                        <PassReset />
                     </Route>
                 </>
             </BrowserRouter>
