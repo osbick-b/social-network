@@ -170,7 +170,7 @@ app.get("/logout", (req, res) => {
 // ---- Get Code
 app.post("/pass/getcode.json", (req, res) => {
     const { email } = req.body;
-    // +++ generate secret code
+    ///////////////////////// +++ generate secret code
     const secretCode = "dSDO32GF";
 
     db.storeSecretCode(email, secretCode)
@@ -185,7 +185,7 @@ app.post("/pass/getcode.json", (req, res) => {
         });
 });
 
-app.post("/pass/checkcode", (req, res) => {
+app.post("/pass/checkcode.json", (req, res) => {
     const { email, inputSecretCode } = req.body;
     db.getSecretCode(email)
         .then(({ rows }) => {
@@ -201,7 +201,7 @@ app.post("/pass/checkcode", (req, res) => {
         });
 });
 
-app.post("/pass/setnewpass", (req, res) => {
+app.post("/pass/setnewpass.json", (req, res) => {
     const { email, newPass, passConfirm } = req.body;
     return newPass !== passConfirm
         ? res.json({ serverSuccess: false })

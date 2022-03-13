@@ -15,20 +15,38 @@ export class CheckSecretCode extends Component {
             success: null,
             error: null,
         };
-         this.handleInputChange = this.handleInputChange.bind(this);
-         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
         console.log("-- CheckSecretCode mounted");
         console.log(`>>> ${fln} >> mount > this.state:`, this.state);
     }
     handleInputChange({ target }) {
-        this.setState({ [target.name]: target.value[0] });
+        this.setState({ [target.name]: target.value });
     }
     handleSubmit(e) {
         e.preventDefault();
-        console.log("", );
-        // +++ write fn here
+        // console.log("this.state", this.state);
+
+        fetch("/pass/checkcode.json", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.state),
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log("02 >> after compareCode >> data", data);
+
+                data.serverSuccess &&
+                    this.props.updateState({ isSecretCodeValid: true });
+            })
+            .catch((err) => {
+                console.log("!!! error in compareCode", err);
+                this.setState({ error: true });
+            });
     }
     render() {
         return (

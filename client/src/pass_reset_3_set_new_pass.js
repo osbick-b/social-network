@@ -25,7 +25,25 @@ export class SetNewPass extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        // +++ write fn here
+        // console.log("this.state", this.state);
+
+        fetch("/pass/setnewpass.json", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.state),
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log("03 >> after setNewPass >> data", data);
+
+                data.serverSuccess && this.props.updateState({ success: true });
+            })
+            .catch((err) => {
+                console.log("!!! error in setNewPass", err);
+                this.setState({ error: true });
+            });
     }
     render() {
         return (
