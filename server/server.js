@@ -65,7 +65,6 @@ app.get("/user/id.json", (req, res) => {
     res.json({ userCookie: req.session }); // --- ??? can i access session (cookie) from client side??
 });
 
-
 //============================== Register, Login, Logout ===================================//
 
 // --- Register
@@ -122,11 +121,12 @@ app.get("/logout", (req, res) => {
 //================================ Get User Data Etc =========================================//
 
 // --- Get User Data
-app.get("/user/profile", (req, res) => {
+app.get("/user/start", (req, res) => {
     db.getUserData(req.session.user_id)
         .then(({ rows }) => {
-            req.session = rows[0];
-            // console.log(`${fln} >> getUserData > req.session `, req.session);
+            console.log(`rows`, rows[0]);
+            req.session = true && rows[0];
+            console.log(`${fln} >> getUserData > req.session `, req.session);
             return res.json(rows[0]);
         })
         .catch((err) => {
@@ -166,6 +166,22 @@ app.post(
             });
     }
 );
+
+// --- Edit Bio
+app.post("/user/editbio.json", (req, res) => {
+    const { bioInput } = req.body;
+    db.upsertBio(req.session.user_id, bioInput)
+        .then(({ rows }) => {
+            console.log("rows[0]", rows[0]);
+            res.json({
+                serverSuccess: true,
+                bio: rows[0].bio});
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in upsertBio`, err);
+                res.json({ serverSuccess: false });
+        });
+});
 
 //=============================== Reset Password =========================================//
 

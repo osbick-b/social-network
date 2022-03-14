@@ -13,7 +13,8 @@ export class ProfileEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            success: null, 
+            userInfo: {},
+            success: null,
             error: null,
         };
         // this.handleInputChange = this.handleInputChange.bind(this);

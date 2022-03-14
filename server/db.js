@@ -39,6 +39,17 @@ module.exports.getUserId = (email) => {
     );
 };
 
+// ======== Once Logged In ======= //
+
+module.exports.getUserData = (user_id) => {
+    return db.query(
+        `SELECT id AS user_id, first, last, email, profile_pic, bio
+        FROM users
+        WHERE id = $1`,
+        [user_id]
+    );
+};
+
 // ======== Reset Password ======= //
 
 module.exports.storeSecretCode = (email, secretCode) => {
@@ -72,17 +83,6 @@ module.exports.updatePass = (email, newPass) => {
     );
 };
 
-// ======== Once Logged In ======= //
-
-module.exports.getUserData = (user_id) => {
-    return db.query(
-        `SELECT id AS user_id, first, last, email, profile_pic
-        FROM users
-        WHERE id = $1`,
-        [user_id]
-    );
-};
-
 // ======== Profile Pic ======= //
 
 module.exports.storeProfilePic = (user_id, newPicInput) => {
@@ -93,6 +93,18 @@ module.exports.storeProfilePic = (user_id, newPicInput) => {
         WHERE id = $1
         RETURNING profile_pic`,
         [user_id, newPicInput]
+    );
+};
+
+// ======== Edit Bio ===== //
+module.exports.upsertBio = (user_id, bioInput) => {
+    console.log(`user_id, bioInput`, user_id, bioInput);
+    return db.query(
+        `UPDATE users
+        SET bio = $2
+        WHERE id = $1
+        RETURNING bio`,
+        [user_id, bioInput]
     );
 };
 

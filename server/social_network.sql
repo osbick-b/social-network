@@ -10,6 +10,7 @@ CREATE TABLE users (
     last        VARCHAR NOT NULL,
     email       VARCHAR NOT NULL UNIQUE,
     profile_pic VARCHAR,
+    bio         VARCHAR,
     password    VARCHAR(255) NOT NULL CHECK (password != '')
 );
 
@@ -23,5 +24,5 @@ CREATE TABLE  secret_codes (
 );
 
 
-INSERT INTO users (first, last, email, password) VALUES ('Lcn', 'Csl', 'lcn@csl', 'lcncsl');
+INSERT INTO users (first, last, email, password, bio) VALUES ('Lcn', 'Csl', 'lcn@csl', 'lcncsl', 'i was born on my bday');
 INSERT INTO secret_codes (email,code) VALUES ('lcn@csl', 'sl12uifdosj');

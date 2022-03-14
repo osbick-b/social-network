@@ -12,8 +12,8 @@ export default function Welcome() {
             <BrowserRouter>
                 <>
                     <Route exact path="/">
-                        <Login />
-                        {/* <Registration /> */}
+                        {/* <Login /> */}
+                        <Registration />
                     </Route>
                     <Route path="/login">
                         <Login />

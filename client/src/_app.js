@@ -24,15 +24,16 @@ export class App extends Component {
             },
             uploaderVisible: false,
             error: null,
-            profileEdit: false,
+            editMode: false,
         };
 
         this.showNewProfilePic = this.showNewProfilePic.bind(this);
         this.toggleUploader = this.toggleUploader.bind(this);
+        this.toggleEditMode = this.toggleEditMode.bind(this);
     }
     componentDidMount() {
         console.log("-- App mounted");
-        fetch("/user/profile")
+        fetch("/user/start")
             .then((resp) => resp.json())
             .then((userData) => {
                 this.setState({ userInfo: userData });
@@ -45,7 +46,13 @@ export class App extends Component {
         this.setState({ uploaderVisible: !this.state.uploaderVisible });
     }
     showNewProfilePic(newPicUrl) {
-        this.setState({userInfo: {...this.state.userInfo, profile_pic: newPicUrl} }); // +++ edit how to update obj
+        this.setState({
+            userInfo: { ...this.state.userInfo, profile_pic: newPicUrl },
+        }); // +++ edit how to update obj
+    }
+    toggleEditMode() {
+        console.log("--toggle edit mode");
+        this.setState({ editMode: !this.state.editMode });
     }
     render() {
         // console.log(`${fln} >>> on render > this.state`, this.state);
@@ -58,15 +65,12 @@ export class App extends Component {
 
                         <h1>💜 App 💜</h1>
 
-                        <ProfilePic
+                        {/* <ProfilePic
                             userInfo={this.state.userInfo}
-                            // url={this.state.userInfo.profile_pic}
-                            // first={this.state.userInfo.first}
-                            // last={this.state.userInfo.last}
                             toggleUploader={this.toggleUploader}
-                            // onChange={this.showNewProfilePic}
-                        />
+                        /> */}
 
+                        {/* ??? Does Uploader live in app? or in Profile Pic?  */}
                         {this.state.uploaderVisible && (
                             <Uploader
                                 user_id={this.state.userInfo.user_id}
@@ -74,19 +78,22 @@ export class App extends Component {
                                 showNewProfilePic={this.showNewProfilePic}
                             />
                         )}
-                        {/* ??? i want to encompass profile pic into route, but it behaves odd -- renders url and not app */}
-                        {/* <Route exact path="/user/profile"> */}
-                        <Profile userInfo={this.state.userInfo} />
-                        {/* </Route> */}
 
-                        {/* <Route path="/user/profile/edit">
-                            <ProfileEdit />
-                        </Route> */}
-                        {/*                         
-                        {!this.state.profileEdit && <Profile />}
-                    {this.state.profileEdit && <ProfileEdit />} */}
-
-                        <Logout />
+                        <Route exact path="/user/profile">
+                            {!this.state.editMode && (
+                                <Profile
+                                    toggleEditMode={this.toggleEditMode}
+                                    userInfo={this.state.userInfo}
+                                    profilePic={
+                                        <ProfilePic
+                                            userInfo={this.state.userInfo}
+                                            toggleUploader={this.toggleUploader}
+                                        />
+                                    }
+                                />
+                            )}
+                            {this.state.editMode && <ProfileEdit />}
+                        </Route>
                     </main>
                 </BrowserRouter>
             </>
