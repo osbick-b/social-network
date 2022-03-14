@@ -16,16 +16,12 @@ export class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // userInfo: {
-            //     first: "",
-            //     last: "",
-            //     user_id: "",
-            //     profile_pic: undefined,
-            // },
-            first: "",
-            last: "",
-            user_id: "",
-            profile_pic: undefined,
+            userInfo: {
+                first: "",
+                last: "",
+                user_id: "",
+                profile_pic: undefined,
+            },
             uploaderVisible: false,
             error: null,
             profileEdit: false,
@@ -39,8 +35,7 @@ export class App extends Component {
         fetch("/user/profile")
             .then((resp) => resp.json())
             .then((userData) => {
-                this.setState({ ...userData });
-                // console.log(`${fln} >>> on mount > this.state`, this.state);
+                this.setState({ userInfo: userData });
             })
             .catch((err) => {
                 console.log(`${fln} >>> error in mount app > fetch/user`, err);
@@ -50,41 +45,43 @@ export class App extends Component {
         this.setState({ uploaderVisible: !this.state.uploaderVisible });
     }
     showNewProfilePic(newPicUrl) {
-        this.setState({ profile_pic: newPicUrl });
+        this.setState({userInfo: {...this.state.userInfo, profile_pic: newPicUrl} }); // +++ edit how to update obj
     }
     render() {
+        // console.log(`${fln} >>> on render > this.state`, this.state);
         return (
             <>
                 <BrowserRouter>
-                    <MainHeader profile_pic={this.state.profile_pic} />
+                    <MainHeader userInfo={this.state.userInfo} />
                     <main className="main">
                         {/* <h1>🧶 ..aaand we are in! 🧶</h1> */}
 
                         <h1>💜 App 💜</h1>
 
                         <ProfilePic
-                        // userInfo={this.state.userInfo}
-                            url={this.state.profile_pic}
-                            first={this.state.first}
-                            last={this.state.last}
+                            userInfo={this.state.userInfo}
+                            // url={this.state.userInfo.profile_pic}
+                            // first={this.state.userInfo.first}
+                            // last={this.state.userInfo.last}
                             toggleUploader={this.toggleUploader}
                             // onChange={this.showNewProfilePic}
                         />
 
                         {this.state.uploaderVisible && (
                             <Uploader
-                                user_id={this.state.user_id}
+                                user_id={this.state.userInfo.user_id}
                                 toggleUploader={this.toggleUploader}
                                 showNewProfilePic={this.showNewProfilePic}
                             />
                         )}
                         {/* ??? i want to encompass profile pic into route, but it behaves odd -- renders url and not app */}
-                        <Route exact path="/user/profile">
-                            <Profile />
-                        </Route>
-                        <Route path="/user/profile/edit">
+                        {/* <Route exact path="/user/profile"> */}
+                        <Profile userInfo={this.state.userInfo} />
+                        {/* </Route> */}
+
+                        {/* <Route path="/user/profile/edit">
                             <ProfileEdit />
-                        </Route>
+                        </Route> */}
                         {/*                         
                         {!this.state.profileEdit && <Profile />}
                     {this.state.profileEdit && <ProfileEdit />} */}

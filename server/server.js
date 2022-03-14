@@ -65,52 +65,6 @@ app.get("/user/id.json", (req, res) => {
     res.json({ userCookie: req.session }); // --- ??? can i access session (cookie) from client side??
 });
 
-//================================ Get User Data Etc =========================================//
-
-// --- Get User Data
-app.get("/user/profile", (req, res) => {
-    db.getUserData(req.session.user_id)
-        .then(({ rows }) => {
-            req.session = rows[0];
-            console.log("/user/profile >> req.session ", req.session);
-            return res.json(rows[0]);
-        })
-        .catch((err) => {
-            console.log(`error in ${fln} >> getUserData`, err);
-        });
-});
-
-// --- Store Profile Pic
-app.post(
-    "/user/profile_pic",
-    // uploader.single("file"), ////// ---- ???? ERROR is in MULTER --> is not doing what it should do
-    // s3.upload,
-    (req, res) => {
-        console.log(`>>> ${fln} >> storeProfilePic > req.file:`, req.file);
-
-        const testImg =
-            // "https://3.bp.blogspot.com/-IYfbtib-wa0/ThvJE-gKyxI/AAAAAAAAADw/XdGrTaImMiM/s1600/possum.jpg";
-            "https://www.wildlifeottawa.ca/wp-content/uploads/2019/10/Are-Possums-Dangerous-To-Humans.jpg";
-
-        db.storeProfilePic(
-            req.session.user_id,
-            testImg
-            // `https://s3.amazonaws.com/spicedling/${req.file.filename}`
-        )
-            .then(({ rows }) => {
-                req.session.profile_pic = rows[0].profile_pic;
-                rows[0].profile_pic &&
-                    res.json({
-                        serverSuccess: true,
-                        newPicUrl: rows[0].profile_pic,
-                    });
-            })
-            .catch((err) => {
-                console.log(`>>> ${fln} >> Error in /POST/profile_pic`, err);
-                res.json({ serverSuccess: false });
-            });
-    }
-);
 
 //============================== Register, Login, Logout ===================================//
 
@@ -164,6 +118,55 @@ app.get("/logout", (req, res) => {
     req.session = null;
     res.json({ userCookie: req.session });
 });
+
+//================================ Get User Data Etc =========================================//
+
+// --- Get User Data
+app.get("/user/profile", (req, res) => {
+    db.getUserData(req.session.user_id)
+        .then(({ rows }) => {
+            req.session = rows[0];
+            console.log("/user/profile >> req.session ", req.session);
+            return res.json(rows[0]);
+        })
+        .catch((err) => {
+            console.log(`error in ${fln} >> getUserData`, err);
+        });
+});
+
+//================================ Edit User Info =========================================//
+
+// --- Store Profile Pic
+app.post(
+    "/user/profile_pic",
+    // uploader.single("file"), ////// ---- ???? ERROR is in MULTER --> is not doing what it should do
+    // s3.upload,
+    (req, res) => {
+        console.log(`>>> ${fln} >> storeProfilePic > req.file:`, req.file);
+
+        const testImg =
+            // "https://3.bp.blogspot.com/-IYfbtib-wa0/ThvJE-gKyxI/AAAAAAAAADw/XdGrTaImMiM/s1600/possum.jpg";
+            "https://www.wildlifeottawa.ca/wp-content/uploads/2019/10/Are-Possums-Dangerous-To-Humans.jpg";
+
+        db.storeProfilePic(
+            req.session.user_id,
+            testImg
+            // `https://s3.amazonaws.com/spicedling/${req.file.filename}`
+        )
+            .then(({ rows }) => {
+                req.session.profile_pic = rows[0].profile_pic;
+                rows[0].profile_pic &&
+                    res.json({
+                        serverSuccess: true,
+                        newPicUrl: rows[0].profile_pic,
+                    });
+            })
+            .catch((err) => {
+                console.log(`>>> ${fln} >> Error in /POST/profile_pic`, err);
+                res.json({ serverSuccess: false });
+            });
+    }
+);
 
 //=============================== Reset Password =========================================//
 

@@ -5,10 +5,11 @@ const fln = "profile_edit.js";
 import ErrorMsg from "./error_msg";
 import SuccessMsg from "./success_msg";
 
-import { Component } from "react";
+// import { Component } from "react";
+import React from "react"; // --> the "long", not-decomposing version of importing
 
 
-export class ProfileEdit extends Component {
+export class ProfileEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

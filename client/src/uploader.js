@@ -71,7 +71,7 @@ export class Uploader extends Component {
                             id="newPicInput"
                             type="file"
                             accept="image/*"
-                            required="required"
+                            // required="required"
                             onChange={(e) => this.handleInputChange(e)}
                         />
 
