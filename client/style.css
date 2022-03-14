@@ -7,8 +7,12 @@
     --c-main-bg: palevioletred;
     --c-el-detail: hotpink;
     --c-el-bg: pink;
+    --c-details: white;
     /* sizes */
     --height-input: 6vh;
+    /* borders */
+    --border-thin: 1px solid;
+    --border-test: 3px dashed green;
 }
 
 body {
@@ -16,12 +20,19 @@ body {
 }
 
 main {
-    padding: 0 5vw;
+    padding: 0;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2vh;
 }
+
+main.main {
+    width: 90vw;
+}
+
+/* ////// Forms ////// */
 
 form {
     display: flex;
@@ -62,4 +73,39 @@ input {
 #modal {
     padding: 3vh;
     background-color: var(--c-el-bg);
+}
+
+.profile-pic {
+    
+}
+
+.profile-pic img {
+    max-height: 100%;
+}
+
+/* ////////// Header ////////////// */
+
+header.main {
+    width: 100vw;
+    height: 15vh;
+    padding: 3vh 10vw;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--border-thin) var(--c-details);
+}
+
+header .profile-pic {
+    height: 10vh;
+    width: 10vh;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    border: var(--border-test);
+}
+
+nav.main {
+    display: flex;
+    flex-direction: row;
 }

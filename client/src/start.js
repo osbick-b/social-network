@@ -22,5 +22,5 @@ fetch("/user/id.json")
     })
     /// THIS IS NNNOOOOOOTTTT THE LOGIN/REGISTER REQUEST!!!!!!! <<<<<<<<<<<<
     .catch((err) => {
-        console.log("error in ", err);
+        console.log(`error in ${fln}`, err);
     });
