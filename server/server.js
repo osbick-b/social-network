@@ -126,7 +126,7 @@ app.get("/user/profile", (req, res) => {
     db.getUserData(req.session.user_id)
         .then(({ rows }) => {
             req.session = rows[0];
-            console.log("/user/profile >> req.session ", req.session);
+            // console.log(`${fln} >> getUserData > req.session `, req.session);
             return res.json(rows[0]);
         })
         .catch((err) => {
@@ -139,19 +139,18 @@ app.get("/user/profile", (req, res) => {
 // --- Store Profile Pic
 app.post(
     "/user/profile_pic",
-    // uploader.single("file"), ////// ---- ???? ERROR is in MULTER --> is not doing what it should do
-    // s3.upload,
+    uploader.single("file"), ////// ---- ???? ERROR is in MULTER --> is not doing what it should do
+    s3.upload,
     (req, res) => {
         console.log(`>>> ${fln} >> storeProfilePic > req.file:`, req.file);
 
-        const testImg =
-            // "https://3.bp.blogspot.com/-IYfbtib-wa0/ThvJE-gKyxI/AAAAAAAAADw/XdGrTaImMiM/s1600/possum.jpg";
-            "https://www.wildlifeottawa.ca/wp-content/uploads/2019/10/Are-Possums-Dangerous-To-Humans.jpg";
+        // const testImg =
+        //     // "https://3.bp.blogspot.com/-IYfbtib-wa0/ThvJE-gKyxI/AAAAAAAAADw/XdGrTaImMiM/s1600/possum.jpg";
+        //     "https://www.wildlifeottawa.ca/wp-content/uploads/2019/10/Are-Possums-Dangerous-To-Humans.jpg";
 
         db.storeProfilePic(
             req.session.user_id,
-            testImg
-            // `https://s3.amazonaws.com/spicedling/${req.file.filename}`
+            `https://s3.amazonaws.com/spicedling/${req.file.filename}`
         )
             .then(({ rows }) => {
                 req.session.profile_pic = rows[0].profile_pic;

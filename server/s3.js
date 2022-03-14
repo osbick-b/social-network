@@ -24,7 +24,6 @@ exports.upload = (req, res, next) => {
     // in req.body we see --> file: 'C:\\fakepath\\Open Peeps - Bust.png' --> is the \\fakepath\\ the issue? or is it just visualization?
     // or why can't multer do its thing??
     // there were vulnerabilities in instalation, may that be the thing?
-    console.log("req.body.file", req.body.file);
     console.log("req.file", req.file);
 
     if (!req.file) {
