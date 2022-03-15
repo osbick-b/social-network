@@ -157,7 +157,7 @@ app.post(
                 rows[0].profile_pic &&
                     res.json({
                         serverSuccess: true,
-                        newPicUrl: rows[0].profile_pic,
+                        updatedInfo: rows[0],
                     });
             })
             .catch((err) => {
@@ -175,7 +175,8 @@ app.post("/user/editbio.json", (req, res) => {
             console.log("rows[0]", rows[0]);
             res.json({
                 serverSuccess: true,
-                bio: rows[0].bio});
+                updatedInfo: rows[0],
+            });
         })
         .catch((err) => {
             console.log(`>>> ${fln} >> Error in upsertBio`, err);
@@ -185,7 +186,7 @@ app.post("/user/editbio.json", (req, res) => {
 
 // --- Edit User Info
 app.post("/user/edituserinfo.json", (req, res) => {
-    const { first,last,email } = req.body;
+    const { first, last, email } = req.body;
     console.log(`first, last, email`, first, last, email);
     console.log(
         `>>> ${fln} >> edituserinfo > first, last, email`,
@@ -198,7 +199,7 @@ app.post("/user/edituserinfo.json", (req, res) => {
             console.log("rows[0]", rows[0]);
             res.json({
                 serverSuccess: true,
-                newInfo: rows[0],
+                updatedInfo: rows[0],
             });
         })
         .catch((err) => {
@@ -206,7 +207,6 @@ app.post("/user/edituserinfo.json", (req, res) => {
             res.json({ serverSuccess: false });
         });
 });
-
 
 //=============================== Reset Password =========================================//
 

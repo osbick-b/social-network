@@ -14,62 +14,60 @@ export class ProfileEdit extends React.Component {
             userInfo: {},
             success: null,
             error: null,
-            newfirst: "",
-            newlast: "",
-            newemail: "",
-            // newUserInfo: {
-            //     first: "",
-            //     last: "",
-            //     email: "",
-            // },
+            newUserInfo: {
+                first: "",
+                last: "",
+                email: "",
+            },
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
         console.log("-- ProfileEdit mounted");
-        console.log("userInfo at mount",this.props.userInfo);
+        // console.log("userInfo at mount",this.props.userInfo);
+        this.setState({newUserInfo:this.props.userInfo});
     }
     handleInputChange({ target }) {
-        // const newInput = {};
-        this.setState({[target.name]: target.value});
         this.setState({
             newUserInfo: {
                 ...this.state.newUserInfo,
-                [target.name]: target.value,
-                // [target.name]: (target.value? target.value:this.props.userInfo[target.name]),
+                // [target.name]: target.value,
+                [target.name]: (target.value),
             },
         });
     }
     handleSubmit(e) {
         e.preventDefault();
-        console.log(`this.state.newUserInfo`, this.state.newUserInfo);
 
-        // fetch("/user/edituserinfo.json", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify(this.state),
-        // })
-        //     .then((resp) => resp.json())
-        //     .then((data) => {
-        //         console.log(`>>> ${fln} >> edit profile > data:`, data);
-        //         const { newInfo } = data;
-        //         this.setState(
-        //             data.serverSuccess
-        //                 ? {
-        //                     success: true,
-        //                     userInfo: { ...this.props.userInfo, newInfo },
-        //                 }
-        //                 : { error: true }
-        //         );
-        //         data.serverSuccess && this.props.showUpdatedValue(newInfo);
-        //     })
-        //     .catch((err) => {
-        //         console.log("error in POST user/register", err);
-        //         this.setState({ error: true });
-        //     });
+        console.log(`this.state.newUserInfo AFTER   `, this.state.newUserInfo);
+
+        fetch("/user/edituserinfo.json", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.state.newUserInfo),
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(`>>> ${fln} >> edit profile > data:`, data);
+                this.setState(
+                    data.serverSuccess
+                        ? {
+                            success: true,
+                            // userInfo: { ...this.props.userInfo, newInfo },
+                        }
+                        : { error: true }
+                );
+                data.serverSuccess && this.props.toggleEditMode("profile");
+                data.serverSuccess &&
+                    this.props.showUpdatedValue(data.updatedInfo);
+            })
+            .catch((err) => {
+                console.log("error in POST user/register", err);
+                this.setState({ error: true });
+            });
     }
     render() {
         return (
@@ -86,6 +84,7 @@ export class ProfileEdit extends React.Component {
                         id="first"
                         type="text"
                         // value={this.props.userInfo.first}
+                        placeholder={this.props.userInfo.first}
                         onChange={this.handleInputChange}
                     />
                     <label htmlFor="last">last</label>
@@ -94,6 +93,7 @@ export class ProfileEdit extends React.Component {
                         id="last"
                         type="text"
                         // value={this.props.userInfo.last}
+                        placeholder={this.props.userInfo.last}
                         onChange={this.handleInputChange}
                     />
                     <label htmlFor="email">email</label>
@@ -101,8 +101,9 @@ export class ProfileEdit extends React.Component {
                         name="email"
                         id="email"
                         type="email"
-                        required="required"
+                        // required="required"
                         // value={this.props.userInfo.email}
+                        placeholder={this.props.userInfo.email}
                         onChange={this.handleInputChange}
                     />
 
