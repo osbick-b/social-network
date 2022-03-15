@@ -179,7 +179,7 @@ app.post("/user/editbio.json", (req, res) => {
         })
         .catch((err) => {
             console.log(`>>> ${fln} >> Error in upsertBio`, err);
-                res.json({ serverSuccess: false });
+            res.json({ serverSuccess: false });
         });
 });
 

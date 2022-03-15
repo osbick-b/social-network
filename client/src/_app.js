@@ -61,9 +61,8 @@ export class App extends Component {
                 <BrowserRouter>
                     <MainHeader userInfo={this.state.userInfo} />
                     <main className="main">
-                        {/* <h1>🧶 ..aaand we are in! 🧶</h1> */}
 
-                        <h1>💜 App 💜</h1>
+                        <h1>🧶 We're Inside! - App 🧶</h1>
 
                         {/* <ProfilePic
                             userInfo={this.state.userInfo}
@@ -79,7 +78,7 @@ export class App extends Component {
                             />
                         )}
 
-                        <Route exact path="/user/profile">
+                        <Route exact path="/profile">
                             {!this.state.editMode && (
                                 <Profile
                                     toggleEditMode={this.toggleEditMode}

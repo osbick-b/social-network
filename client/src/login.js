@@ -38,7 +38,7 @@ export default class Login extends Component {
                 this.setState(
                     data.serverSuccess ? { success: true } : { error: true }
                 );
-                data.serverSuccess && location.reload();
+                data.serverSuccess && location.replace("/profile");
             })
             .catch((err) => {
                 console.log("!!! error in login", err);

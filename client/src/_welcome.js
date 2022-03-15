@@ -7,7 +7,7 @@ import { PassReset } from "./pass_reset_0";
 export default function Welcome() {
     return (
         <>
-            <h1>Welcome!</h1>
+            <h1>🤍 Welcome! 🤍</h1>
 
             <BrowserRouter>
                 <>

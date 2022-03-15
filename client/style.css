@@ -13,6 +13,10 @@
     /* borders */
     --border-thin: 1px solid;
     --border-test: 3px dashed green;
+
+    /* mini prof pic  */
+    --h-main-header: 15vh;
+    --sz-profile-pic-mini: calc(var(--h-main-header)*0.5);
 }
 
 body {
@@ -87,7 +91,8 @@ input {
 
 header.main {
     width: 100vw;
-    height: 15vh;
+    height: var(--h-main-header);
+    /* height: 15vh; */
     padding: 3vh 10vw;
     position: relative;
     display: flex;
@@ -97,15 +102,24 @@ header.main {
 }
 
 header .profile-pic {
-    height: 10vh;
-    width: 10vh;
+    height: var(--sz-profile-pic-mini);
+    width: var(--sz-profile-pic-mini);
+    /* height: 90%; */
+    /* width: 10vh; */
     border-radius: 50%;
+    object-fit: cover;
     overflow: hidden;
     position: relative;
     border: var(--border-test);
 }
 
 nav.main {
+    background-color: var(--c-el-bg);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 2vh 0;
+    position: absolute;
+    top: var(--h-main-header);
+    right: 5vw;
+    padding: 2rem;
 }
