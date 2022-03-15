@@ -163,8 +163,8 @@ app.post(
 
 // --- Edit Bio
 app.post("/user/editbio.json", (req, res) => {
-    const { bioInput } = req.body;
-    db.upsertBio(req.session.user_id, bioInput)
+    const { bio } = req.body;
+    db.upsertBio(req.session.user_id, bio)
         .then(({ rows }) => {
             console.log("rows[0]", rows[0]);
             res.json({

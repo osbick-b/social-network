@@ -97,14 +97,14 @@ module.exports.storeProfilePic = (user_id, newPicInput) => {
 };
 
 // ======== Edit Bio ===== //
-module.exports.upsertBio = (user_id, bioInput) => {
-    console.log(`in DB >> user_id, bioInput`, user_id, bioInput);
+module.exports.upsertBio = (user_id, bio) => {
+    console.log(`in DB >> user_id, bio`, user_id, bio);
     return db.query(
         `UPDATE users
         SET bio = $2
         WHERE id = $1
         RETURNING bio`,
-        [user_id, bioInput]
+        [user_id, bio]
     );
 };
 

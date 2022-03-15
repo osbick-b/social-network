@@ -17,7 +17,7 @@ export class BioEdit extends React.Component {
             newUserInfo: {
                 bio: "",
             }
-            bio: "",
+            // bio: "",
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -28,7 +28,12 @@ export class BioEdit extends React.Component {
 
     }
     handleInputChange({ target }) {
-        this.setState({ [target.name]: target.value });
+        this.setState({
+            newUserInfo: {
+                ...this.state.newUserInfo,
+                [target.name]: target.value,
+            },
+        });
     }
     handleSubmit(e) {
         e.preventDefault();
@@ -71,7 +76,7 @@ export class BioEdit extends React.Component {
                         name="bio"
                         id="bio"
                         type="text"
-                        value={this.state.bio}
+                        value={this.state.newUserInfo.bio}
                         onChange={(e) => this.handleInputChange(e)}
                     ></textarea>
                     <button>save</button>
