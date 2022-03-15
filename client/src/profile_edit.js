@@ -25,7 +25,7 @@ export class ProfileEdit extends React.Component {
     }
     componentDidMount() {
         console.log("-- ProfileEdit mounted");
-        // this.setState({newUserInfo:this.props.userInfo}); // assigns current vals to newUserInfo
+        this.setState({newUserInfo:this.props.userInfo}); // assigns current vals to newUserInfo
     }
     handleInputChange({ target }) {
         this.setState({
@@ -36,6 +36,7 @@ export class ProfileEdit extends React.Component {
         });
     }
     handleSubmit(e) {
+        // +++ add form validation ---- html required doesnt work bc theres preventDefault on submit
         e.preventDefault();
 
         console.log(`this.state.newUserInfo AFTER   `, this.state.newUserInfo);
@@ -78,10 +79,8 @@ export class ProfileEdit extends React.Component {
                         name="first"
                         id="first"
                         type="text"
-                        value={
-                            this.state.newUserInfo.first ||
-                            (this.props.userInfo.first)}
-                        // placeholder={this.props.userInfo.first}
+                        value={this.state.newUserInfo.first}
+                        required="required"
                         onChange={this.handleInputChange}
                     />
                     <label htmlFor="last">last</label>
@@ -89,10 +88,8 @@ export class ProfileEdit extends React.Component {
                         name="last"
                         id="last"
                         type="text"
-                        value={
-                            this.state.newUserInfo.last ||
-                            (this.props.userInfo.last)}
-                        // placeholder={this.props.userInfo.last}
+                        value={this.state.newUserInfo.last}
+                        required="required"
                         onChange={this.handleInputChange}
                     />
                     <label htmlFor="email">email</label>
@@ -100,10 +97,8 @@ export class ProfileEdit extends React.Component {
                         name="email"
                         id="email"
                         type="email"
-                        value={
-                            this.state.newUserInfo.email ||
-                            (this.props.userInfo.email)}    
-                        // placeholder={this.props.userInfo.email}
+                        value={this.state.newUserInfo.email}
+                        required="required"
                         onChange={this.handleInputChange}
                     />
 
