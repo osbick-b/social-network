@@ -1,4 +1,4 @@
-const fln = "profile_pic.js";
+// const fln = "profile_pic.js";
 /////////////////////////////////
 
 export function ProfilePic({ userInfo, toggleUploader }) {
@@ -10,8 +10,13 @@ export function ProfilePic({ userInfo, toggleUploader }) {
     let url = userInfo.profile_pic || defaultImgUrl;
 
     return (
-        <div className={"profile-pic"} onClick={toggleUploader}>
-            <img alt={`${userInfo.first} ${userInfo.last}`} src={url} />
-        </div>
+        <>
+            <img
+                alt={`${userInfo.first} ${userInfo.last}`}
+                src={url}
+                className={"profile-pic"}
+                onClick={toggleUploader}
+            />
+        </>
     );
 }

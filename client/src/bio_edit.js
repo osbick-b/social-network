@@ -1,4 +1,4 @@
-const fln = "profile_bio_edit.js";
+// const fln = "profile_bio_edit.js";
 ///////////////////////////////////
 
 import ErrorMsg from "./error_msg";
@@ -17,6 +17,7 @@ export class BioEdit extends React.Component {
             bioInput: "",
         };
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
         console.log("-- BioEdit mounted");
@@ -24,7 +25,7 @@ export class BioEdit extends React.Component {
     handleInputChange({ target }) {
         this.setState({ [target.name]: target.value });
     }
-    handleSubmit(e){
+    handleSubmit(e) {
         e.preventDefault();
         fetch("/user/editbio.json", {
             method: "POST",
@@ -36,7 +37,12 @@ export class BioEdit extends React.Component {
             .then((resp) => resp.json())
             .then((data) => {
                 this.setState(
-                    data.serverSuccess ? { success: true } : { error: true }
+                    data.serverSuccess
+                        ? {
+                            success: true,
+                            userInfo: { ...this.state.userInfo, bio: data },
+                        }
+                        : { error: true }
                 );
                 data.serverSuccess && location.reload();
             })
@@ -49,16 +55,23 @@ export class BioEdit extends React.Component {
         return (
             <>
                 <h1>💌 BioEdit 💌</h1>
+
+                {this.state.error && <ErrorMsg />}
+                {this.state.success && <SuccessMsg />}
+
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor="bioInput">Bio</label>
                     <textarea
                         name="bioInput"
                         id="bioInput"
                         type="text"
-                        placeholder=""
+                        value={this.props.userInfo.bio && this.props.userInfo.bio}
                         onChange={(e) => this.handleInputChange(e)}
                     ></textarea>
                     <button>save</button>
+                    <button onClick={() => this.props.toggleEditMode("bio")}>
+                        cancel
+                    </button>
                 </form>
             </>
         );

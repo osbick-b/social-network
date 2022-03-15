@@ -14,7 +14,7 @@ const db = spicedPg(
 
 module.exports.registerUser = (first, last, email, hashedPass) => {
     return db.query(
-        `INSERT INTO users (first, last, email, password) 
+        `INSERT INTO users (first, last, email, password)
         VALUES ($1, $2, $3, $4)
         RETURNING id AS user_id`,
         [first, last, email, hashedPass]
@@ -98,13 +98,23 @@ module.exports.storeProfilePic = (user_id, newPicInput) => {
 
 // ======== Edit Bio ===== //
 module.exports.upsertBio = (user_id, bioInput) => {
-    console.log(`user_id, bioInput`, user_id, bioInput);
+    console.log(`in DB >> user_id, bioInput`, user_id, bioInput);
     return db.query(
         `UPDATE users
         SET bio = $2
         WHERE id = $1
         RETURNING bio`,
         [user_id, bioInput]
+    );
+};
+
+module.exports.updateUserInfo = (first, last, email, user_id) => {
+    return db.query(
+        `UPDATE users
+        SET first = $1, last = $2, email = $3
+        WHERE id = $4
+        RETURNING first, last, email`,
+        [first, last, email, user_id]
     );
 };
 

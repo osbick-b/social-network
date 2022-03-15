@@ -183,6 +183,31 @@ app.post("/user/editbio.json", (req, res) => {
         });
 });
 
+// --- Edit User Info
+app.post("/user/edituserinfo.json", (req, res) => {
+    const { first,last,email } = req.body;
+    console.log(`first, last, email`, first, last, email);
+    console.log(
+        `>>> ${fln} >> edituserinfo > first, last, email`,
+        first,
+        last,
+        email
+    );
+    db.updateUserInfo(first, last, email, req.session.user_id)
+        .then(({ rows }) => {
+            console.log("rows[0]", rows[0]);
+            res.json({
+                serverSuccess: true,
+                newInfo: rows[0],
+            });
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in upsertBio`, err);
+            res.json({ serverSuccess: false });
+        });
+});
+
+
 //=============================== Reset Password =========================================//
 
 // ---- Get Code

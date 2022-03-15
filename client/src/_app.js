@@ -4,13 +4,14 @@ const fln = "_app.js";
 import { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 
-import Logout from "./logout";
+// import Logout from "./logout";
 import { Uploader } from "./uploader";
 import { ProfilePic } from "./profile_pic";
 
 import { MainHeader } from "./header";
 import { Profile } from "./profile";
-import { ProfileEdit } from "./profile_edit";
+// import { ProfileEdit } from "./profile_edit";
+// import { BioEdit } from "./bio_edit";
 
 export class App extends Component {
     constructor(props) {
@@ -24,10 +25,14 @@ export class App extends Component {
             },
             uploaderVisible: false,
             error: null,
-            editMode: false,
+            editMode: {
+                bio:false,
+                profile:false,
+            },
         };
 
-        this.showNewProfilePic = this.showNewProfilePic.bind(this);
+        // this.showNewProfilePic = this.showNewProfilePic.bind(this);
+        this.showUpdatedValue = this.showUpdatedValue.bind(this);
         this.toggleUploader = this.toggleUploader.bind(this);
         this.toggleEditMode = this.toggleEditMode.bind(this);
     }
@@ -45,14 +50,21 @@ export class App extends Component {
     toggleUploader() {
         this.setState({ uploaderVisible: !this.state.uploaderVisible });
     }
-    showNewProfilePic(newPicUrl) {
+    // showNewProfilePic(newPicUrl) {
+    //     this.setState({
+    //         userInfo: { ...this.state.userInfo, profile_pic: newPicUrl },
+    //     }); 
+    // }
+    showUpdatedValue(propsToUpdate){
         this.setState({
-            userInfo: { ...this.state.userInfo, profile_pic: newPicUrl },
-        }); // +++ edit how to update obj
+            userInfo: { ...this.state.userInfo, ...propsToUpdate },
+        });
     }
-    toggleEditMode() {
+    // toggleEditMode() {
+    toggleEditMode(comp) {
         console.log("--toggle edit mode");
-        this.setState({ editMode: !this.state.editMode });
+        this.setState({ editMode: { [comp]: !this.state.editMode[comp]} });
+        // this.setState({ editMode: !this.state.editMode });
     }
     render() {
         // console.log(`${fln} >>> on render > this.state`, this.state);
@@ -61,37 +73,30 @@ export class App extends Component {
                 <BrowserRouter>
                     <MainHeader userInfo={this.state.userInfo} />
                     <main className="main">
-
-                        <h1>🧶 We're Inside! - App 🧶</h1>
+                        <h1>🧶 App 🧶</h1>
 
                         {/* <ProfilePic
                             userInfo={this.state.userInfo}
                             toggleUploader={this.toggleUploader}
                         /> */}
 
-                        {/* ??? Does Uploader live in app? or in Profile Pic?  */}
-                        {this.state.uploaderVisible && (
-                            <Uploader
-                                user_id={this.state.userInfo.user_id}
-                                toggleUploader={this.toggleUploader}
-                                showNewProfilePic={this.showNewProfilePic}
-                            />
-                        )}
-
                         <Route exact path="/profile">
-                            {!this.state.editMode && (
-                                <Profile
-                                    toggleEditMode={this.toggleEditMode}
-                                    userInfo={this.state.userInfo}
-                                    profilePic={
-                                        <ProfilePic
-                                            userInfo={this.state.userInfo}
-                                            toggleUploader={this.toggleUploader}
-                                        />
-                                    }
+                            <Profile
+                                toggleEditMode={this.toggleEditMode}
+                                userInfo={this.state.userInfo}
+                                toggleUploader={this.toggleUploader}
+                                showUpdatedValue={this.showUpdatedValue}
+                                editMode={this.state.editMode}
+                            />
+
+                            {this.state.uploaderVisible && (
+                                <Uploader
+                                    user_id={this.state.userInfo.user_id}
+                                    toggleUploader={this.toggleUploader}
+                                    // showNewProfilePic={this.showNewProfilePic}
+                                    showUpdatedValue={this.showUpdatedValue}
                                 />
                             )}
-                            {this.state.editMode && <ProfileEdit />}
                         </Route>
                     </main>
                 </BrowserRouter>

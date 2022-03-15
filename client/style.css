@@ -12,7 +12,7 @@
     --height-input: 6vh;
     /* borders */
     --border-thin: 1px solid;
-    --border-test: 3px dashed green;
+    --border-test: 2px solid pink;
 
     /* mini prof pic  */
     --h-main-header: 15vh;
@@ -21,6 +21,10 @@
 
 body {
     background-color: var(--c-main-bg);
+}
+
+a, button {
+    cursor: pointer;
 }
 
 main {
