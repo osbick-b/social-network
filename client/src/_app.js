@@ -10,8 +10,6 @@ import { ProfilePic } from "./profile_pic";
 
 import { MainHeader } from "./header";
 import { Profile } from "./profile";
-// import { ProfileEdit } from "./profile_edit";
-// import { BioEdit } from "./bio_edit";
 
 export class App extends Component {
     constructor(props) {
@@ -31,7 +29,6 @@ export class App extends Component {
             },
         };
 
-        // this.showNewProfilePic = this.showNewProfilePic.bind(this);
         this.showUpdatedValue = this.showUpdatedValue.bind(this);
         this.toggleUploader = this.toggleUploader.bind(this);
         this.toggleEditMode = this.toggleEditMode.bind(this);
@@ -50,21 +47,14 @@ export class App extends Component {
     toggleUploader() {
         this.setState({ uploaderVisible: !this.state.uploaderVisible });
     }
-    // showNewProfilePic(newPicUrl) {
-    //     this.setState({
-    //         userInfo: { ...this.state.userInfo, profile_pic: newPicUrl },
-    //     }); 
-    // }
     showUpdatedValue(propsToUpdate){
         this.setState({
             userInfo: { ...this.state.userInfo, ...propsToUpdate },
         });
     }
-    // toggleEditMode() {
     toggleEditMode(comp) {
         console.log("--toggle edit mode");
         this.setState({ editMode: { [comp]: !this.state.editMode[comp]} });
-        // this.setState({ editMode: !this.state.editMode });
     }
     render() {
         // console.log(`${fln} >>> on render > this.state`, this.state);

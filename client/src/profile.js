@@ -59,7 +59,6 @@ export function Profile({
                     toggleEditMode={toggleEditMode}
                 />
             ) : (
-                // <Bio userInfo={userInfo} />
                 <section>
                     <h1>Bio</h1>
                     {userInfo.bio ? (

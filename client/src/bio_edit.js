@@ -36,19 +36,16 @@ export class BioEdit extends React.Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                const { bio } = data;
                 this.setState(
                     data.serverSuccess
                         ? {
                             success: true,
-                            // userInfo: { ...this.state.userInfo, bio: data },
                         }
                         : { error: true }
                 );
                 data.serverSuccess && this.props.toggleEditMode("bio");
                 data.serverSuccess &&
                     this.props.showUpdatedValue(data.updatedInfo);
-                // data.serverSuccess && location.reload();
             })
             .catch((err) => {
                 console.log("error in POST user/register", err);

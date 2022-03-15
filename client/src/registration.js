@@ -59,7 +59,7 @@ export class Registration extends Component {
                         name="first"
                         id="first"
                         type="text"
-                        placeholder=""
+                        required="required"
                         onChange={this.handleInputChange}
                     />
                     <label htmlFor="last">last</label>
@@ -67,7 +67,7 @@ export class Registration extends Component {
                         name="last"
                         id="last"
                         type="text"
-                        placeholder=""
+                        required="required"
                         onChange={this.handleInputChange}
                     />
                     <label htmlFor="email">email</label>
@@ -75,7 +75,7 @@ export class Registration extends Component {
                         name="email"
                         id="email"
                         type="email"
-                        placeholder=""
+                        required="required"
                         onChange={this.handleInputChange}
                     />
 
@@ -84,7 +84,7 @@ export class Registration extends Component {
                         name="password"
                         id="password"
                         type="password"
-                        placeholder=""
+                        required="required"
                         onChange={this.handleInputChange}
                     />
 

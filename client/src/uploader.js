@@ -48,7 +48,6 @@ export class Uploader extends Component {
                     data.serverSuccess ? { success: true } : { error: true }
                 );
                 data.serverSuccess &&
-                    // this.props.showNewProfilePic(data.newPicUrl);
                     this.props.showUpdatedValue(data.updatedInfo);
                 data.serverSuccess && this.props.toggleUploader();
             })

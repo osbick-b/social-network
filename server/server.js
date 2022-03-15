@@ -139,15 +139,9 @@ app.get("/user/start", (req, res) => {
 // --- Store Profile Pic
 app.post(
     "/user/profile_pic",
-    uploader.single("file"), ////// ---- ???? ERROR is in MULTER --> is not doing what it should do
+    uploader.single("file"),
     s3.upload,
     (req, res) => {
-        console.log(`>>> ${fln} >> storeProfilePic > req.file:`, req.file);
-
-        // const testImg =
-        //     // "https://3.bp.blogspot.com/-IYfbtib-wa0/ThvJE-gKyxI/AAAAAAAAADw/XdGrTaImMiM/s1600/possum.jpg";
-        //     "https://www.wildlifeottawa.ca/wp-content/uploads/2019/10/Are-Possums-Dangerous-To-Humans.jpg";
-
         db.storeProfilePic(
             req.session.user_id,
             `https://s3.amazonaws.com/spicedling/${req.file.filename}`
@@ -187,13 +181,6 @@ app.post("/user/editbio.json", (req, res) => {
 // --- Edit User Info
 app.post("/user/edituserinfo.json", (req, res) => {
     const { first, last, email } = req.body;
-    console.log(`first, last, email`, first, last, email);
-    console.log(
-        `>>> ${fln} >> edituserinfo > first, last, email`,
-        first,
-        last,
-        email
-    );
     db.updateUserInfo(first, last, email, req.session.user_id)
         .then(({ rows }) => {
             console.log("rows[0]", rows[0]);

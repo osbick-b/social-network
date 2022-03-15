@@ -25,14 +25,12 @@ export class ProfileEdit extends React.Component {
     }
     componentDidMount() {
         console.log("-- ProfileEdit mounted");
-        // console.log("userInfo at mount",this.props.userInfo);
-        this.setState({newUserInfo:this.props.userInfo});
+        // this.setState({newUserInfo:this.props.userInfo}); // assigns current vals to newUserInfo
     }
     handleInputChange({ target }) {
         this.setState({
             newUserInfo: {
                 ...this.state.newUserInfo,
-                // [target.name]: target.value,
                 [target.name]: (target.value),
             },
         });
@@ -51,12 +49,10 @@ export class ProfileEdit extends React.Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(`>>> ${fln} >> edit profile > data:`, data);
                 this.setState(
                     data.serverSuccess
                         ? {
                             success: true,
-                            // userInfo: { ...this.props.userInfo, newInfo },
                         }
                         : { error: true }
                 );
@@ -75,7 +71,6 @@ export class ProfileEdit extends React.Component {
                 <h1>💌 ProfileEdit 💌</h1>
 
                 {this.state.error && <ErrorMsg />}
-                {/* {this.state.success && <SuccessMsg />} */}
 
                 <form>
                     <label htmlFor="first">first</label>
@@ -83,8 +78,10 @@ export class ProfileEdit extends React.Component {
                         name="first"
                         id="first"
                         type="text"
-                        // value={this.props.userInfo.first}
-                        placeholder={this.props.userInfo.first}
+                        value={
+                            this.state.newUserInfo.first ||
+                            (this.props.userInfo.first)}
+                        // placeholder={this.props.userInfo.first}
                         onChange={this.handleInputChange}
                     />
                     <label htmlFor="last">last</label>
@@ -92,8 +89,10 @@ export class ProfileEdit extends React.Component {
                         name="last"
                         id="last"
                         type="text"
-                        // value={this.props.userInfo.last}
-                        placeholder={this.props.userInfo.last}
+                        value={
+                            this.state.newUserInfo.last ||
+                            (this.props.userInfo.last)}
+                        // placeholder={this.props.userInfo.last}
                         onChange={this.handleInputChange}
                     />
                     <label htmlFor="email">email</label>
@@ -101,9 +100,10 @@ export class ProfileEdit extends React.Component {
                         name="email"
                         id="email"
                         type="email"
-                        // required="required"
-                        // value={this.props.userInfo.email}
-                        placeholder={this.props.userInfo.email}
+                        value={
+                            this.state.newUserInfo.email ||
+                            (this.props.userInfo.email)}    
+                        // placeholder={this.props.userInfo.email}
                         onChange={this.handleInputChange}
                     />
 
