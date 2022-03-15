@@ -14,13 +14,18 @@ export class BioEdit extends React.Component {
             userInfo: {},
             success: null,
             error: null,
-            bioInput: "",
+            newUserInfo: {
+                bio: "",
+            }
+            bio: "",
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
         console.log("-- BioEdit mounted");
+        this.setState({newUserInfo:this.props.userInfo}); // assigns current vals to newUserInfo
+
     }
     handleInputChange({ target }) {
         this.setState({ [target.name]: target.value });
@@ -32,7 +37,7 @@ export class BioEdit extends React.Component {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(this.state),
+            body: JSON.stringify(this.state.newUserInfo),
         })
             .then((resp) => resp.json())
             .then((data) => {
@@ -61,12 +66,12 @@ export class BioEdit extends React.Component {
                 {this.state.success && <SuccessMsg />}
 
                 <form onSubmit={this.handleSubmit}>
-                    <label htmlFor="bioInput">Bio</label>
+                    <label htmlFor="bio">Bio</label>
                     <textarea
-                        name="bioInput"
-                        id="bioInput"
+                        name="bio"
+                        id="bio"
                         type="text"
-                        value={this.state.bioInput||this.props.userInfo.bio && this.props.userInfo.bio}
+                        value={this.state.bio}
                         onChange={(e) => this.handleInputChange(e)}
                     ></textarea>
                     <button>save</button>
