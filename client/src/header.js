@@ -34,7 +34,7 @@ export class MainHeader extends Component {
 
                 {this.state.showMainNav && (
                     <nav className="main" onClick={this.toggleMainNav}>
-                        <Link to="/profile">Profile</Link>
+                        <Link to="/home">My Profile</Link>
                         {/* <Link to="/user/profile/edit">Edit Profile</Link> */}
                         <Logout />
                     </nav>

@@ -10,6 +10,10 @@ import { ProfilePic } from "./profile_pic";
 
 import { MainHeader } from "./header";
 import { Profile } from "./profile";
+import { OtherUserProfile } from "./other-user-profile";
+import { FindPeople } from "./find-people";
+
+
 
 export class App extends Component {
     constructor(props) {
@@ -61,16 +65,13 @@ export class App extends Component {
         return (
             <>
                 <BrowserRouter>
+
                     <MainHeader userInfo={this.state.userInfo} />
-                    <main className="main">
-                        <h1>🧶 App 🧶</h1>
 
-                        {/* <ProfilePic
-                            userInfo={this.state.userInfo}
-                            toggleUploader={this.toggleUploader}
-                        /> */}
+                    <main className="main app">
+                        <h2>🧶 App 🧶</h2>
 
-                        <Route exact path="/profile">
+                        <Route exact path={"/home"}>
                             <Profile
                                 toggleEditMode={this.toggleEditMode}
                                 userInfo={this.state.userInfo}
@@ -78,6 +79,14 @@ export class App extends Component {
                                 showUpdatedValue={this.showUpdatedValue}
                                 editMode={this.state.editMode}
                             />
+                            {/* that is another way you can fo this. there are functional differences, so */}
+                            <Route path="/find-people" component={FindPeople} />
+
+                            <Route path="/user/:otherUserId">
+                                {/* :otherUserId MUST match the name you gave to theis var in OtherUserProfile */}
+                                <OtherUserProfile />
+                            </Route>
+                               
 
                             {this.state.uploaderVisible && (
                                 <Uploader

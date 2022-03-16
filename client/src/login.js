@@ -14,6 +14,11 @@ export default class Login extends Component {
             user_id: null,
             error: null,
             forgotPass: true,
+            // added now: nothing removed instead
+            userInfo: {
+                email: "",
+                password: "",
+            }
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,8 +26,11 @@ export default class Login extends Component {
     componentDidMount() {
         console.log("-- Login mounted");
     }
+    // handleInputChange({ target }) {
+    //     this.setState({ [target.name]: target.value });
+    // }
     handleInputChange({ target }) {
-        this.setState({ [target.name]: target.value });
+        this.setState({ userInfo: {...this.state.userInfo, [target.name]: target.value} });
     }
     handleSubmit(e) {
         e.preventDefault();
@@ -31,14 +39,15 @@ export default class Login extends Component {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(this.state),
+            // body: JSON.stringify(this.state),
+            body: JSON.stringify(this.state.userInfo),
         })
             .then((resp) => resp.json())
             .then((data) => {
                 this.setState(
                     data.serverSuccess ? { success: true } : { error: true }
                 );
-                data.serverSuccess && location.replace("/profile");
+                data.serverSuccess && location.replace("/home");
             })
             .catch((err) => {
                 console.log("!!! error in login", err);
@@ -73,7 +82,7 @@ export default class Login extends Component {
                 </form>
 
 
-                <Link to="/">Not yet a member? Register here!</Link>
+                <Link to="/register">Not yet a member? Register here!</Link>
                 <Link to="/password/reset">Forgot your password?</Link>
                 {/* {this.state.forgotPass && <PassReset />} */}
             </>

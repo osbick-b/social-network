@@ -21,6 +21,7 @@ export function Profile({
     // console.log(`${fln} > userInfo`, userInfo);
     return (
         <>
+            <h1>🌵 Profile 🌵</h1>
             <h1>
                 {userInfo.first} {userInfo.last}
             </h1>
@@ -28,7 +29,6 @@ export function Profile({
             <ProfilePic userInfo={userInfo} toggleUploader={toggleUploader} />
 
             <h2>Profile</h2>
-
             {editMode.profile ? (
                 <ProfileEdit
                     userInfo={userInfo}

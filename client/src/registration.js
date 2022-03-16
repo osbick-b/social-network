@@ -40,7 +40,7 @@ export class Registration extends Component {
                 this.setState(
                     data.serverSuccess ? { success: true } : { error: true }
                 );
-                data.serverSuccess && location.reload();
+                data.serverSuccess && location.replace("/home");
             })
             .catch((err) => {
                 console.log("error in POST user/register", err);
@@ -91,7 +91,7 @@ export class Registration extends Component {
                     <button onClick={this.handleSubmit}>Submit</button>
                 </form>
 
-                <Link to="/login">Already a member? Log in here!</Link>
+                <Link to="/">Already a member? Log in here!</Link>
             </>
         );
     }

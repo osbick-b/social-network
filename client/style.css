@@ -83,8 +83,10 @@ input {
     background-color: var(--c-el-bg);
 }
 
-.profile-pic {
-    
+.app .profile-pic {
+    height: 25vh;
+    object-fit: cover;
+    position: relative;
 }
 
 .profile-pic img {

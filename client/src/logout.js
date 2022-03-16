@@ -19,7 +19,7 @@ export default class Logout extends Component {
             .then((resp) => resp.json())
             .then(({ userCookie }) => {
                 console.log(`${fln} >>> userCookie`, userCookie);
-                location.replace("/login"); // we need to redirect to start
+                location.replace("/"); // we need to redirect to start
             })
             .catch((err) => {
                 console.log("error in logout", err);

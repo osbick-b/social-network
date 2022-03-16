@@ -10,18 +10,21 @@ export default function Welcome() {
             <h1>🤍 Welcome! 🤍</h1>
 
             <BrowserRouter>
-                <>
+                <main className="main welcome">
                     <Route exact path="/">
-                        {/* <Login /> */}
+                        <Login />
+                        {/* <Registration /> */}
+                    </Route>
+                    <Route path="/register">
                         <Registration />
                     </Route>
-                    <Route path="/login">
+                    {/* <Route path="/login">
                         <Login />
-                    </Route>
+                    </Route> */}
                     <Route path="/password/reset">
                         <PassReset />
                     </Route>
-                </>
+                </main>
             </BrowserRouter>
         </>
     );
