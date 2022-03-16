@@ -58,8 +58,8 @@ export class Uploader extends Component {
     }
     render() {
         return (
-            <div id={"modal-bg"}>
-                <div id={"modal"}>
+            <div className={"modal-bg"}>
+                <div className={"modal"}>
                     <button onClick={this.props.toggleUploader}>X</button>
                     <h1>📸 Uploader 📸</h1>
                     {this.state.error && <ErrorMsg />}

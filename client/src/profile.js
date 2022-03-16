@@ -28,7 +28,6 @@ export function Profile({
 
             <ProfilePic userInfo={userInfo} toggleUploader={toggleUploader} />
 
-            <h2>Profile</h2>
             {editMode.profile ? (
                 <ProfileEdit
                     userInfo={userInfo}
@@ -37,6 +36,10 @@ export function Profile({
                 />
             ) : (
                 <section>
+                    <h2>Profile</h2>
+                    <button onClick={() => toggleEditMode("profile")}>
+                        Edit Profile
+                    </button>
                     <p>
                         First Name:<span>{userInfo.first}</span>
                     </p>
@@ -46,9 +49,6 @@ export function Profile({
                     <p>
                         Email:<span>{userInfo.email}</span>
                     </p>
-                    <button onClick={() => toggleEditMode("profile")}>
-                        Edit Profile
-                    </button>
                 </section>
             )}
 
@@ -62,12 +62,14 @@ export function Profile({
                 <section>
                     <h1>Bio</h1>
                     {userInfo.bio ? (
-                        <p>
-                            Bio:<span>{userInfo.bio}</span>
+                        <>
                             <button onClick={() => toggleEditMode("bio")}>
                                 Edit Bio
                             </button>
-                        </p>
+                            <p>
+                                Bio:<span>{userInfo.bio}</span>
+                            </p>
+                        </>
                     ) : (
                         <button onClick={() => toggleEditMode("bio")}>
                             Add Bio

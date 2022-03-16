@@ -65,7 +65,7 @@ input {
 }
 
 
-#modal-bg {
+.modal-bg {
     background-color: rgba(0, 0, 0, 0.5);
     height: 100vh;
     width: 100vw;
@@ -78,7 +78,7 @@ input {
     justify-content: center;
 }
 
-#modal {
+.modal {
     padding: 3vh;
     background-color: var(--c-el-bg);
 }

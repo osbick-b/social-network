@@ -6,8 +6,8 @@ import Welcome from "./_welcome";
 // import Inside from "./_inside";
 import { App } from "./_app";
 
-ReactDOM.render(<Welcome />, document.querySelector("main"));
-console.log(`>>>>> loading ${fln} <<<<<<`);
+// ReactDOM.render(<Welcome />, document.querySelector("main"));
+// console.log(`>>>>> loading ${fln} <<<<<<`);
 
 /// THIS IS NNNOOOOOOTTTT THE LOGIN/REGISTER REQUEST!!!!!!! <<<<<<<<<<<<
 fetch("/user/id.json")

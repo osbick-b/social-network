@@ -7,13 +7,12 @@ import { BrowserRouter, Route } from "react-router-dom";
 // import Logout from "./logout";
 import { Uploader } from "./uploader";
 import { ProfilePic } from "./profile_pic";
+import { Loading } from "./loading";
 
 import { MainHeader } from "./header";
 import { Profile } from "./profile";
 import { OtherUserProfile } from "./other-user-profile";
 import { FindPeople } from "./find-people";
-
-
 
 export class App extends Component {
     constructor(props) {
@@ -28,9 +27,10 @@ export class App extends Component {
             uploaderVisible: false,
             error: null,
             editMode: {
-                bio:false,
-                profile:false,
+                bio: false,
+                profile: false,
             },
+            dataAlreadyArrived: false,
         };
 
         this.showUpdatedValue = this.showUpdatedValue.bind(this);
@@ -41,8 +41,9 @@ export class App extends Component {
         console.log("-- App mounted");
         fetch("/user/start")
             .then((resp) => resp.json())
-            .then((userData) => {
-                this.setState({ userInfo: userData });
+            .then((data) => {
+                this.setState({ dataAlreadyArrived: true });
+                this.setState({ userInfo: data });
             })
             .catch((err) => {
                 console.log(`${fln} >>> error in mount app > fetch/user`, err);
@@ -51,52 +52,61 @@ export class App extends Component {
     toggleUploader() {
         this.setState({ uploaderVisible: !this.state.uploaderVisible });
     }
-    showUpdatedValue(propsToUpdate){
+    showUpdatedValue(propsToUpdate) {
         this.setState({
             userInfo: { ...this.state.userInfo, ...propsToUpdate },
         });
     }
     toggleEditMode(comp) {
         console.log("--toggle edit mode");
-        this.setState({ editMode: { [comp]: !this.state.editMode[comp]} });
+        this.setState({ editMode: { [comp]: !this.state.editMode[comp] } });
     }
     render() {
+        if (!this.state.dataAlreadyArrived) {
+            console.log("...loading");
+        }
         // console.log(`${fln} >>> on render > this.state`, this.state);
         return (
             <>
                 <BrowserRouter>
+                    {!this.state.dataAlreadyArrived && <Loading />}
 
                     <MainHeader userInfo={this.state.userInfo} />
 
                     <main className="main app">
                         <h2>🧶 App 🧶</h2>
 
-                        <Route exact path={"/home"}>
-                            <Profile
-                                toggleEditMode={this.toggleEditMode}
-                                userInfo={this.state.userInfo}
-                                toggleUploader={this.toggleUploader}
-                                showUpdatedValue={this.showUpdatedValue}
-                                editMode={this.state.editMode}
-                            />
-                            {/* that is another way you can fo this. there are functional differences, so */}
-                            <Route path="/find-people" component={FindPeople} />
-
-                            <Route path="/user/:otherUserId">
-                                {/* :otherUserId MUST match the name you gave to theis var in OtherUserProfile */}
-                                <OtherUserProfile />
-                            </Route>
-                               
-
-                            {this.state.uploaderVisible && (
-                                <Uploader
-                                    user_id={this.state.userInfo.user_id}
+                        {/* <Route exact path={"/home"}> */}
+                        <Route exact path={"/"}>
+                            {this.state.dataAlreadyArrived && (
+                                <Profile
+                                    toggleEditMode={this.toggleEditMode}
+                                    userInfo={this.state.userInfo}
                                     toggleUploader={this.toggleUploader}
-                                    // showNewProfilePic={this.showNewProfilePic}
                                     showUpdatedValue={this.showUpdatedValue}
+                                    editMode={this.state.editMode}
                                 />
                             )}
                         </Route>
+                        {/* that is another way you can fo this. there are functional differences, so */}
+                        {/* <Route path="/find-people" component={FindPeople} /> */}
+                        <Route path={"/find-people"}>
+                            <FindPeople />
+                        </Route>
+
+                        <Route path="/users/:otherUserId">
+                            {/* :otherUserId MUST match the name you gave to theis var in OtherUserProfile */}
+                            <OtherUserProfile myInfo={this.state.userInfo} />
+                        </Route>
+
+                        {this.state.uploaderVisible && (
+                            <Uploader
+                                user_id={this.state.userInfo.user_id}
+                                toggleUploader={this.toggleUploader}
+                                // showNewProfilePic={this.showNewProfilePic}
+                                showUpdatedValue={this.showUpdatedValue}
+                            />
+                        )}
                     </main>
                 </BrowserRouter>
             </>

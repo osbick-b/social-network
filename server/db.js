@@ -118,6 +118,36 @@ module.exports.updateUserInfo = (first, last, email, user_id) => {
     );
 };
 
+// ======== Find Other Users ======= //
+
+module.exports.findRecentUsers = () => {
+    return db.query(
+        `SELECT id AS user_id, first, last, email, profile_pic, bio
+        FROM users
+        ORDER BY id DESC
+        LIMIT 4`
+    );
+};
+
+module.exports.findMatchingUsers = (searchInput) => {
+    return db.query(
+        `SELECT id AS user_id, first, last, email, profile_pic, bio
+        FROM users
+        WHERE first ILIKE $1
+        LIMIT 4`,
+        ['%'+searchInput+'%']
+    );
+};
+
+
+
+
+
+
+
+
+
+
 // ======== Else ======= //
 
 // module.exports.setSecretCode = (email, secretCode) => {

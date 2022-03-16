@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 import Logout from "./logout";
 import { ProfilePic } from "./profile_pic";
@@ -28,13 +28,16 @@ export class MainHeader extends Component {
         return (
             <header className="main">
                 <h1>MainHeader</h1>
+                
+                <Link to={"/find-people"}>Find People</Link>
                 <div onClick={this.toggleMainNav}>
                     <ProfilePic userInfo={this.props.userInfo} />
                 </div>
 
                 {this.state.showMainNav && (
                     <nav className="main" onClick={this.toggleMainNav}>
-                        <Link to="/home">My Profile</Link>
+                        {/* <Link to="/home">My Profile</Link> */}
+                        <Link to="/">My Profile</Link>
                         {/* <Link to="/user/profile/edit">Edit Profile</Link> */}
                         <Logout />
                     </nav>

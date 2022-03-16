@@ -124,9 +124,8 @@ app.get("/logout", (req, res) => {
 app.get("/user/start", (req, res) => {
     db.getUserData(req.session.user_id)
         .then(({ rows }) => {
-            console.log(`rows`, rows[0]);
             req.session = true && rows[0];
-            console.log(`${fln} >> getUserData > req.session `, req.session);
+            // console.log(`${fln} >> getUserData > req.session `, req.session);
             return res.json(rows[0]);
         })
         .catch((err) => {
@@ -246,6 +245,60 @@ app.post("/pass/setnewpass.json", (req, res) => {
                   console.log(`>>> ${fln} >> Error in /pass/setnewpass`, err);
                   res.json({ serverSuccess: false });
               });
+});
+
+//================================= Find Other Users =========================================//
+
+// --- Get most recent people
+app.get("/api/search", (req, res) => {
+    console.log(`>>> ${fln} RECENT users`);
+    db.findRecentUsers()
+        .then(({ rows }) => {
+            console.log("FIND most recent ppl: rows", rows);
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in route`, err);
+        });
+
+    //dbq -- most recent users
+    // return arr of users (w user data)
+    // client --> map render the array
+});
+
+// --- Search for other People
+app.get("/api/search/:searchInput", (req, res) => {
+    const { searchInput } = req.params;
+    console.log(`>>> ${fln} SEARCH INPUT users`, searchInput);
+
+    return !searchInput
+        ? db.findRecentUsers()
+        : db
+            .findMatchingUsers(searchInput)
+            .then(({ rows }) => {
+                console.log("FIND ppl: rows", rows);
+                res.json(rows);
+            })
+            .catch((err) => {
+                console.log(`>>> ${fln} >> Error in route`, err);
+            });
+});
+
+// --- Get Other User Profile
+app.get("/api/get-user-data/:user_id", (req, res) => {
+    const { user_id } = req.params;
+    console.log(
+        `>>> ${fln} >> GET other user profile > req.params:`,
+        req.params
+    );
+    db.getUserData(user_id)
+        .then(({ rows }) => {
+            console.log("rows[0]", rows[0]);
+            res.json(rows[0]);
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in getOtherUserProfile`, err);
+        });
 });
 
 //================================= STAR ROUTE =========================================//
