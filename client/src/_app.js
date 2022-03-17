@@ -39,6 +39,7 @@ export class App extends Component {
     }
     componentDidMount() {
         console.log("-- App mounted");
+        console.log(`>>> in APP >> this.props.myId`,  this.props.myId);
         fetch("/api/get-my-data")
             .then((resp) => resp.json())
             .then((data) => {
@@ -96,7 +97,7 @@ export class App extends Component {
 
                         <Route path="/users/:otherUserId">
                             {/* :otherUserId MUST match the name you gave to theis var in OtherUserProfile */}
-                            <OtherUserProfile myId={this.state.userInfo} />
+                            <OtherUserProfile myId={this.props.myId} />
                         </Route>
 
                         {this.state.uploaderVisible && (

@@ -7,19 +7,23 @@ import { ProfilePic } from "./profile_pic";
 import { Loading } from "./loading";
 import { InexistentUser } from "./inexistent-user";
 
-export function OtherUserProfile(myInfo) {
+export function OtherUserProfile(myId) {
     const [userInfo, setUserInfo] = useState({});
     const [dataAlreadyArrived, setDataAlreadyArrived] = useState(false);
     const { otherUserId } = useParams(); // from react router --> in app.js
     const history = useHistory();
+    // const { myId } = myId;
 
     useEffect(() => {
-        let abort = false;
         console.log("--- OtherUserProfile rendered");
+        if (otherUserId == myId.myId) {
+            console.log("OH NO! ITS ME");
+            return history.push("/");} // own profile case if handled client side
+
         fetch(`/api/get-user-data/${otherUserId}`)
             .then((resp) => resp.json())
             .then((data) => {
-                if (data.isMyOwnProfile) {return history.push("/");}
+                // if (data.isMyOwnProfile) {return history.push("/");} //  own profile case if handled server side (more to it in the server obv)
                 setDataAlreadyArrived(true); // use it for loading state
                 data.serverSuccess && setUserInfo(data.userInfo);
                 console.log(`userInfo`, userInfo);
@@ -30,19 +34,7 @@ export function OtherUserProfile(myInfo) {
                     err
                 );
             });
-
-        // if (!abort) {
-        //     // decides id user exists or not kinda i think
-        //     // also handles if we're trying to access out own profile or not
-        //     if (otherUserId === myInfo.user_id) {
-        //         history.push("/"); // own profile --> redirect to "/" route
-        //     }
-        // }
-
-        // return () => {
-        //     abort = true;
-        // };
-    }, [otherUserId]); // to make sure the useEffect only runs in the 1st render, pass an empty array as 2nd arg
+    }, [otherUserId]); 
     return (
         <>
             {!dataAlreadyArrived && <Loading />}
