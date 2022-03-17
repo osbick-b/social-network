@@ -133,20 +133,53 @@ module.exports.findMatchingUsers = (searchInput) => {
     return db.query(
         `SELECT id AS user_id, first, last, email, profile_pic, bio
         FROM users
-        WHERE (first ILIKE $1) OR (last ILIKE $1)
+        WHERE (first ILIKE $1) OR (last ILIKE $1) OR (id = $2)
         LIMIT 4`,
-        ['%'+searchInput+'%']
+        ["%" + searchInput + "%", +searchInput]
     );
 };
 
+// ======== Friendship Requests ======= //
 
+module.exports.getFriendshipStatus = (my_id, other_user_id) => {
+    return db.query(
+        `SELECT * FROM friendships
+        WHERE (sender_id = $1 && recipient_id = $2) 
+        OR (sender_id = $2 && recipient_id = $1)`,
+        [my_id, other_user_id]
+    );
+};
 
+module.exports.makeFriendshipRequest = (my_id, other_user_id) => {
+    return db.query(
+        `INSERT INTO friendships (sender_id, recipient_id, accepted)
+            VALUES ($1, $2, false)
+            RETURNING sender_id, recipient_id, accepted`,
+        // RETURNING *`,
+        [my_id, other_user_id]
+    );
+};
 
+module.exports.acceptFriendshipRequest = (my_id, other_user_id) => {
+    return db.query(
+        `UPDATE friendships
+            SET accepted = true
+            WHERE recipient_id = $1 AND sender_id = $2
+            RETURNING sender_id, recipient_id, accepted`,
+        // RETURNING *`,
+        [my_id, other_user_id]
+    );
+};
 
-
-
-
-
+module.exports.cancelFriendship = (my_id, other_user_id) => {
+    return db.query(
+        `DELETE FROM friendships
+        WHERE (sender_id = $1, recipient_id = $2) 
+        OR (sender_id = $2, recipient_id = $1)
+        RETURNING id`,
+        [my_id, other_user_id]
+    );
+};
 
 // ======== Else ======= //
 

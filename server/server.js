@@ -137,7 +137,7 @@ app.get("/logout", (req, res) => {
 
 //================================ Edit User Info =========================================//
 
-// --- Store Profile Pic 
+// --- Store Profile Pic
 // in -- uploader
 app.post(
     "/user/profile_pic",
@@ -272,7 +272,6 @@ app.get("/api/search", (req, res) => {
 // --- Search for other People
 app.get("/api/search/:searchInput", (req, res) => {
     const { searchInput } = req.params;
-    console.log(`>>> ${fln} SEARCH INPUT users`, searchInput);
 
     return !searchInput
         ? db.findRecentUsers()
@@ -295,11 +294,103 @@ app.get("/api/get-user-data/:user_id", (req, res) => {
     // }
     db.getUserData(user_id)
         .then(({ rows }) => {
-            rows[0] ? res.json({serverSuccess: true, userInfo: rows[0]}) : res.json({ serverSuccess: false });
+            rows[0]
+                ? res.json({ serverSuccess: true, userInfo: rows[0] })
+                : res.json({ serverSuccess: false });
         })
         .catch((err) => {
             console.log(`>>> ${fln} >> Error in getOtherUserProfile`, err);
-            res.json({serverSuccess:false});
+            res.json({ serverSuccess: false });
+        });
+});
+
+//=========================== Friendships ================================//
+
+// --- getFriendshipStatus
+app.get("/friendship/get-status/:other_user_id", (req, res) => {
+    const my_id = req.session.user_id;
+    let { other_user_id } = req.params;
+    other_user_id = +other_user_id;
+
+    console.log(
+        `getFriendshipStatus >> my_id, other_user_id`,
+        my_id,
+        typeof my_id,
+        other_user_id,
+        typeof other_user_id
+    );
+
+    db.getFriendshipStatus(my_id, other_user_id)
+        .then(({ rows }) => {
+            console.log("rows[0]", rows[0]);
+            res.json({ serverSuccess: true, friendship: rows[0] });
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in getFriendshipStatus`, err);
+            res.json({ serverSuccess: false });
+        });
+});
+
+// --- makeFriendshipRequest
+app.post("/friendship/make-request/:other_user_id", (req, res) => {
+    const my_id = req.session.user_id;
+    const { other_user_id } = req.params;
+    console.log(
+        `makeFriendshipRequest >> my_id, other_user_id`,
+        my_id,
+        other_user_id
+    );
+
+    db.makeFriendshipRequest(my_id, other_user_id)
+        .then(({ rows }) => {
+            console.log("rows[0]", rows[0]);
+            res.json({ serverSuccess: true, friendship: rows[0] });
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in makeFriendshipRequest`, err);
+            res.json({ serverSuccess: false });
+        });
+});
+
+// --- acceptFriendshipRequest
+app.post("/friendship/accept-request/:other_user_id", (req, res) => {
+    const my_id = req.session.user_id;
+    const { other_user_id } = req.params;
+    console.log(
+        `acceptFriendshipRequest >> my_id, other_user_id`,
+        my_id,
+        other_user_id
+    );
+
+    db.acceptFriendshipRequest(my_id, other_user_id)
+        .then(({ rows }) => {
+            console.log("rows[0]", rows[0]);
+            res.json({ serverSuccess: true, friendship: rows[0] });
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in acceptFriendshipRequest`, err);
+            res.json({ serverSuccess: false });
+        });
+});
+
+// --- cancelFriendship
+app.post("/friendship/cancel-friendship/:other_user_id", (req, res) => {
+    const my_id = req.session.user_id;
+    const { other_user_id } = req.params;
+    console.log(
+        `cancelFriendship >> my_id, other_user_id`,
+        my_id,
+        other_user_id
+    );
+
+    db.cancelFriendship(my_id, other_user_id)
+        .then(({ rows }) => {
+            console.log("rows[0]", rows[0]);
+            res.json({ serverSuccess: true, friendship: rows[0] });
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in cancelFriendship`, err);
+            res.json({ serverSuccess: false });
         });
 });
 

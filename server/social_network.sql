@@ -1,5 +1,6 @@
 -- drop existing tables
 DROP TABLE IF EXISTS secret_codes;
+DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS users;
 
 
@@ -23,6 +24,18 @@ CREATE TABLE  secret_codes (
     timestamp   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- new friendships table
+CREATE TABLE friendships (
+    id             SERIAL PRIMARY KEY,
+    sender_id      SERIAL NOT NULL REFERENCES users(id),
+    recipient_id   SERIAL NOT NULL REFERENCES users(id),
+    accepted       BOOLEAN NOT NULL
+);
 
-INSERT INTO users (first, last, email, password, bio) VALUES ('Lcn', 'Csl', 'lcn@csl', 'lcncsl', 'i was born on my bday');
-INSERT INTO secret_codes (email,code) VALUES ('lcn@csl', 'sl12uifdosj');
+-- INSERT INTO users (first, last, email, password, bio) VALUES ('Lcn', 'Csl', 'lcn@csl', 'lcncsl', 'i was born on my bday');
+INSERT INTO secret_codes (email,code) VALUES ('rue123@example.com', 'sl12uifdosj');
+
+INSERT INTO friendships (sender_id, recipient_id, accepted) VALUES (22,33,false);
+INSERT INTO friendships (sender_id, recipient_id, accepted) VALUES (33, 22,false);
+INSERT INTO friendships (sender_id, recipient_id, accepted) VALUES (33,44,false);
+INSERT INTO friendships (sender_id, recipient_id, accepted) VALUES (44,55, true);
