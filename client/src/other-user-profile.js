@@ -5,15 +5,13 @@ import { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import { ProfilePic } from "./profile_pic";
 import { Loading } from "./loading";
-
+import { InexistentUser } from "./inexistent-user";
 
 export function OtherUserProfile(myInfo) {
     const [userInfo, setUserInfo] = useState({});
-    const [dataAlreadyArrived, setDataAlreadyArrived]  = useState(false);
+    const [dataAlreadyArrived, setDataAlreadyArrived] = useState(false);
     const { otherUserId } = useParams(); // from react router --> in app.js
     const history = useHistory();
-    console.log(`history`, history);
-    console.log(`otherUserId`, otherUserId);
 
     useEffect(() => {
         let abort = false;
@@ -21,59 +19,67 @@ export function OtherUserProfile(myInfo) {
         fetch(`/api/get-user-data/${otherUserId}`)
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(" data", data);
-                setUserInfo(data);
-                console.log(`userInfo`, userInfo);
+                if (data.isMyOwnProfile) {return history.push("/");}
                 setDataAlreadyArrived(true); // use it for loading state
+                data.serverSuccess && setUserInfo(data.userInfo);
+                console.log(`userInfo`, userInfo);
             })
             .catch((err) => {
-                console.log(`>>> ${fln} >> Error in fetch other user profile`, err);
+                console.log(
+                    `>>> ${fln} >> Error in fetch other user profile`,
+                    err
+                );
             });
 
-        if (!abort) {
-            // decides id user exists or not kinda i think
-            // also handles if we're trying to access out own profile or not
-            if (otherUserId === myInfo.user_id) {
-                history.push("/home"); // own profile --> redirect to "/" route
-            }
-        }
+        // if (!abort) {
+        //     // decides id user exists or not kinda i think
+        //     // also handles if we're trying to access out own profile or not
+        //     if (otherUserId === myInfo.user_id) {
+        //         history.push("/"); // own profile --> redirect to "/" route
+        //     }
+        // }
 
-        return () => {
-            abort = true;
-        };
+        // return () => {
+        //     abort = true;
+        // };
     }, [otherUserId]); // to make sure the useEffect only runs in the 1st render, pass an empty array as 2nd arg
     return (
         <>
             {!dataAlreadyArrived && <Loading />}
+            {dataAlreadyArrived && !userInfo.user_id && <InexistentUser />}
 
-            <h1>OtherUserProfile</h1>
-            <h1>
-                {userInfo.first} {userInfo.last}
-            </h1>
+            {userInfo.user_id && (
+                <>
+                    <h1>OtherUserProfile</h1>
+                    <h1>
+                        {userInfo.first} {userInfo.last}
+                    </h1>
 
-            <ProfilePic userInfo={userInfo} />
-            {/* what about toggle uploader? dont i need to pass it to the comp bc it expects me to?? */}
+                    <ProfilePic userInfo={userInfo} />
+                    {/* what about toggle uploader? dont i need to pass it to the comp bc it expects me to?? */}
 
-            <section>
-                <h2>Profile</h2>
-                <p>
-                    First Name:<span>{userInfo.first}</span>
-                </p>
-                <p>
-                    Last Name:<span>{userInfo.last}</span>
-                </p>
-                <p>
-                    Email:<span>{userInfo.email}</span>
-                </p>
-            </section>
+                    <section>
+                        <h2>Profile</h2>
+                        <p>
+                            First Name:<span>{userInfo.first}</span>
+                        </p>
+                        <p>
+                            Last Name:<span>{userInfo.last}</span>
+                        </p>
+                        <p>
+                            Email:<span>{userInfo.email}</span>
+                        </p>
+                    </section>
 
-            <section>
-                <h1>Bio</h1>
+                    <section>
+                        <h1>Bio</h1>
 
-                <p>
-                    Bio:<span>{userInfo.bio}</span>
-                </p>
-            </section>
+                        <p>
+                            Bio:<span>{userInfo.bio}</span>
+                        </p>
+                    </section>
+                </>
+            )}
         </>
     );
 }

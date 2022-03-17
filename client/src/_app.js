@@ -10,7 +10,7 @@ import { ProfilePic } from "./profile_pic";
 import { Loading } from "./loading";
 
 import { MainHeader } from "./header";
-import { Profile } from "./profile";
+import { MyProfile } from "./my-profile";
 import { OtherUserProfile } from "./other-user-profile";
 import { FindPeople } from "./find-people";
 
@@ -39,7 +39,7 @@ export class App extends Component {
     }
     componentDidMount() {
         console.log("-- App mounted");
-        fetch("/user/start")
+        fetch("/api/get-my-data")
             .then((resp) => resp.json())
             .then((data) => {
                 this.setState({ dataAlreadyArrived: true });
@@ -79,7 +79,7 @@ export class App extends Component {
                         {/* <Route exact path={"/home"}> */}
                         <Route exact path={"/"}>
                             {this.state.dataAlreadyArrived && (
-                                <Profile
+                                <MyProfile
                                     toggleEditMode={this.toggleEditMode}
                                     userInfo={this.state.userInfo}
                                     toggleUploader={this.toggleUploader}
@@ -96,7 +96,7 @@ export class App extends Component {
 
                         <Route path="/users/:otherUserId">
                             {/* :otherUserId MUST match the name you gave to theis var in OtherUserProfile */}
-                            <OtherUserProfile myInfo={this.state.userInfo} />
+                            <OtherUserProfile myId={this.state.userInfo} />
                         </Route>
 
                         {this.state.uploaderVisible && (

@@ -121,7 +121,7 @@ app.get("/logout", (req, res) => {
 //================================ Get User Data Etc =========================================//
 
 // --- Get User Data
-app.get("/user/start", (req, res) => {
+app.get("/api/get-my-data", (req, res) => {
     db.getUserData(req.session.user_id)
         .then(({ rows }) => {
             req.session = true && rows[0];
@@ -135,7 +135,8 @@ app.get("/user/start", (req, res) => {
 
 //================================ Edit User Info =========================================//
 
-// --- Store Profile Pic
+// --- Store Profile Pic 
+// in -- uploader
 app.post(
     "/user/profile_pic",
     uploader.single("file"),
@@ -287,17 +288,16 @@ app.get("/api/search/:searchInput", (req, res) => {
 // --- Get Other User Profile
 app.get("/api/get-user-data/:user_id", (req, res) => {
     const { user_id } = req.params;
-    console.log(
-        `>>> ${fln} >> GET other user profile > req.params:`,
-        req.params
-    );
+    if (user_id == req.session.user_id) {
+        return res.json({isMyOwnProfile: true});
+    }
     db.getUserData(user_id)
         .then(({ rows }) => {
-            console.log("rows[0]", rows[0]);
-            res.json(rows[0]);
+            rows[0] ? res.json({serverSuccess: true, userInfo: rows[0]}) : res.json({ serverSuccess: false });
         })
         .catch((err) => {
             console.log(`>>> ${fln} >> Error in getOtherUserProfile`, err);
+            res.json({serverSuccess:false});
         });
 });
 

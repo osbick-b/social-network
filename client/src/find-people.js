@@ -10,52 +10,26 @@ export function FindPeople() {
     // const [[users], handleChange] = useStatefulFields(); // useStatefulFields uses an obj, and we need an array
     const [noResults, setNoResults] = useState(false);
     const [users, setUsers] = useState([]);
-    // const [searchTerm, setSearchTerm] = useState();
-
-    // useEffect(() => {
-    //     console.log(`--- FindPeople rendered `);
-    //     let abort = false;
-    //     if (!abort) {
-    //         fetch("/api/search")
-    //             .then((resp) => resp.json())
-    //             .then((data) => {
-    //                 setUsers(data);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(
-    //                     `>>> ${fln} >> Error in fetch findMostRecentUsers`,
-    //                     err
-    //                 );
-    //             });
-    //     }
-    //     return () => {
-    //         abort = true;
-    //     };
-    // }, []);
-    // console.log(`users`, users);
 
     useEffect(() => {
         let abort = false;
-        console.log(`searchInput:  ${searchInput}`);
         // ??? where does this Abort go???
-        // if (!abort) {
         fetch(`/api/search/${searchInput}`)
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(`data`, data);
                 !data[0] ? setNoResults(true) : setNoResults(false);
-                setUsers(data);
+                if (!abort) {
+                    setUsers(data);
+                }
             })
             .catch((err) => {
                 console.log(`>>> ${fln} >> Error in fetch find people`, err);
             });
-        // }
-        // return () => {
-        //     abort = true;
-        // };
+        return () => {
+            abort = true;
+        };
     }, [searchInput]);
 
-    console.log(`noResults`, noResults);
     return (
         <>
             <h1>FindPeople</h1>

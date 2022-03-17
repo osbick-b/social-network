@@ -15,7 +15,10 @@ fetch("/user/id.json")
     .then(({ userCookie }) => {
         console.log(">>>>> userCookie /user/id.json > user_id", userCookie);
         if (userCookie.user_id) {
-            ReactDOM.render(<App />, document.querySelector("main"));
+            ReactDOM.render(
+                <App myId={userCookie.user_id} />,
+                document.querySelector("main")
+            );
         } else {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         }

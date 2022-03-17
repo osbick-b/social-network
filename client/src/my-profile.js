@@ -1,4 +1,4 @@
-// const fln = "profile.js";
+// const fln = "my-profile.js";
 ///////////////////////////////////
 
 // import ErrorMsg from "./error_msg";
@@ -11,7 +11,7 @@ import { BioEdit } from "./bio_edit";
 import { ProfilePic } from "./profile_pic";
 
 // export function Profile({ userInfo, profilePic, toggleEditMode }) {
-export function Profile({
+export function MyProfile({
     userInfo,
     toggleUploader,
     toggleEditMode,
