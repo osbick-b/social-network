@@ -120,18 +120,20 @@ app.get("/logout", (req, res) => {
 
 //================================ Get User Data Etc =========================================//
 
-// --- Get User Data
-app.get("/api/get-my-data", (req, res) => {
-    db.getUserData(req.session.user_id)
-        .then(({ rows }) => {
-            req.session = true && rows[0];
-            // console.log(`${fln} >> getUserData > req.session `, req.session);
-            return res.json(rows[0]);
-        })
-        .catch((err) => {
-            console.log(`error in ${fln} >> getUserData`, err);
-        });
-});
+// Solved with same route as getOtherUserProfile. ownProfile case handled client side
+
+// // --- Get User Data
+// app.get("/api/get-my-data", (req, res) => {
+//     db.getUserData(req.session.user_id)
+//         .then(({ rows }) => {
+//             req.session = true && rows[0];
+//             // console.log(`${fln} >> getUserData > req.session `, req.session);
+//             return res.json(rows[0]);
+//         })
+//         .catch((err) => {
+//             console.log(`error in ${fln} >> getUserData`, err);
+//         });
+// });
 
 //================================ Edit User Info =========================================//
 
@@ -288,9 +290,9 @@ app.get("/api/search/:searchInput", (req, res) => {
 // --- Get Other User Profile
 app.get("/api/get-user-data/:user_id", (req, res) => {
     const { user_id } = req.params;
-    if (user_id == req.session.user_id) {
-        return res.json({isMyOwnProfile: true});
-    }
+    // if (user_id == req.session.user_id) {
+    //     return res.json({isMyOwnProfile: true});
+    // }
     db.getUserData(user_id)
         .then(({ rows }) => {
             rows[0] ? res.json({serverSuccess: true, userInfo: rows[0]}) : res.json({ serverSuccess: false });

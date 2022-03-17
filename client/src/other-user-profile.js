@@ -26,7 +26,6 @@ export function OtherUserProfile(myId) {
                 // if (data.isMyOwnProfile) {return history.push("/");} //  own profile case if handled server side (more to it in the server obv)
                 setDataAlreadyArrived(true); // use it for loading state
                 data.serverSuccess && setUserInfo(data.userInfo);
-                console.log(`userInfo`, userInfo);
             })
             .catch((err) => {
                 console.log(

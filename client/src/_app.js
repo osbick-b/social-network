@@ -39,12 +39,13 @@ export class App extends Component {
     }
     componentDidMount() {
         console.log("-- App mounted");
-        console.log(`>>> in APP >> this.props.myId`,  this.props.myId);
-        fetch("/api/get-my-data")
+        fetch(`/api/get-user-data/${this.props.myId}`)
             .then((resp) => resp.json())
             .then((data) => {
                 this.setState({ dataAlreadyArrived: true });
-                this.setState({ userInfo: data });
+                data.serverSuccess
+                    ? this.setState({ userInfo: data.userInfo })
+                    : this.setState({ error: true });
             })
             .catch((err) => {
                 console.log(`${fln} >>> error in mount app > fetch/user`, err);
