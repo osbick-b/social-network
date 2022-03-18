@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 export function Loading() {
     useEffect(() => {
-        console.log("--- Loading rendered");
+        // console.log("--- Loading rendered");
     });
     return (
         <div className="modal-bg">

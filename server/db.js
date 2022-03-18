@@ -1,3 +1,7 @@
+const fln = "db.js";
+///////////////////////////////////
+
+
 //////////////// DB.JS //////////////
 
 // const { use } = require("express/lib/application");
@@ -142,10 +146,11 @@ module.exports.findMatchingUsers = (searchInput) => {
 // ======== Friendship Requests ======= //
 
 module.exports.getFriendshipStatus = (my_id, other_user_id) => {
+    console.log(`>>> ${fln} >> getFriendshipStatus > my_id, other_user_id:`, my_id, other_user_id);
     return db.query(
         `SELECT * FROM friendships
-        WHERE (sender_id = $1 && recipient_id = $2) 
-        OR (sender_id = $2 && recipient_id = $1)`,
+        WHERE (sender_id = $1 AND recipient_id = $2) 
+        OR (sender_id = $2 AND recipient_id = $1)`,
         [my_id, other_user_id]
     );
 };

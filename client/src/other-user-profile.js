@@ -6,19 +6,20 @@ import { useParams, useHistory } from "react-router";
 import { ProfilePic } from "./profile_pic";
 import { Loading } from "./loading";
 import { InexistentUser } from "./inexistent-user";
+import { FriendshipButton } from "./friendship-button";
 
-export function OtherUserProfile(myId) {
+export function OtherUserProfile({ myId }) {
     const [userInfo, setUserInfo] = useState({});
     const [dataAlreadyArrived, setDataAlreadyArrived] = useState(false);
     const { otherUserId } = useParams(); // from react router --> in app.js
     const history = useHistory();
-    // const { myId } = myId;
 
     useEffect(() => {
         console.log("--- OtherUserProfile rendered");
-        if (otherUserId == myId.myId) {
+        if (otherUserId == myId) {
             console.log("OH NO! ITS ME");
-            return history.push("/");} // own profile case if handled client side
+            return history.push("/");
+        } // own profile case if handled client side
 
         fetch(`/api/get-user-data/${otherUserId}`)
             .then((resp) => resp.json())
@@ -33,7 +34,7 @@ export function OtherUserProfile(myId) {
                     err
                 );
             });
-    }, [otherUserId]); 
+    }, [otherUserId]);
     return (
         <>
             {!dataAlreadyArrived && <Loading />}
@@ -45,6 +46,7 @@ export function OtherUserProfile(myId) {
                     <h1>
                         {userInfo.first} {userInfo.last}
                     </h1>
+                    <FriendshipButton otherUserId={userInfo.user_id} myId={myId} />
 
                     <ProfilePic userInfo={userInfo} />
                     {/* what about toggle uploader? dont i need to pass it to the comp bc it expects me to?? */}

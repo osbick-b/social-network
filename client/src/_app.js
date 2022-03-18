@@ -97,7 +97,7 @@ export class App extends Component {
                         </Route>
 
                         <Route path="/users/:otherUserId">
-                            {/* :otherUserId MUST match the name you gave to theis var in OtherUserProfile */}
+                            {/* :otherUserId MUST match the name you gave to their var in OtherUserProfile there at start */}
                             <OtherUserProfile myId={this.props.myId} />
                         </Route>
 

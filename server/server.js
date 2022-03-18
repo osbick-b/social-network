@@ -276,14 +276,14 @@ app.get("/api/search/:searchInput", (req, res) => {
     return !searchInput
         ? db.findRecentUsers()
         : db
-            .findMatchingUsers(searchInput)
-            .then(({ rows }) => {
-                console.log("FIND ppl: rows", rows);
-                res.json(rows);
-            })
-            .catch((err) => {
-                console.log(`>>> ${fln} >> Error in route`, err);
-            });
+              .findMatchingUsers(searchInput)
+              .then(({ rows }) => {
+                  console.log("FIND ppl: rows", rows);
+                  res.json(rows);
+              })
+              .catch((err) => {
+                  console.log(`>>> ${fln} >> Error in route`, err);
+              });
 });
 
 // --- Get Other User Profile
@@ -310,7 +310,7 @@ app.get("/api/get-user-data/:user_id", (req, res) => {
 app.get("/friendship/get-status/:other_user_id", (req, res) => {
     const my_id = req.session.user_id;
     let { other_user_id } = req.params;
-    other_user_id = +other_user_id;
+    other_user_id = parseInt(other_user_id);
 
     console.log(
         `getFriendshipStatus >> my_id, other_user_id`,

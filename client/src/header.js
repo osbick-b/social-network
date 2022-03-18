@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 // import { useState, useEffect } from "react";
 
@@ -21,14 +20,17 @@ export class MainHeader extends Component {
         console.log("-- MainHeader mounted");
     }
     toggleMainNav() {
-        console.log(`-- toggle mainNav -- this.state.showMainNav`, this.state.showMainNav);
-        this.setState({showMainNav: !this.state.showMainNav});
+        console.log(
+            `-- toggle mainNav -- this.state.showMainNav`,
+            this.state.showMainNav
+        );
+        this.setState({ showMainNav: !this.state.showMainNav });
     }
     render() {
         return (
             <header className="main">
                 <h1>MainHeader</h1>
-                
+
                 <Link to={"/find-people"}>Find People</Link>
                 <div onClick={this.toggleMainNav}>
                     <ProfilePic userInfo={this.props.userInfo} />
@@ -54,9 +56,9 @@ export class MainHeader extends Component {
 //     console.log(`showMainNav`, showMainNav);
 
 //     useEffect(() => {
-        
+
 //     }, [showMainNav]);
-    
+
 //     return (
 //         <header className="main">
 //             <h1>MainHeader</h1>
