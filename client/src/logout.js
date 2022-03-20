@@ -15,7 +15,7 @@ export default class Logout extends Component {
     logout(e) {
         e.preventDefault();
         console.log("user wants out");
-        fetch("/logout")
+        fetch("/loguser/logout")
             .then((resp) => resp.json())
             .then(({ userCookie }) => {
                 console.log(`${fln} >>> userCookie`, userCookie);

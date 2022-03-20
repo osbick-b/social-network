@@ -28,7 +28,7 @@ export class Registration extends Component {
         e.preventDefault();
         // +++ do some input check here
         // console.log(`>>> ${fln} >> handleSubmit >> this.state`, this.state);
-        fetch("/user/register.json", {
+        fetch("/loguser/register.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

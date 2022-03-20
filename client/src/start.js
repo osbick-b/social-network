@@ -10,7 +10,7 @@ import { App } from "./_app";
 // console.log(`>>>>> loading ${fln} <<<<<<`);
 
 /// THIS IS NNNOOOOOOTTTT THE LOGIN/REGISTER REQUEST!!!!!!! <<<<<<<<<<<<
-fetch("/user/id.json")
+fetch("/start/id.json")
     .then((resp) => resp.json())
     .then(({ userCookie }) => {
         console.log(">>>>> userCookie /user/id.json > user_id", userCookie);
