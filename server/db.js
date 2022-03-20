@@ -177,11 +177,12 @@ module.exports.acceptFriendshipRequest = (my_id, other_user_id) => {
 };
 
 module.exports.cancelFriendship = (my_id, other_user_id) => {
+    console.log("DB >>>>> cancelFriendship");
     return db.query(
         `DELETE FROM friendships
-        WHERE (sender_id = $1, recipient_id = $2) 
-        OR (sender_id = $2, recipient_id = $1)
-        RETURNING id`,
+        WHERE (sender_id = $1 AND recipient_id = $2) 
+        OR (sender_id = $2 AND recipient_id = $1)`,
+        // RETURNING id`,
         [my_id, other_user_id]
     );
 };

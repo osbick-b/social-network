@@ -34,6 +34,7 @@ export class ProfileEdit extends React.Component {
                 [target.name]: (target.value),
             },
         });
+        // TODO: +++ add verify input
     }
     handleSubmit(e) {
         // +++ add form validation ---- html required doesnt work bc theres preventDefault on submit

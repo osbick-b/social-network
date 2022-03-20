@@ -42,7 +42,7 @@ export function OtherUserProfile({ myId }) {
 
             {userInfo.user_id && (
                 <>
-                    <h1>OtherUserProfile</h1>
+                    <h3>OtherUserProfile</h3>
                     <h1>
                         {userInfo.first} {userInfo.last}
                     </h1>

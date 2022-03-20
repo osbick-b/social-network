@@ -1,90 +1,106 @@
-const fln = "frisndship-button.js";
+const fln = "friendship-button.js";
 ///////////////////////////////////
 
 import { useState, useEffect } from "react";
 
+const FRIENDSHIP_BTN_STATUSES = {
+    NO_FRIENDSHIP: {
+        text: "Add Friend",
+        action: "makeFriendshipRequest",
+    },
+    PENDING_SENDER: {
+        text: "Cancel Request",
+        action: "cancelFriendship",
+    },
+    PENDING_RECIPIENT: {
+        text: "Accept",
+        action: "acceptFriendshipRequest",
+        DECLINE: {
+            text: "Decline",
+            action: "cancelFriendship",
+        },
+    },
+    FRIENDS: {
+        text: "Unfriend",
+        action: "cancelFriendship",
+    },
+};
 export function FriendshipButton({ otherUserId, myId }) {
-    const FRIENDSHIP_BTN_STATUSES = {
-        NO_FRIENDSHIP: {
-            text: "Add Friend",
-            action: "make friendship request",
-        },
-        PENDING: {
-            sender: {
-                text: "Unfriend",
-                action: "cancel friendship request",
-            },
-            recipient: {
-                cancel: {
-                    text: "Unfriend",
-                    action: "cancel friendship request",
-                },
-                accept: {
-                    text: "Accept Request",
-                    action: "accept friendship request",
-                },
-            },
-        },
-        FRIENDS: {
-            text: "Unfriend",
-            action: "cancel friendship request",
-        },
-    };
-
     const fbs = FRIENDSHIP_BTN_STATUSES;
-    const [friendshipStatus, setFriendshipStatus] = useState({});
-    const [button, setButton] = useState(friendshipStatus.text);
-    const [amIRecipient, setAmIRecipient] = useState(false);
-    const [acceptButtonText, setAcceptButtonText]  = useState();
+    const [friendshipStatus, setFriendshipStatus] = useState();
+    const [buttonText, setButtonText] = useState();
+    const [buttonAction, setButtonAction] = useState();
+    const [declineBtn, setDeclineBtn] = useState(fbs.PENDING_RECIPIENT.DECLINE);
+    const [recipientAndPending, setRecipientAndPending] = useState(false);
+
+    const updateFriendshipStatus = (data) => {
+        !data.friendship
+            ? setFriendshipStatus(fbs.NO_FRIENDSHIP)
+            : data.friendship.accepted
+            ? setFriendshipStatus(fbs.FRIENDS)
+            : data.friendship.sender_id == myId
+            ? setFriendshipStatus(fbs.PENDING_SENDER)
+            : (setFriendshipStatus(fbs.PENDING_RECIPIENT),
+              setRecipientAndPending(true));
+    };
 
     useEffect(() => {
         console.log("--- FriendshipButton rendered");
         fetch(`/friendship/get-status/${otherUserId}`)
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(" data.friendship", data.friendship);
-                console.log(`>>> ${fln} > otherUserId:`, otherUserId, "myId:", myId);
-
                 // data here is the friendship status obj, if existent
-                data.serverSuccess &&
-                    setFriendshipStatus(
-                        !data.friendship
-                            ? fbs.NO_FRIENDSHIP
-                            : !data.friendship.accepted
-                            ? fbs.PENDING
-                            : fbs.FRIENDS
-                    );
-
-                // If request is pending:
-                if (data.friendship && !data.friendship.accepted) {
-                    console.log("REQUEST PENDING");
-
-                    data.friendship.recipient_id == myId &&
-                    setAmIRecipient(true);
-                    setButton();
-                }
+                data.serverSuccess && updateFriendshipStatus(data);
             })
             .catch((err) => {
                 console.log(`>>> ${fln} >> Error in getFriendshipStatus`, err);
             });
     }, []);
 
-    console.log(`amIRecipient`, amIRecipient);
+    // --- Update buttonText etc based on friendshipStatus
+    useEffect(() => {
+        friendshipStatus && setButtonText(friendshipStatus.text);
+        friendshipStatus && setButtonAction(friendshipStatus.action);
+    }, [friendshipStatus]);
 
-    const handleClick = (e) => {
-        console.log("click");
-        fetch();
+    const handleClick = (action) => {
+        fetch(`/friendship/${action}/${otherUserId}`, {
+            // fetch(`/friendship/${buttonAction}/${otherUserId}`, {
+            // fetch(`/friendship/change-friendship`, {
+            method: "POST",
+            // headers: {
+            //     "Content Type": "application/json",
+            // },
+            body: JSON.stringify({
+                other_user_id: otherUserId,
+                action: action,
+            }),
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                data.serverSuccess && setRecipientAndPending(false);
+                data.serverSuccess && updateFriendshipStatus(data);
+            })
+            .catch((err) => {
+                console.log(`>>> ${fln} >> friendship clickHandler`, err);
+            });
     };
 
     return (
         <>
-            {amIRecipient && (
-                <button className={"primary friendship"} onClick={handleClick}>
-                    {acceptButtonText}
+            {recipientAndPending && (
+                <button
+                    className={"primary friendship destructive"}
+                    onClick={() => handleClick(declineBtn.action)}
+                >
+                    {declineBtn.text}
                 </button>
             )}
-            <button className={"primary friendship"} onClick={handleClick}>
-                {button}
+            <button
+                className={"primary friendship"}
+                onClick={() => handleClick(buttonAction)}
+            >
+                {buttonText}
             </button>
         </>
     );
