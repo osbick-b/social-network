@@ -26,9 +26,9 @@ const fln = "_app.js";
 // {CONDITION? COMPONENT1 : COMPONENT2}
 
 
-import Logout from "../logout";
-import { Uploader } from "../uploader";
-import { ProfilePic } from "../profile_pic";
+import Logout from "../client/src/logout";
+import { Uploader } from "../client/src/uploader";
+import { ProfilePic } from "../client/src/profile_pic";
 import { Component } from "react";
 
 export class App extends Component {

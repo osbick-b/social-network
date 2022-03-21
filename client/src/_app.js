@@ -13,6 +13,7 @@ import { MainHeader } from "./header";
 import { MyProfile } from "./my-profile";
 import { OtherUserProfile } from "./other-user-profile";
 import { FindPeople } from "./find-people";
+import FriendsAndWannabes from "./friends-wannabes";
 
 export class App extends Component {
     constructor(props) {
@@ -78,7 +79,6 @@ export class App extends Component {
                     <main className="main app">
                         <h2>🧶 App 🧶</h2>
 
-                        {/* <Route exact path={"/home"}> */}
                         <Route exact path={"/"}>
                             {this.state.dataAlreadyArrived && (
                                 <MyProfile
@@ -90,14 +90,16 @@ export class App extends Component {
                                 />
                             )}
                         </Route>
-                        {/* that is another way you can fo this. there are functional differences, so */}
-                        {/* <Route path="/find-people" component={FindPeople} /> */}
+
+                        <Route path={"/me/friends-list"}>
+                            <FriendsAndWannabes myId={this.props.myId} />
+                        </Route>
+
                         <Route path={"/find-people"}>
                             <FindPeople />
                         </Route>
 
                         <Route path="/users/:otherUserId">
-                            {/* :otherUserId MUST match the name you gave to their var in OtherUserProfile there at start */}
                             <OtherUserProfile myId={this.props.myId} />
                         </Route>
 

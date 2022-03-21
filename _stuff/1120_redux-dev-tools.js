@@ -21,3 +21,5 @@
  * 
  * 
  */
+
+// usually it's good to have a root reducer and then other tiny smaller reducers

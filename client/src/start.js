@@ -3,27 +3,36 @@ const fln = "_start.js";
 
 import ReactDOM from "react-dom";
 import Welcome from "./_welcome";
-// import Inside from "./_inside";
 import { App } from "./_app";
 
-// ReactDOM.render(<Welcome />, document.querySelector("main"));
-// console.log(`>>>>> loading ${fln} <<<<<<`);
+// Redux setup
+import { createStore, applyMiddleware } from "redux";
+import * as immutableState from "redux-immutable-state-invariant";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { Provider } from "react-redux";
+import reducer from "./redux/reducer"; // its called rootReducer in the orig reducer file. you can import it with another name bc we exported it default
 
-/// THIS IS NNNOOOOOOTTTT THE LOGIN/REGISTER REQUEST!!!!!!! <<<<<<<<<<<<
+const store = createStore(
+    reducer,
+    composeWithDevTools(applyMiddleware(immutableState.default()))
+);
+
+////////////////////////////////////////////////////////
 fetch("/start/id.json")
     .then((resp) => resp.json())
     .then(({ userCookie }) => {
         console.log(">>>>> userCookie /user/id.json > user_id", userCookie);
         if (userCookie.user_id) {
             ReactDOM.render(
-                <App myId={userCookie.user_id} />,
+                <Provider store={store}>
+                    <App myId={userCookie.user_id} />
+                </Provider>,
                 document.querySelector("main")
             );
         } else {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         }
     })
-    /// THIS IS NNNOOOOOOTTTT THE LOGIN/REGISTER REQUEST!!!!!!! <<<<<<<<<<<<
     .catch((err) => {
         console.log(`error in ${fln}`, err);
     });

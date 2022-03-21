@@ -187,6 +187,23 @@ module.exports.cancelFriendship = (my_id, other_user_id) => {
     );
 };
 
+// ======== Get Friends Lists ======= //
+module.exports.getAllFriendsAndWannabes = (my_id) => {
+    return db.query(
+        `SELECT friendships.id AS friendship_id, friendships.accepted, friendships.sender_id, friendships.recipient_id,
+         users.id AS other_user_id, users.profile_pic, users.first, users.last
+        FROM friendships
+        JOIN users
+        ON (sender_id = $1 AND recipient_id = users.id)
+        OR (sender_id = users.id AND recipient_id = $1)`,
+        [my_id]
+    );
+};
+
+
+
+
+
 // ======== Else ======= //
 
 // module.exports.setSecretCode = (email, secretCode) => {

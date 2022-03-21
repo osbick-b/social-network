@@ -1,4 +1,3 @@
-
 const fln = "friendship-routes.js";
 ///////////////////////////////////
 
@@ -44,5 +43,21 @@ router.post("/:action/:other_user_id", (req, res) => {
         .catch((err) => {
             console.log(`>>> ${fln} >> Error in makeFriendshipRequest`, err);
             res.json({ serverSuccess: false });
+        });
+});
+
+
+// --- Get ALL friends and Wannabes
+router.get("/get-friends-and-wannabes", (req, res) => {
+    const my_id = req.session.user_id;
+    // // console.log(`----get-friends-wannas ---my_id`, my_id);
+
+    db.getAllFriendsAndWannabes(my_id)
+        .then(({ rows }) => {
+            console.log("rows", rows);
+            res.json({ serverSuccess: true, allFriendships: rows });
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in get-friends-wannabes`, err);
         });
 });
