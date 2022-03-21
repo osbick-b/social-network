@@ -91,7 +91,7 @@ export class App extends Component {
                             )}
                         </Route>
 
-                        <Route path={"/me/friends-list"}>
+                        <Route path={"/me/friendships"}>
                             <FriendsAndWannabes myId={this.props.myId} />
                         </Route>
 

@@ -64,13 +64,13 @@ export function FriendshipButton({ otherUserId, myId }) {
     }, [friendshipStatus]);
 
     const handleClick = (action) => {
-        fetch(`/friendship/${action}/${otherUserId}`, {
-            // fetch(`/friendship/${buttonAction}/${otherUserId}`, {
-            // fetch(`/friendship/change-friendship`, {
+        // fetch(`/friendship/${action}/${otherUserId}`, {
+        // fetch(`/friendship/${buttonAction}/${otherUserId}`, {
+        fetch(`/friendship/change-friendship`, {
             method: "POST",
-            // headers: {
-            //     "Content Type": "application/json",
-            // },
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify({
                 other_user_id: otherUserId,
                 action: action,

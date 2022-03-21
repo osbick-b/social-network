@@ -9,8 +9,9 @@ import { App } from "./_app";
 import { createStore, applyMiddleware } from "redux";
 import * as immutableState from "redux-immutable-state-invariant";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { Provider } from "react-redux";
 import reducer from "./redux/reducer"; // its called rootReducer in the orig reducer file. you can import it with another name bc we exported it default
+
+import { Provider } from "react-redux";
 
 const store = createStore(
     reducer,

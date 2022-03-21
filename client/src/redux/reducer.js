@@ -2,28 +2,18 @@ const fln = "reducer.js";
 ///////////////////////////////////
 
 import { combineReducers } from "redux";
-import FriendsWannabesReducer from "./friends/slice";
+import friendsListReducer from "./friends/slice"; // there called FriendsWannabesReducer
+// import FriendsWannabesReducer from "./friends/slice";
 
 
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({
+    friends: friendsListReducer,
+});
 
 export default rootReducer;
 
 
 
-export function makeFriend(id) {
-    return {
-        type: "friends-and-wannabes/accepr",
-
-    };
-}
-
-
-
-
-export function getList(data) {
-    return {};
-}
 
 
 

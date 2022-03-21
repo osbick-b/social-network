@@ -2,7 +2,7 @@ const fln = "friends-wannabes.js";
 ///////////////////////////////////
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { makeFriend, getList } from "./redux/reducer";
+import { makeFriend, getFriendshipsList } from "./redux/friends/slice";
 import { ProfilePic } from "./profile_pic";
 
 export default function FriendsAndWannabes({ myId }) {
@@ -12,9 +12,27 @@ export default function FriendsAndWannabes({ myId }) {
     const wannabes = useSelector(
         (state) =>
             state.friendsWannabes &&
-            state.friendsWannabes.filter((friendship) => !friendship.accepted)
+            state.friendsWannabes.filter(
+                (friendship) =>
+                    !friendship.accepted && friendship.recipient_id == myId
+            )
     );
     // console.log(`wannabes`, wannabes);
+
+    const friends = useSelector(
+        (state) =>
+            state.friendsWannabes &&
+            state.friendsWannabes.filter((friendship) => friendship.accepted)
+    );
+
+    const pendingRequests = useSelector(
+        (state) =>
+            state.friendsWannabes &&
+            state.friendsWannabes.filter(
+                (friendship) =>
+                    !friendship.accepted && friendship.sender_id == myId
+            )
+    );
 
     useEffect(() => {
         fetch("/friendship/get-friends-and-wannabes")
@@ -23,27 +41,27 @@ export default function FriendsAndWannabes({ myId }) {
                 console.log(" data", data);
                 // // data.serverSuccess && data.allFriendships.map((wannabe, i) => {console.log(i, wannabe);});
 
-                let myFriends = data.allFriendships.filter(
-                    (friendship) => friendship.accepted
-                );
+                // // let myFriends = data.allFriendships.filter(
+                // //     (friendship) => friendship.accepted
+                // // );
 
-                let myWannabes = data.allFriendships.filter(
-                    (friendship) =>
-                        !friendship.accepted && friendship.recipient_id == myId
-                );
+                // // let myWannabes = data.allFriendships.filter(
+                // //     (friendship) =>
+                // //         !friendship.accepted && friendship.recipient_id == myId
+                // // );
 
-                let myPendingRequests = data.allFriendships.filter(
-                    (friendship) =>
-                        !friendship.accepted && friendship.sender_id == myId
-                );
+                // // let myPendingRequests = data.allFriendships.filter(
+                // //     (friendship) =>
+                // //         !friendship.accepted && friendship.sender_id == myId
+                // // );
 
-                console.log(`myFriends`, myFriends);
-                console.log(`myWannabes`, myWannabes);
-                console.log(`myPendingRequests`, myPendingRequests);
+                // // console.log(`myFriends`, myFriends);
+                // // console.log(`myWannabes`, myWannabes);
+                // // console.log(`myPendingRequests`, myPendingRequests);
 
                 // you'll get an arr of ALL the stuff
                 // filter them into 2 sets: frds and wannabs
-                //! dispatch(getList(data));
+                //! dispatch(getFriendshipsList(data));
             })
             .catch((err) => {
                 console.log(`>>> ${fln} >> fetch Friends and Wanabes`, err);

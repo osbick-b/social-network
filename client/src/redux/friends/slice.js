@@ -5,10 +5,33 @@
 export default function FriendsWannabesReducer(friends = [], action){
     if (action.type === "friends-and-wannabes/accept") {
         // do sth
+        return [...friends, ];
     }
 
     return friends;
 }
+
+
+// =============================================================================
+// Actions
+// =============================================================================
+
+
+export function makeFriend(id) {
+    return {
+        type: "friends-and-wannabes/accept",
+    };
+}
+
+export function getFriendshipsList(data) {
+    return {
+        type: "friendships/list",
+        payload: { data }
+    };
+}
+
+
+
 
 
 //* SPREAD OPERATOR

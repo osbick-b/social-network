@@ -25,15 +25,13 @@ router.get("/get-status/:other_user_id", (req, res) => {
 });
 
 // --- changeFriendship
-router.post("/:action/:other_user_id", (req, res) => {
-    // console.log("req.body", req.body); // ?? why cant i pass a body to this side??
-    // const { other_user_id, action } = req.body;
-
+router.post("/change-friendship", (req, res) => {
+    
+    const { other_user_id, action } = req.body;
     const my_id = req.session.user_id;
-    const { action } = req.params;
-    const other_user_id = parseInt(req.params.other_user_id);
-
+    
     console.log("---- in ChangeFriendship");
+    // console.log(`action, other_user_id`, action, other_user_id);
 
     db[action](my_id, other_user_id)
         .then(({ rows }) => {
