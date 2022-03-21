@@ -32,6 +32,8 @@ export class MainHeader extends Component {
                 <h1>MainHeader</h1>
 
                 <Link to={"/find-people"}>Find People</Link>
+                <Link to={"/me/friendships"}>My Friendships</Link>
+                
                 <div onClick={this.toggleMainNav}>
                     <ProfilePic userInfo={this.props.userInfo} />
                 </div>
@@ -40,7 +42,6 @@ export class MainHeader extends Component {
                     <nav className="main" onClick={this.toggleMainNav}>
                         {/* <Link to="/home">My Profile</Link> */}
                         <Link to="/">My Profile</Link>
-                        <Link to={"/me/friendships"}>My Friendships</Link>
                         {/* <Link to="/user/profile/edit">Edit Profile</Link> */}
                         <Logout />
                     </nav>
