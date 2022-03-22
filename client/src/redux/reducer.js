@@ -2,12 +2,12 @@ const fln = "reducer.js";
 ///////////////////////////////////
 
 import { combineReducers } from "redux";
-import friendsListReducer from "./friends/slice"; // there called FriendsWannabesReducer
+import FriendshipsReducer from "./friends/slice"; // there called FriendsWannabesReducer
 // import FriendsWannabesReducer from "./friends/slice";
 
 
 const rootReducer = combineReducers({
-    friends: friendsListReducer,
+    friendships: FriendshipsReducer,
 });
 
 export default rootReducer;

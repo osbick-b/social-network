@@ -2,36 +2,46 @@
 // we MUST make copies for every array and obj
 // no mutating allowed!
 
-export default function FriendsWannabesReducer(friends = [], action){
-    if (action.type === "friends-and-wannabes/accept") {
-        // do sth
-        return [...friends, ];
+export default function FriendshipsReducer(friendships = [], action) {
+    console.log(`----- FriendshipsReducer is running`);
+    switch (action.type) {
+                    case "friendships/list": {
+                        console.log(action.type), console.log(1 + 1);
+                        console.log(`action.payload.data`, action.payload.data);
+                        friendships = action.payload.data;
+                        break;
+                    }
+                    case "friend/accept": {
+                        console.log(action.type), console.log(1 + 1);
+                        break;
+                    }
     }
 
-    return friends;
-}
+    // if (action.type === "friends-and-wannabes/accept") {
+    //     // do sth
+    //     return [...friends, ];
+    // } else if (){}
 
+    return friendships;
+}
 
 // =============================================================================
 // Actions
 // =============================================================================
 
-
-export function makeFriend(id) {
-    return {
-        type: "friends-and-wannabes/accept",
-    };
-}
-
 export function getFriendshipsList(data) {
     return {
         type: "friendships/list",
-        payload: { data }
+        payload: { data },
     };
 }
 
-
-
+export function makeFriend(id) {
+    return {
+        type: "friend/accept",
+        payload: { id },
+    };
+}
 
 
 //* SPREAD OPERATOR
@@ -42,10 +52,10 @@ export function getFriendshipsList(data) {
 // let newArr = [...arr, 4,5];
 
 //* MAP --- useful method here. ARRAYS ONLY
-// 
+//
 
 //* FILTER --- useful array method
 // creates a copy of array and filters it according to condition
 
-//* SLICE --- 
+//* SLICE ---
 // creates a copy of the array, and THEN you can use whatever destructive methods you want on this copy

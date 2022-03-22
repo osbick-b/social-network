@@ -188,7 +188,7 @@ module.exports.cancelFriendship = (my_id, other_user_id) => {
 };
 
 // ======== Get Friends Lists ======= //
-module.exports.getAllFriendsAndWannabes = (my_id) => {
+module.exports.getAllFriendships = (my_id) => {
     return db.query(
         `SELECT friendships.id AS friendship_id, friendships.accepted, friendships.sender_id, friendships.recipient_id,
          users.id AS other_user_id, users.profile_pic, users.first, users.last

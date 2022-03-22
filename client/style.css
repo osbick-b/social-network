@@ -129,3 +129,13 @@ nav.main {
     right: 5vw;
     padding: 2rem;
 }
+
+
+/* ///////// Friendships ///////// */
+.friendships-group {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 5vw;
+    padding: 3vh 0;
+    margin-bottom: 7vh;
+}

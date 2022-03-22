@@ -46,16 +46,16 @@ router.post("/change-friendship", (req, res) => {
 
 
 // --- Get ALL friends and Wannabes
-router.get("/get-friends-and-wannabes", (req, res) => {
+router.get("/get-friendships-list", (req, res) => {
     const my_id = req.session.user_id;
     // // console.log(`----get-friends-wannas ---my_id`, my_id);
 
-    db.getAllFriendsAndWannabes(my_id)
+    db.getAllFriendships(my_id)
         .then(({ rows }) => {
-            console.log("rows", rows);
-            res.json({ serverSuccess: true, allFriendships: rows });
+            console.log("getAllFriendships - rows", rows);
+            res.json(rows);
         })
         .catch((err) => {
-            console.log(`>>> ${fln} >> Error in get-friends-wannabes`, err);
+            console.log(`>>> ${fln} >> Error in getAllFriendships`, err);
         });
 });
