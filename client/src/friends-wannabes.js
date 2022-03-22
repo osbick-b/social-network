@@ -2,8 +2,15 @@ const fln = "friends-wannabes.js";
 ///////////////////////////////////
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { makeFriend, getFriendshipsList } from "./redux/friends/slice";
+import {
+    getFriendshipsList,
+    acceptFriendshipRequest,
+    cancelFriendship,
+} from "./redux/friends/slice";
 import { ProfilePic } from "./profile_pic";
+import { Link } from "react-router-dom";
+
+import { FriendsSetDisplay } from "./friends-c-set";
 
 export default function FriendsAndWannabes({ myId }) {
     const dispatch = useDispatch();
@@ -13,12 +20,10 @@ export default function FriendsAndWannabes({ myId }) {
             .then((resp) => resp.json())
             .then((data) => {
                 console.log(`${fln} data`, data);
-                // you'll get an arr of ALL the stuff
-                // filter them into 2 sets: frds and wannabs
                 !dispatch(getFriendshipsList(data));
             })
             .catch((err) => {
-                console.log(`>>> ${fln} >> fetch Friends and Wanabes`, err);
+                console.log(`>>> ${fln} >> fetch Friendsips List`, err);
             });
     }, []);
 
@@ -47,64 +52,134 @@ export default function FriendsAndWannabes({ myId }) {
             )
     );
 
-    console.log(`friends`, friends);
-    console.log(`wannabes`, wannabes);
-    console.log(`pendingRequests`, pendingRequests);
+    // console.log(`friends`, friends);
+    // console.log(`wannabes`, wannabes);
+    // console.log(`pendingRequests`, pendingRequests);
 
-    const handleAccept = (id) => {
-        // make post req to db
-        // dispatch an action to update redux
-        //! dispatch(makeFriend(id));
+    const handleClick = async (buttonAction, id) => {
+        console.log("CLICK!", id, buttonAction);
+
+        const resp = await fetch(`/friendship/change-friendship`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                other_user_id: id,
+                action: buttonAction,
+            }),
+        });
+        const data = await resp.json();
+        console.log(`AFTER handleCancel -- data`, data);
+
+        data.serverSuccess && buttonAction === "acceptFriendshipRequest"
+            ? dispatch(acceptFriendshipRequest(id))
+            : dispatch(cancelFriendship(id));
     };
 
     return (
         <section>
             <h2>Wannabes</h2>
+            {/* {friends[0] && (
+                <FriendsSetDisplay
+                    group={friends}
+                    clickHandler={handleClick}
+                    messageIfEmpty={"No one here 😪"}
+                    buttons={{
+                        cancel: { action: "cancelFriendship", text: "Decline" },
+                        accept: { action: "acceptFriendshipRequest", text: "Accept" },
+                    }}
+                />
+            )} */}
             <section className="friendships-group">
-                {wannabes &&
-                    wannabes.map((wannabe, i) => (
+                {wannabes[0] &&
+                    wannabes.map((user, i) => (
                         <div key={i}>
-                            <ProfilePic userInfo={wannabe} />
-                            <h5>
-                                {wannabe.first} {wannabe.last}
-                            </h5>
-                            <button onClick={(id) => handleAccept(id)}>
+                            <Link to={`/users/${user.other_user_id}`}>
+                                <ProfilePic userInfo={user} />
+                                <h5>
+                                    {user.first} {user.last}
+                                </h5>
+                            </Link>
+                            <button
+                                name={"acceptFriendshipRequest"}
+                                onClick={(e) =>
+                                    handleClick(
+                                        e.target.name,
+                                        user.other_user_id
+                                    )
+                                }
+                            >
                                 Accept
+                            </button>
+                            <button
+                                name={"cancelFriendship"}
+                                onClick={(e) =>
+                                    handleClick(
+                                        e.target.name,
+                                        user.other_user_id
+                                    )
+                                }
+                            >
+                                Decline
                             </button>
                         </div>
                     ))}
+                {!wannabes[0] && <h5> No wannabes 💔 </h5>}
             </section>
 
             <h2>Pending Requests</h2>
             <section className="friendships-group">
-                {pendingRequests &&
-                    pendingRequests.map((pendingRequest, i) => (
+                {pendingRequests[0] &&
+                    pendingRequests.map((user, i) => (
                         <div key={i}>
-                            <ProfilePic userInfo={pendingRequest} />
-                            <h5>
-                                {pendingRequest.first} {pendingRequest.last}
-                            </h5>
-                            <button onClick={(id) => handleAccept(id)}>
-                                Accept
+                            <Link to={`/users/${user.other_user_id}`}>
+                                <ProfilePic userInfo={user} />
+                                <h5>
+                                    {user.first} {user.last}
+                                </h5>
+                            </Link>
+                            <button
+                                name={"cancelFriendship"}
+                                onClick={(e) =>
+                                    handleClick(
+                                        e.target.name,
+                                        user.other_user_id
+                                    )
+                                }
+                            >
+                                Cancel Request
                             </button>
                         </div>
                     ))}
+                {!pendingRequests[0] && <h5> No Pending requests 💔 </h5>}
             </section>
 
             <h2>Friends</h2>
             <section className="friendships-group">
-                {friends &&
-                    friends.map((friend, i) => (
+                {friends[0] &&
+                    friends.map((user, i) => (
                         <div key={i}>
-                            <ProfilePic userInfo={friend} />
-                            <h5>
-                                {friend.first} {friend.last}
-                            </h5>
-                            <button onClick={(id) => handleAccept(id)}>
-                                Accept
+                            <Link to={`/users/${user.other_user_id}`}>
+                                <ProfilePic userInfo={user} />
+                                <h5>
+                                    {user.first} {user.last}
+                                </h5>
+                            </Link>
+                            <button
+                                name={"cancelFriendship"}
+                                onClick={(e) =>
+                                    handleClick(
+                                        e.target.name,
+                                        user.other_user_id
+                                    )
+                                }
+                            >
+                                Unfriend
                             </button>
                         </div>
                     ))}
+                {!friends[0] && <h5>No friends yet 😭😭😭</h5>}
             </section>
         </section>
     );

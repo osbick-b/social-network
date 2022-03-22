@@ -5,26 +5,27 @@ import { useState, useEffect } from "react";
 
 const FRIENDSHIP_BTN_STATUSES = {
     NO_FRIENDSHIP: {
-        text: "Add Friend",
+        buttonText: "Add Friend",
         action: "makeFriendshipRequest",
     },
     PENDING_SENDER: {
-        text: "Cancel Request",
+        buttonText: "Cancel Request",
         action: "cancelFriendship",
     },
     PENDING_RECIPIENT: {
-        text: "Accept",
+        buttonText: "Accept",
         action: "acceptFriendshipRequest",
         DECLINE: {
-            text: "Decline",
+            buttonText: "Decline",
             action: "cancelFriendship",
         },
     },
     FRIENDS: {
-        text: "Unfriend",
+        buttonText: "Unfriend",
         action: "cancelFriendship",
     },
 };
+
 export function FriendshipButton({ otherUserId, myId }) {
     const fbs = FRIENDSHIP_BTN_STATUSES;
     const [friendshipStatus, setFriendshipStatus] = useState();
@@ -59,13 +60,11 @@ export function FriendshipButton({ otherUserId, myId }) {
 
     // --- Update buttonText etc based on friendshipStatus
     useEffect(() => {
-        friendshipStatus && setButtonText(friendshipStatus.text);
+        friendshipStatus && setButtonText(friendshipStatus.buttonText);
         friendshipStatus && setButtonAction(friendshipStatus.action);
     }, [friendshipStatus]);
 
     const handleClick = (action) => {
-        // fetch(`/friendship/${action}/${otherUserId}`, {
-        // fetch(`/friendship/${buttonAction}/${otherUserId}`, {
         fetch(`/friendship/change-friendship`, {
             method: "POST",
             headers: {
@@ -93,7 +92,7 @@ export function FriendshipButton({ otherUserId, myId }) {
                     className={"primary friendship destructive"}
                     onClick={() => handleClick(declineBtn.action)}
                 >
-                    {declineBtn.text}
+                    {declineBtn.buttonText}
                 </button>
             )}
             <button

@@ -5,16 +5,28 @@
 export default function FriendshipsReducer(friendships = [], action) {
     console.log(`----- FriendshipsReducer is running`);
     switch (action.type) {
-                    case "friendships/list": {
-                        console.log(action.type), console.log(1 + 1);
-                        console.log(`action.payload.data`, action.payload.data);
+                    case "friendships/listed": {
+                        console.log(action.type);
+                        // // console.log(`action.payload.data`, action.payload.data);
                         friendships = action.payload.data;
                         break;
                     }
-                    case "friend/accept": {
-                        console.log(action.type), console.log(1 + 1);
+                    case "friend/accepted": {
+                        console.log(action.type);
+                        friendships = friendships.map(
+                            (user) => user.other_user_id === action.payload.id? {...user, accepted:true}:user
+                        );
                         break;
                     }
+                    case "friend/cancelled": {
+                        console.log(action.type);
+                        friendships = friendships.filter((user) => user.other_user_id !== action.payload.id);
+                        break;
+                    }
+                    // case "friend/request": {
+                    //     console.log(action.type);
+                    //     break;
+                    // }
     }
 
     // if (action.type === "friends-and-wannabes/accept") {
@@ -31,17 +43,33 @@ export default function FriendshipsReducer(friendships = [], action) {
 
 export function getFriendshipsList(data) {
     return {
-        type: "friendships/list",
+        type: "friendships/listed",
         payload: { data },
     };
 }
 
-export function makeFriend(id) {
+
+export function acceptFriendshipRequest(id) {
     return {
-        type: "friend/accept",
+        type: "friend/accepted",
         payload: { id },
     };
 }
+
+export function cancelFriendship(id) {
+    return {
+        type: "friend/cancelled",
+        payload: { id },
+    };
+}
+
+
+// export function makeFriendshipRequest( id ) {
+//     return {
+//         type: "friend/request",
+//         payload: { id },
+//     };
+// }
 
 
 //* SPREAD OPERATOR
