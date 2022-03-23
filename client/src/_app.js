@@ -8,8 +8,10 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { Uploader } from "./uploader";
 import { ProfilePic } from "./profile_pic";
 import { Loading } from "./loading";
-
 import { MainHeader } from "./header";
+
+import { Chat } from "./chat";
+
 import { MyProfile } from "./my-profile";
 import { OtherUserProfile } from "./other-user-profile";
 import { FindPeople } from "./find-people";
@@ -101,6 +103,10 @@ export class App extends Component {
 
                         <Route path="/users/:otherUserId">
                             <OtherUserProfile myId={this.props.myId} />
+                        </Route>
+
+                        <Route exact path={"/chat"}>
+                            <Chat/>
                         </Route>
 
                         {this.state.uploaderVisible && (

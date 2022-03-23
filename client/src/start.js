@@ -2,6 +2,13 @@ const fln = "_start.js";
 ////////////////////////////////////
 
 import ReactDOM from "react-dom";
+
+// --- Socket.io setup client
+import { io } from "socket.io-client";
+const socket = io();
+import { init } from "./socket";
+
+
 import Welcome from "./_welcome";
 import { App } from "./_app";
 
