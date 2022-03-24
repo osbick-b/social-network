@@ -27,10 +27,6 @@ export function OtherUserProfile({ myId }) {
             return history.push("/");
         } // own profile case if handled client side
 
-        // // const resp = await fetch(`/api/get-user-data/${otherUserId}`);
-        // // const data = await resp.json();
-        // // data && setDataAlreadyArrived(true); // use it for loading state
-        // // data.serverSuccess && setUserInfo(data.userInfo);
         Promise.all([
             fetch(`/api/get-user-data/${otherUserId}`),
             fetch(`/api/get-mutual-friends/${otherUserId}`),
@@ -39,44 +35,13 @@ export function OtherUserProfile({ myId }) {
 
             .then((data) => {
                 console.log(" data", data);
-                setDataAlreadyArrived(true); // use it for loading state
                 data[0].serverSuccess && setUserInfo(data[0].userInfo);
-
-                console.log(`data[1].userFriends`, data[1].userFriends);
-                const mutualsPlaceholder = data[1].userFriends;
-                console.log(`mutualsPlaceholder`, mutualsPlaceholder);
-                data[1].serverSuccess && setMutualFriends(mutualsPlaceholder);
+                data[1].serverSuccess && setMutualFriends(data[1].userFriends);
+                setDataAlreadyArrived(true); // use it for loading state
             })
             .catch((err) => {
-                console.log(`>>> ${fln} >> Error in route`, err);
+                console.log(`>>> ${fln} >> Error in get other user info and friends`, err);
             });
-
-        // Get User Info
-        // fetch(`/api/get-user-data/${otherUserId}`)
-        //     .then((resp) => resp.json())
-        //     .then((data) => {
-        //         setDataAlreadyArrived(true); // use it for loading state
-        //         data.serverSuccess && setUserInfo(data.userInfo);
-        //         // // ///
-        //     })
-        //     .catch((err) => {
-        //         console.log(
-        //             `>>> ${fln} >> Error in fetch other user profile`,
-        //             err
-        //         );
-        //     });
-        // fetch(`/api/get-user-friends/${otherUserId}`)
-        // .then((resp) => resp.json())
-        // .then((data) => {
-        //     console.log(" data", data);
-        //     data.serverSuccess && // filter friends
-        //     myFriendsToo = ??? // attrib them to mutuals
-        //     setMutualFriends(myFriendsToo);
-        //     // render mutuals in component
-        // })
-        // .catch((err) => {
-        //     console.log(`>>> ${fln} >> Error in route`, err);
-        // });
     }, [otherUserId]);
 
     return (

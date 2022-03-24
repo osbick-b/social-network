@@ -32,7 +32,6 @@ router.get("/get-mutual-friends/:other_user_id", (req, res) => {
 
     db.getMutualFriends(other_user_id, my_id)
         .then(({ rows }) => {
-            console.log(`mutual friends`, rows);
             rows
                 ? res.json({ serverSuccess: true, userFriends: rows })
                 : res.json({ serverSuccess: false });

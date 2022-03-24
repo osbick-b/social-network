@@ -224,8 +224,8 @@ module.exports.getMutualFriends = (other_user_id, my_id) => {
         JOIN friendships
         ON (friendships.accepted = true AND sender_id = $1 AND recipient_id = users.id)
         OR (friendships.accepted = true AND sender_id = users.id AND recipient_id = $1)
-        WHERE users.id IN (
-            SELECT users.id 
+        INTERSECT (
+            SELECT users.id AS user_id, users.profile_pic, users.first, users.last
         FROM users
         JOIN friendships
         ON (friendships.accepted = true AND sender_id = $2 AND recipient_id = users.id)
