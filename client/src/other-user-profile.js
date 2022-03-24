@@ -43,7 +43,7 @@ export function OtherUserProfile({ myId }) {
                 data[0].serverSuccess && setUserInfo(data[0].userInfo);
 
                 console.log(`data[1].userFriends`, data[1].userFriends);
-                const mutualsPlaceholder = [data[1].userFriends];
+                const mutualsPlaceholder = data[1].userFriends;
                 console.log(`mutualsPlaceholder`, mutualsPlaceholder);
                 data[1].serverSuccess && setMutualFriends(mutualsPlaceholder);
             })

@@ -28,14 +28,17 @@ router.get("/get-user-data/:user_id", (req, res) => {
 // --- Get Mutual Friends
 router.get("/get-mutual-friends/:other_user_id", (req, res) => {
     const { other_user_id } = req.params;
-    db.getUserFriends(other_user_id)
+    const my_id = req.session.user_id;
+
+    db.getMutualFriends(other_user_id, my_id)
         .then(({ rows }) => {
+            console.log(`mutual friends`, rows);
             rows
                 ? res.json({ serverSuccess: true, userFriends: rows })
                 : res.json({ serverSuccess: false });
         })
         .catch((err) => {
-            console.log(`>>> ${fln} >> Error in getOtherUserProfile`, err);
+            console.log(`>>> ${fln} >> Error in getMutualFriends`, err);
             res.json({ serverSuccess: false });
         });
 });

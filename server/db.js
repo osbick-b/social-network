@@ -194,7 +194,7 @@ module.exports.cancelFriendship = (my_id, other_user_id) => {
 module.exports.getAllFriendsAndPending = (my_id) => {
     return db.query(
         `SELECT friendships.id AS friendship_id, friendships.accepted, friendships.sender_id, friendships.recipient_id,
-         users.id AS other_user_id, users.profile_pic, users.first, users.last
+         users.id AS user_id, users.profile_pic, users.first, users.last
         FROM friendships
         JOIN users
         ON (sender_id = $1 AND recipient_id = users.id)
@@ -206,12 +206,12 @@ module.exports.getAllFriendsAndPending = (my_id) => {
 // --- Get User Friends
 module.exports.getUserFriends = (user_id) => {
     return db.query(
-        `SELECT friendships.id AS friendship_id, friendships.sender_id, friendships.recipient_id,
-         users.id AS friend_id, users.profile_pic, users.first, users.last
-        FROM friendships
-        JOIN users
+        `SELECT users.id AS user_id, users.profile_pic, users.first, users.last
+        FROM users
+        JOIN friendships
         ON (friendships.accepted = true AND sender_id = $1 AND recipient_id = users.id)
-        OR (friendships.accepted = true AND sender_id = users.id AND recipient_id = $1)`,
+        OR (friendships.accepted = true AND sender_id = users.id AND recipient_id = $1)
+        `,
         [user_id]
     );
 };
@@ -219,11 +219,18 @@ module.exports.getUserFriends = (user_id) => {
 // -- Get Mutual Friends
 module.exports.getMutualFriends = (other_user_id, my_id) => {
     return db.query(
-        `SELECT *
-        FROM friendships
-        WHERE sender_id = $1 OR recipient_id = $1
-
-`,
+        `SELECT users.id AS user_id, users.profile_pic, users.first, users.last
+        FROM users
+        JOIN friendships
+        ON (friendships.accepted = true AND sender_id = $1 AND recipient_id = users.id)
+        OR (friendships.accepted = true AND sender_id = users.id AND recipient_id = $1)
+        WHERE users.id IN (
+            SELECT users.id 
+        FROM users
+        JOIN friendships
+        ON (friendships.accepted = true AND sender_id = $2 AND recipient_id = users.id)
+        OR (friendships.accepted = true AND sender_id = users.id AND recipient_id = $2)
+        )`,
         [other_user_id, my_id]
     );
 };

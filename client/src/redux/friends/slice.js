@@ -14,13 +14,13 @@ export default function FriendshipsReducer(friendships = [], action) {
                     case "friend/accepted": {
                         console.log(action.type);
                         friendships = friendships.map(
-                            (user) => user.other_user_id === action.payload.id? {...user, accepted:true}:user
+                            (user) => user.user_id === action.payload.id? {...user, accepted:true}:user
                         );
                         break;
                     }
                     case "friend/cancelled": {
                         console.log(action.type);
-                        friendships = friendships.filter((user) => user.other_user_id !== action.payload.id);
+                        friendships = friendships.filter((user) => user.user_id !== action.payload.id);
                         break;
                     }
     }

@@ -7,6 +7,7 @@ export function FriendsSetDisplay({
     messageIfEmpty,
     buttons,
 }) {
+
     return (
         <section className="friendships-group">
 
@@ -14,7 +15,7 @@ export function FriendsSetDisplay({
             {group[0] &&
                 group.map((person, i) => (
                     <div key={i}>
-                        <Link to={`/users/${person.other_user_id}`}>
+                        <Link to={`/users/${person.user_id}`}>
                             <ProfilePic userInfo={person} />
                             <h5>
                                 {person.first} {person.last}
@@ -31,7 +32,7 @@ export function FriendsSetDisplay({
                                         onClick={(e) =>
                                             clickHandler(
                                                 e.target.name,
-                                                person.other_user_id
+                                                person.user_id
                                             )
                                         }
                                     >
