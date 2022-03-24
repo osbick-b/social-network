@@ -1,7 +1,6 @@
 const fln = "db.js";
 ///////////////////////////////////
 
-
 //////////////// DB.JS //////////////
 
 // const { use } = require("express/lib/application");
@@ -146,7 +145,11 @@ module.exports.findMatchingUsers = (searchInput) => {
 // ======== Friendship Requests ======= //
 
 module.exports.getFriendshipStatus = (my_id, other_user_id) => {
-    console.log(`>>> ${fln} >> getFriendshipStatus > my_id, other_user_id:`, my_id, other_user_id);
+    console.log(
+        `>>> ${fln} >> getFriendshipStatus > my_id, other_user_id:`,
+        my_id,
+        other_user_id
+    );
     return db.query(
         `SELECT * FROM friendships
         WHERE (sender_id = $1 AND recipient_id = $2) 
@@ -188,7 +191,7 @@ module.exports.cancelFriendship = (my_id, other_user_id) => {
 };
 
 // ======== Get Friends Lists ======= //
-module.exports.getAllFriendships = (my_id) => {
+module.exports.getAllFriendsAndPending = (my_id) => {
     return db.query(
         `SELECT friendships.id AS friendship_id, friendships.accepted, friendships.sender_id, friendships.recipient_id,
          users.id AS other_user_id, users.profile_pic, users.first, users.last
@@ -200,9 +203,30 @@ module.exports.getAllFriendships = (my_id) => {
     );
 };
 
+// --- Get User Friends
+module.exports.getUserFriends = (user_id) => {
+    return db.query(
+        `SELECT friendships.id AS friendship_id, friendships.sender_id, friendships.recipient_id,
+         users.id AS friend_id, users.profile_pic, users.first, users.last
+        FROM friendships
+        JOIN users
+        ON (friendships.accepted = true AND sender_id = $1 AND recipient_id = users.id)
+        OR (friendships.accepted = true AND sender_id = users.id AND recipient_id = $1)`,
+        [user_id]
+    );
+};
 
+// -- Get Mutual Friends
+module.exports.getMutualFriends = (other_user_id, my_id) => {
+    return db.query(
+        `SELECT *
+        FROM friendships
+        WHERE sender_id = $1 OR recipient_id = $1
 
-
+`,
+        [other_user_id, my_id]
+    );
+};
 
 // ======== Else ======= //
 

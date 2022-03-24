@@ -50,7 +50,7 @@ router.get("/get-friendships-list", (req, res) => {
     const my_id = req.session.user_id;
     // // console.log(`----get-friends-wannas ---my_id`, my_id);
 
-    db.getAllFriendships(my_id)
+    db.getAllFriendsAndPending(my_id)
         .then(({ rows }) => {
             console.log("getAllFriendships - rows", rows);
             res.json(rows);

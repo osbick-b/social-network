@@ -11,11 +11,10 @@ import { InexistentUser } from "./inexistent-user";
 import { FriendshipButton } from "./friendship-button";
 import { FriendsSetDisplay } from "./friends-c-set";
 
-
 export function OtherUserProfile({ myId }) {
     const [userInfo, setUserInfo] = useState({});
     const [dataAlreadyArrived, setDataAlreadyArrived] = useState(false);
-    const [mutualFriends, setMutualFriends]  = useState([]);
+    const [mutualFriends, setMutualFriends] = useState([]);
     const { otherUserId } = useParams(); // from react router --> in app.js
     const history = useHistory();
 
@@ -28,37 +27,58 @@ export function OtherUserProfile({ myId }) {
             return history.push("/");
         } // own profile case if handled client side
 
-        // Get User Info
-        fetch(`/api/get-user-data/${otherUserId}`)
-            .then((resp) => resp.json())
+        // // const resp = await fetch(`/api/get-user-data/${otherUserId}`);
+        // // const data = await resp.json();
+        // // data && setDataAlreadyArrived(true); // use it for loading state
+        // // data.serverSuccess && setUserInfo(data.userInfo);
+        Promise.all([
+            fetch(`/api/get-user-data/${otherUserId}`),
+            fetch(`/api/get-mutual-friends/${otherUserId}`),
+        ])
+            .then((resp) => Promise.all(resp.map((res) => res.json())))
+
             .then((data) => {
+                console.log(" data", data);
                 setDataAlreadyArrived(true); // use it for loading state
-                data.serverSuccess && setUserInfo(data.userInfo);
+                data[0].serverSuccess && setUserInfo(data[0].userInfo);
 
-                ///
-                fetch(`/api/get-user-friends/${otherUserId}`)
-                .then((resp) => resp.json())
-                .then((data) => {
-                    console.log(" data", data);
-                    data.serverSuccess && // filter friends
-                    myFriendsToo = ??? // attrib them to mutuals
-                    setMutualFriends(myFriendsToo);
-                    // render mutuals in component
-                })
-                .catch((err) => {
-                    console.log(`>>> ${fln} >> Error in route`, err);
-                });
-
-
-
+                console.log(`data[1].userFriends`, data[1].userFriends);
+                const mutualsPlaceholder = [data[1].userFriends];
+                console.log(`mutualsPlaceholder`, mutualsPlaceholder);
+                data[1].serverSuccess && setMutualFriends(mutualsPlaceholder);
             })
             .catch((err) => {
-                console.log(
-                    `>>> ${fln} >> Error in fetch other user profile`,
-                    err
-                );
+                console.log(`>>> ${fln} >> Error in route`, err);
             });
+
+        // Get User Info
+        // fetch(`/api/get-user-data/${otherUserId}`)
+        //     .then((resp) => resp.json())
+        //     .then((data) => {
+        //         setDataAlreadyArrived(true); // use it for loading state
+        //         data.serverSuccess && setUserInfo(data.userInfo);
+        //         // // ///
+        //     })
+        //     .catch((err) => {
+        //         console.log(
+        //             `>>> ${fln} >> Error in fetch other user profile`,
+        //             err
+        //         );
+        //     });
+        // fetch(`/api/get-user-friends/${otherUserId}`)
+        // .then((resp) => resp.json())
+        // .then((data) => {
+        //     console.log(" data", data);
+        //     data.serverSuccess && // filter friends
+        //     myFriendsToo = ??? // attrib them to mutuals
+        //     setMutualFriends(myFriendsToo);
+        //     // render mutuals in component
+        // })
+        // .catch((err) => {
+        //     console.log(`>>> ${fln} >> Error in route`, err);
+        // });
     }, [otherUserId]);
+
     return (
         <>
             {!dataAlreadyArrived && <Loading />}
@@ -70,7 +90,10 @@ export function OtherUserProfile({ myId }) {
                     <h1>
                         {userInfo.first} {userInfo.last}
                     </h1>
-                    <FriendshipButton otherUserId={userInfo.user_id} myId={myId} />
+                    <FriendshipButton
+                        otherUserId={userInfo.user_id}
+                        myId={myId}
+                    />
 
                     <ProfilePic userInfo={userInfo} />
 
@@ -98,11 +121,12 @@ export function OtherUserProfile({ myId }) {
                     <section>
                         <h2>Friend&apos;s Friends</h2>
                         {/* <h2>Mutual Friends</h2> */}
-                        <FriendsSetDisplay  group={mutualFriends}
-                    // clickHandler={handleClick}
-                    messageIfEmpty={"No one here 😪"}
-                    // buttons={null}
-                    />
+                        <FriendsSetDisplay
+                            group={mutualFriends}
+                            // clickHandler={handleClick}
+                            messageIfEmpty={"No one here 😪"}
+                            // buttons={null}
+                        />
                     </section>
                 </>
             )}

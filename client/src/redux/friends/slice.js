@@ -23,16 +23,7 @@ export default function FriendshipsReducer(friendships = [], action) {
                         friendships = friendships.filter((user) => user.other_user_id !== action.payload.id);
                         break;
                     }
-                    // case "friend/request": {
-                    //     console.log(action.type);
-                    //     break;
-                    // }
     }
-
-    // if (action.type === "friends-and-wannabes/accept") {
-    //     // do sth
-    //     return [...friends, ];
-    // } else if (){}
 
     return friendships;
 }
@@ -62,28 +53,3 @@ export function cancelFriendship(id) {
         payload: { id },
     };
 }
-
-
-// export function makeFriendshipRequest( id ) {
-//     return {
-//         type: "friend/request",
-//         payload: { id },
-//     };
-// }
-
-
-//* SPREAD OPERATOR
-// let obj = {name: "Luci"};
-// let newObj = {...obj, last: "En"};
-
-// let arr = [1,2,3];
-// let newArr = [...arr, 4,5];
-
-//* MAP --- useful method here. ARRAYS ONLY
-//
-
-//* FILTER --- useful array method
-// creates a copy of array and filters it according to condition
-
-//* SLICE ---
-// creates a copy of the array, and THEN you can use whatever destructive methods you want on this copy

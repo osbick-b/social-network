@@ -8,9 +8,7 @@ const db = require("../db");
 
 module.exports = router;
 
-
 //================================= Get User's Data =========================================//
-
 
 // --- Get User Profile
 router.get("/get-user-data/:user_id", (req, res) => {
@@ -27,13 +25,13 @@ router.get("/get-user-data/:user_id", (req, res) => {
         });
 });
 
-// --- Get User Friends
-router.get("/get-user-friends/:user_id", (req, res) => {
-    const { user_id } = req.params;
-    db.getUserData(user_id)
+// --- Get Mutual Friends
+router.get("/get-mutual-friends/:other_user_id", (req, res) => {
+    const { other_user_id } = req.params;
+    db.getUserFriends(other_user_id)
         .then(({ rows }) => {
-            rows[0]
-                ? res.json({ serverSuccess: true, userFriends: rows[0] })
+            rows
+                ? res.json({ serverSuccess: true, userFriends: rows })
                 : res.json({ serverSuccess: false });
         })
         .catch((err) => {

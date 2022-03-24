@@ -74,51 +74,44 @@ export default function FriendsAndWannabes({ myId }) {
         <>
             <h1>🎅 Friendships 🎅</h1>
             <h2>Friends</h2>
-            {friends[0] && (
-                <FriendsSetDisplay
-                    group={friends}
-                    clickHandler={handleClick}
-                    messageIfEmpty={"No one here 😪"}
-                    buttons={{
-                        cancel: {
-                            action: "cancelFriendship",
-                            text: "Unfriend",
-                        },
-                    }}
-                />
-            )}
+            <FriendsSetDisplay
+                group={friends}
+                clickHandler={handleClick}
+                messageIfEmpty={"No one here 😪"}
+                buttons={{
+                    cancel: {
+                        action: "cancelFriendship",
+                        text: "Unfriend",
+                    },
+                }}
+            />
 
             <h2>Wannabes</h2>
-            {wannabes[0] && (
-                <FriendsSetDisplay
-                    group={wannabes}
-                    clickHandler={handleClick}
-                    messageIfEmpty={"No one here 😪"}
-                    buttons={{
-                        cancel: { action: "cancelFriendship", text: "Decline" },
-                        accept: {
-                            action: "acceptFriendshipRequest",
-                            text: "Accept",
-                        },
-                    }}
-                />
-            )}
+            <FriendsSetDisplay
+                group={wannabes}
+                clickHandler={handleClick}
+                messageIfEmpty={"No one here 😪"}
+                buttons={{
+                    cancel: { action: "cancelFriendship", text: "Decline" },
+                    accept: {
+                        action: "acceptFriendshipRequest",
+                        text: "Accept",
+                    },
+                }}
+            />
 
             <h2>Pending Requests</h2>
-            {pendingRequests[0] && (
-                <FriendsSetDisplay
-                    group={pendingRequests}
-                    clickHandler={handleClick}
-                    messageIfEmpty={"No one here 😪"}
-                    buttons={{
-                        cancel: {
-                            action: "cancelFriendship",
-                            text: "Cancel Request",
-                        },
-                    }}
-                />
-            )}
+            <FriendsSetDisplay
+                group={pendingRequests}
+                clickHandler={handleClick}
+                messageIfEmpty={"No one here 😪"}
+                buttons={{
+                    cancel: {
+                        action: "cancelFriendship",
+                        text: "Cancel Request",
+                    },
+                }}
+            />
         </>
     );
 }
-
