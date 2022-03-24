@@ -2,11 +2,12 @@ import { ProfilePic } from "./profile_pic";
 import { Link } from "react-router-dom";
 
 export function FriendsSetDisplay({
-    group,
+    group=[],
     clickHandler,
     messageIfEmpty,
     buttons,
 }) {
+    console.log("---Friends display loaded");
     return (
         <section className="friendships-group">
 

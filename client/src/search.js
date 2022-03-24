@@ -14,7 +14,7 @@ export function FindPeople() {
     useEffect(() => {
         let abort = false;
         // ??? where does this Abort go???
-        fetch(`/api/search/${searchInput}`)
+        fetch(`/search-api/search/${searchInput}`)
             .then((resp) => resp.json())
             .then((data) => {
                 !data[0] ? setNoResults(true) : setNoResults(false);

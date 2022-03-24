@@ -3,30 +3,54 @@ const fln = "other-user-profile.js";
 
 import { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
+
 import { ProfilePic } from "./profile_pic";
 import { Loading } from "./loading";
 import { InexistentUser } from "./inexistent-user";
+
 import { FriendshipButton } from "./friendship-button";
+import { FriendsSetDisplay } from "./friends-c-set";
+
 
 export function OtherUserProfile({ myId }) {
     const [userInfo, setUserInfo] = useState({});
     const [dataAlreadyArrived, setDataAlreadyArrived] = useState(false);
+    const [mutualFriends, setMutualFriends]  = useState([]);
     const { otherUserId } = useParams(); // from react router --> in app.js
     const history = useHistory();
 
     useEffect(() => {
         console.log("--- OtherUserProfile rendered");
+
+        // If own Profile
         if (otherUserId == myId) {
             console.log("OH NO! ITS ME");
             return history.push("/");
         } // own profile case if handled client side
 
+        // Get User Info
         fetch(`/api/get-user-data/${otherUserId}`)
             .then((resp) => resp.json())
             .then((data) => {
-                // if (data.isMyOwnProfile) {return history.push("/");} //  own profile case if handled server side (more to it in the server obv)
                 setDataAlreadyArrived(true); // use it for loading state
                 data.serverSuccess && setUserInfo(data.userInfo);
+
+                ///
+                fetch(`/api/get-user-friends/${otherUserId}`)
+                .then((resp) => resp.json())
+                .then((data) => {
+                    console.log(" data", data);
+                    data.serverSuccess && // filter friends
+                    myFriendsToo = ??? // attrib them to mutuals
+                    setMutualFriends(myFriendsToo);
+                    // render mutuals in component
+                })
+                .catch((err) => {
+                    console.log(`>>> ${fln} >> Error in route`, err);
+                });
+
+
+
             })
             .catch((err) => {
                 console.log(
@@ -49,7 +73,6 @@ export function OtherUserProfile({ myId }) {
                     <FriendshipButton otherUserId={userInfo.user_id} myId={myId} />
 
                     <ProfilePic userInfo={userInfo} />
-                    {/* what about toggle uploader? dont i need to pass it to the comp bc it expects me to?? */}
 
                     <section>
                         <h2>Profile</h2>
@@ -65,11 +88,21 @@ export function OtherUserProfile({ myId }) {
                     </section>
 
                     <section>
-                        <h1>Bio</h1>
+                        <h2>Bio</h2>
 
                         <p>
                             Bio:<span>{userInfo.bio}</span>
                         </p>
+                    </section>
+
+                    <section>
+                        <h2>Friend&apos;s Friends</h2>
+                        {/* <h2>Mutual Friends</h2> */}
+                        <FriendsSetDisplay  group={mutualFriends}
+                    // clickHandler={handleClick}
+                    messageIfEmpty={"No one here 😪"}
+                    // buttons={null}
+                    />
                     </section>
                 </>
             )}

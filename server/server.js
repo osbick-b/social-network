@@ -35,6 +35,7 @@ const friendshipRoutes = require("./routes/friendship-routes");
 const passwordRoutes = require("./routes/password-routes");
 const searchUserRoutes = require("./routes/search-user-routes");
 const chatRoutes = require("./routes/chat-routes");
+const userDataRoutes = require("./routes/user-data-routes");
 
 // ============= Middleware ================= //
 
@@ -63,10 +64,11 @@ app.get("/start/id.json", (req, res) => {
 // ============================ ROUTER ROUTES ========================================= //
 
 app.use("/loguser", loginRoutes);
+app.use("/api", userDataRoutes);
 app.use("/user", editUserRoutes);
 app.use("/friendship", friendshipRoutes);
 app.use("/pass", passwordRoutes);
-app.use("/api", searchUserRoutes);
+app.use("/search-api", searchUserRoutes);
 app.use("/chat-api", chatRoutes);
 
 

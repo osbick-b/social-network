@@ -12,6 +12,23 @@ module.exports = router;
 
 //================================= Find Other Users =========================================//
 
+
+// // // --- Get Other User Profile
+// // router.get("/get-user-data/:user_id", (req, res) => {
+// //     const { user_id } = req.params;
+// //     db.getUserData(user_id)
+// //         .then(({ rows }) => {
+// //             rows[0]
+// //                 ? res.json({ serverSuccess: true, userInfo: rows[0] })
+// //                 : res.json({ serverSuccess: false });
+// //         })
+// //         .catch((err) => {
+// //             console.log(`>>> ${fln} >> Error in getOtherUserProfile`, err);
+// //             res.json({ serverSuccess: false });
+// //         });
+// // });
+
+
 // --- Get most recent people
 router.get("/search", (req, res) => {
     console.log(`>>> ${fln} RECENT users`);
@@ -24,6 +41,7 @@ router.get("/search", (req, res) => {
             console.log(`>>> ${fln} >> Error in route`, err);
         });
 });
+
 
 // --- Search for other People
 router.get("/search/:searchInput", (req, res) => {
@@ -42,17 +60,3 @@ router.get("/search/:searchInput", (req, res) => {
             });
 });
 
-// --- Get Other User Profile
-router.get("/get-user-data/:user_id", (req, res) => {
-    const { user_id } = req.params;
-    db.getUserData(user_id)
-        .then(({ rows }) => {
-            rows[0]
-                ? res.json({ serverSuccess: true, userInfo: rows[0] })
-                : res.json({ serverSuccess: false });
-        })
-        .catch((err) => {
-            console.log(`>>> ${fln} >> Error in getOtherUserProfile`, err);
-            res.json({ serverSuccess: false });
-        });
-});

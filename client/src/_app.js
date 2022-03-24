@@ -6,7 +6,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 // import Logout from "./logout";
 import { Uploader } from "./uploader";
-import { ProfilePic } from "./profile_pic";
+// import { ProfilePic } from "./profile_pic";
 import { Loading } from "./loading";
 import { MainHeader } from "./header";
 
@@ -14,7 +14,7 @@ import { Chat } from "./chat";
 
 import { MyProfile } from "./my-profile";
 import { OtherUserProfile } from "./other-user-profile";
-import { FindPeople } from "./find-people";
+import { FindPeople } from "./search";
 import FriendsAndWannabes from "./friends-wannabes";
 
 export class App extends Component {

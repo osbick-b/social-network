@@ -18,7 +18,7 @@ export default function FriendsAndWannabes({ myId }) {
             .then((resp) => resp.json())
             .then((data) => {
                 console.log(`${fln} data`, data);
-                !dispatch(getFriendshipsList(data));
+                dispatch(getFriendshipsList(data));
             })
             .catch((err) => {
                 console.log(`>>> ${fln} >> fetch Friendsips List`, err);
