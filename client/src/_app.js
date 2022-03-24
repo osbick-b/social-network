@@ -41,7 +41,6 @@ export class App extends Component {
         this.toggleEditMode = this.toggleEditMode.bind(this);
     }
     componentDidMount() {
-        console.log("-- App mounted");
         fetch(`/api/get-user-data/${this.props.myId}`)
             .then((resp) => resp.json())
             .then((data) => {

@@ -40,6 +40,14 @@ main.main {
     width: 90vw;
 }
 
+
+/* ============ GENERAL LAYOUT CLASSES ======================*/
+.flex-column {
+    display: flex;
+    flex-direction: column;
+
+}
+
 /* ////// Forms ////// */
 
 form {
@@ -138,4 +146,28 @@ nav.main {
     gap: 5vw;
     padding: 3vh 0;
     margin-bottom: 7vh;
+}
+
+
+/* ================== CHAT =======================*/
+.chat {
+    background-color: var(--c-el-bg);
+    padding: 3vh;
+    position: fixed;
+    bottom: 0;
+    right: 5vw;
+    min-height: 40vh;
+    width: 40vw;
+}
+
+.chat.flex-column {
+    justify-content: flex-end;
+    gap: 1vh;
+}
+
+.messages-log {
+    gap: 1vh;
+}
+.one-msg {
+    background-color: var(--c-details);
 }

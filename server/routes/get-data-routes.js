@@ -30,7 +30,7 @@ router.get("/get-mutual-friends/:other_user_id", (req, res) => {
     const { other_user_id } = req.params;
     const my_id = req.session.user_id;
 
-    db.getMutualFriends(other_user_id, my_id)
+    db.getMutualFriends(my_id, other_user_id)
         .then(({ rows }) => {
             rows
                 ? res.json({ serverSuccess: true, userFriends: rows })
@@ -38,6 +38,28 @@ router.get("/get-mutual-friends/:other_user_id", (req, res) => {
         })
         .catch((err) => {
             console.log(`>>> ${fln} >> Error in getMutualFriends`, err);
+            res.json({ serverSuccess: false });
+        });
+});
+
+// --- Get Recent Messages
+// router.get(`/get-latest-messages/:other_user_id`, (req, res) => {
+router.get(`/get-latest-messages`, (req, res) => {
+    // const { other_user_id } = req.params;
+    const my_id = req.session.user_id;
+
+    //! IN PROCESS ----
+
+    // return other_user_id
+    //     ? db.getLatestMessages(my_id, other_user_id)
+    //     :
+    db.getLatestMessages(my_id)
+        .then(({ rows }) => {
+            console.log("getLatestMessages rows", rows);
+            res.json({ serverSuccess: true, latestMessages: rows });
+        })
+        .catch((err) => {
+            console.log(`>>> ${fln} >> Error in route getLatest Messages`, err);
             res.json({ serverSuccess: false });
         });
 });

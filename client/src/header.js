@@ -16,9 +16,9 @@ export class MainHeader extends Component {
         };
         this.toggleMainNav = this.toggleMainNav.bind(this);
     }
-    componentDidMount() {
-        console.log("-- MainHeader mounted");
-    }
+    // // componentDidMount() {
+    // //     console.log("-- MainHeader mounted");
+    // // }
     toggleMainNav() {
         console.log(
             `-- toggle mainNav -- this.state.showMainNav`,

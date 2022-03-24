@@ -3,7 +3,6 @@
 // no mutating allowed!
 
 export default function FriendshipsReducer(friendships = [], action) {
-    console.log(`----- FriendshipsReducer is running`);
     switch (action.type) {
                     case "friendships/listed": {
                         console.log(action.type);

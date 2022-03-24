@@ -217,7 +217,7 @@ module.exports.getUserFriends = (user_id) => {
 };
 
 // -- Get Mutual Friends
-module.exports.getMutualFriends = (other_user_id, my_id) => {
+module.exports.getMutualFriends = (my_id, other_user_id) => {
     return db.query(
         `SELECT users.id AS user_id, users.profile_pic, users.first, users.last
         FROM users
@@ -234,6 +234,31 @@ module.exports.getMutualFriends = (other_user_id, my_id) => {
         [other_user_id, my_id]
     );
 };
+
+
+
+// ========== Chat ======== //
+
+// --- Get Latest Messages
+//! IN PROCESS ---- do JOIN to get stuff from other users (photo etc)
+module.exports.getLatestMessages = (my_id) => {
+    return db.query(
+        `SELECT * 
+    FROM chat
+    WHERE id_sender = $1 `,
+    [my_id]);
+};
+
+
+
+
+
+
+
+
+
+
+
 
 // ======== Else ======= //
 

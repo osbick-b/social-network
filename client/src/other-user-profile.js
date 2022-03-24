@@ -34,7 +34,6 @@ export function OtherUserProfile({ myId }) {
             .then((resp) => Promise.all(resp.map((res) => res.json())))
 
             .then((data) => {
-                console.log(" data", data);
                 data[0].serverSuccess && setUserInfo(data[0].userInfo);
                 data[1].serverSuccess && setMutualFriends(data[1].userFriends);
                 setDataAlreadyArrived(true); // use it for loading state

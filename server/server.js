@@ -35,7 +35,7 @@ const friendshipRoutes = require("./routes/friendship-routes");
 const passwordRoutes = require("./routes/password-routes");
 const searchUserRoutes = require("./routes/search-user-routes");
 const chatRoutes = require("./routes/chat-routes");
-const userDataRoutes = require("./routes/user-data-routes");
+const userDataRoutes = require("./routes/get-data-routes");
 
 // ============= Middleware ================= //
 
