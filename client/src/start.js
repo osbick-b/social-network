@@ -6,6 +6,7 @@ import ReactDOM from "react-dom";
 // --- Socket.io setup client
 import { io } from "socket.io-client";
 const socket = io();
+
 import { init } from "./socket"; // TODO-- call init if user is logged in
 
 
@@ -32,7 +33,7 @@ fetch("/start/id.json")
         console.log(">>>>> userCookie /user/id.json > user_id", userCookie);
         if (userCookie.user_id) {
             init(store); // TODO -- call init when user logged in
-            
+
             ReactDOM.render(
                 <Provider store={store}>
                     <App myId={userCookie.user_id} />

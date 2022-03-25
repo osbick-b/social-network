@@ -1,3 +1,7 @@
+const fln = "messages-slice.js";
+///////////////////////////////////
+
+
 // we MUST make copies for every array and obj
 // no mutating allowed!
 
@@ -9,9 +13,10 @@ export default function ChatReducer(messages = [], action) {
                     case "latestMessages/loaded": {
                         console.log(action.type);
                         messages = action.payload.data;
+                        // console.log(`>>> ${fln}  > messages:`, messages);
                         break;
                     }
-                    case "newMessage/received": {
+                    case "newMessage/stored ": {
                         console.log(action.type);
                         messages = [...messages, ...action.payload.data];
                         //TODO -- check order of adding based on odred of selection in db
@@ -35,10 +40,10 @@ export function latestMessagesLoaded(data) {
     };
 }
 
-export function newMsgReceived(data) {
+export function newMsgStored(data) {
     // ? --- data?
     return {
-        type: "newMessage/received",
+        type: "newMessage/stored",
         payload: { data },
     };
 }

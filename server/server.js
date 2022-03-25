@@ -5,8 +5,7 @@ const compression = require("compression");
 const path = require("path");
 const mw = require("../route_middleware");
 
-// const db = require("../db");
-
+// // const db = require("../db");
 
 
 // --- Cookie Session setup
@@ -20,7 +19,7 @@ const cookieSessionMiddleware = cookieSession({
 });
 
 
-// --- Sockets.io setup
+// --- Sockets.io setup --- //
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     allowRequest: (req, callback) =>
@@ -28,13 +27,13 @@ const io = require("socket.io")(server, {
 });
 
 
-// --- Routes
+// ============= Routes ================= //
+
 const loginRoutes = require("./routes/login-routes");
 const editUserRoutes = require("./routes/edit-user-routes");
 const friendshipRoutes = require("./routes/friendship-routes");
 const passwordRoutes = require("./routes/password-routes");
 const searchUserRoutes = require("./routes/search-user-routes");
-const chatRoutes = require("./routes/chat-routes");
 const userDataRoutes = require("./routes/get-data-routes");
 
 // ============= Middleware ================= //
@@ -49,17 +48,27 @@ app.use(cookieSessionMiddleware);
 
 app.use(mw.logRouteInfo);
 
-// --- Sockets.io middleware
+
+// --- Sockets.io middleware --- // 
 io.use(function (socket, next) {
     cookieSessionMiddleware(socket.request, socket.request.res, next);
 });
 
 
-//============================    START    ====================================//
+// ============================    START    ==================================== //
 
 app.get("/start/id.json", (req, res) => {
     res.json({ userCookie: req.session }); // --- ??? can i access session (cookie) from client side??
 });
+
+
+//================================= SOCKET CHAT ROUTE =========================================//
+
+
+require("./routes/chat-routes")(io); // calls fn in chat-routes.js passing "io" created here at the top
+// that is where the connection is established
+//? is this the handshake then?
+
 
 // ============================ ROUTER ROUTES ========================================= //
 
@@ -69,15 +78,6 @@ app.use("/user", editUserRoutes);
 app.use("/friendship", friendshipRoutes);
 app.use("/pass", passwordRoutes);
 app.use("/search-api", searchUserRoutes);
-// app.use("/chat-api", chatRoutes); //? --- do i need to use this route here? i dont think so. theres the io thing
-
-
-
-
-//================================= SOCKET CHAT ROUTE =========================================//
-
-
-require("./routes/chat-routes")(io);
 
 
 //================================= STAR ROUTE =========================================//
@@ -90,9 +90,11 @@ app.get("*", function (req, res) {
 
 // ================================== LISTENERS ==================================== //
 
-app.listen(process.env.PORT || 3001, function () {
+server.listen(3001, function () {
     console.log("I'm listening. --- http://localhost:3000");
 });
 
-
-server.listen(3001);
+// // app.listen(process.env.PORT || 3001, function () {
+// //     console.log("I'm listening. --- http://localhost:3000");
+// // });
+// * we only need one listener! the normal routes will be handled by server (declared at the top)

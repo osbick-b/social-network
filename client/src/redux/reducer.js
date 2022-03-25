@@ -9,7 +9,7 @@ import ChatReducer from "./messages/slice"; // there called FriendsWannabesReduc
 
 const rootReducer = combineReducers({
     friendships: FriendshipsReducer,
-    chat: ChatReducer,
+    messages: ChatReducer,
 });
 
 export default rootReducer;
