@@ -42,9 +42,13 @@ router.get("/get-mutual-friends/:other_user_id", (req, res) => {
         });
 });
 
+
+
 // --- Get Recent Messages
+//! =========================================================================
 // router.get(`/get-latest-messages/:other_user_id`, (req, res) => {
 router.get(`/get-latest-messages`, (req, res) => {
+    //!! THIS WONT HAPPEN HERE!!! ---> but in chat-routes
     // const { other_user_id } = req.params;
     const my_id = req.session.user_id;
 
@@ -53,7 +57,7 @@ router.get(`/get-latest-messages`, (req, res) => {
     // return other_user_id
     //     ? db.getLatestMessages(my_id, other_user_id)
     //     :
-    db.getLatestMessages(my_id)
+    db.getLatestMessages()
         .then(({ rows }) => {
             console.log("getLatestMessages rows", rows);
             res.json({ serverSuccess: true, latestMessages: rows });
@@ -63,3 +67,5 @@ router.get(`/get-latest-messages`, (req, res) => {
             res.json({ serverSuccess: false });
         });
 });
+//! =========================================================================
+

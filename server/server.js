@@ -69,9 +69,15 @@ app.use("/user", editUserRoutes);
 app.use("/friendship", friendshipRoutes);
 app.use("/pass", passwordRoutes);
 app.use("/search-api", searchUserRoutes);
-app.use("/chat-api", chatRoutes);
+// app.use("/chat-api", chatRoutes); //? --- do i need to use this route here? i dont think so. theres the io thing
 
 
+
+
+//================================= SOCKET CHAT ROUTE =========================================//
+
+
+require("./routes/chat-routes")(io);
 
 
 //================================= STAR ROUTE =========================================//
@@ -80,13 +86,6 @@ app.get("*", function (req, res) {
     console.log(">>> *");
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
-
-
-//================================= SOCKET CHAT ROUTE =========================================//
-
-
-
-require("./routes/chat-routes")(io);
 
 
 // ================================== LISTENERS ==================================== //

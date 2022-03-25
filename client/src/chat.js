@@ -9,6 +9,14 @@ import { Link } from "react-router-dom";
 import { useStatefulFields } from "./hooks/useStatefulFields";
 
 
+import { socket } from "./socket";
+import { init } from "./socket";
+
+// TODO -- add link to socket somewhere
+// TODO -- init
+
+
+
 // ======= Chat Component ======//
 
 export function Chat() {
@@ -16,23 +24,27 @@ export function Chat() {
     const info = "hey yo";
 
     const [{ searchInput = "" }, handleChange] = useStatefulFields();
-    const [allMessages, setAllMessages]  = useState([]);
+    const [allMessages, setAllMessages] = useState([]);
 
-    
+    //! =========================================================================
+
     useEffect(() => {
         console.log(" --- chat rendered");
-        //! IN PROCESS ---- 
+        //! IN PROCESS ----
         // fetch(`/api/get-latest-messages/:other_user_id`)
-        fetch(`/api/get-latest-messages`)
-        .then((resp) => resp.json())
-        .then((data) => {
-            console.log(" data", data);
-            data.serverSuccess && setAllMessages(data.latestMessages)
-        })
-        .catch((err) => {
-            console.log(`>>> ${fln} >> Error in route`, err);
-        });
+        fetch(`chat-api`) //* --- using socket route
+            // // fetch(`/api/get-latest-messages`) //* --- route is in get-data-routes.js
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(" data", data);
+                data.serverSuccess && setAllMessages(data.latestMessages);
+            })
+            .catch((err) => {
+                console.log(`>>> ${fln} >> Error in route`, err);
+            });
     }, []);
+
+    //! =========================================================================
 
     const handleInputChange = (e) => {
         console.log(`e.target.value`, e.target.value);
@@ -41,6 +53,7 @@ export function Chat() {
 
     const handleSubmit = () => {
         console.log("handling submit");
+        // when send button --- a newChatMsg event should be emitted //! check name
     };
 
     console.log(`allMessages`, allMessages);
@@ -52,7 +65,9 @@ export function Chat() {
                 {!!allMessages.length &&
                     allMessages.map((msg) => (
                         <div key={msg.id} className="one-msg">
-                            {msg.userInfo && <ProfilePic userInfo={msg.userInfo} />}
+                            {msg.userInfo && (
+                                <ProfilePic userInfo={msg.userInfo} />
+                            )}
                             <p>{msg.message}</p>
                         </div>
                     ))}
