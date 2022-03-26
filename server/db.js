@@ -19,7 +19,7 @@ module.exports.registerUser = (first, last, email, hashedPass) => {
     return db.query(
         `INSERT INTO users (first, last, email, password)
         VALUES ($1, $2, $3, $4)
-        RETURNING id AS user_id`,
+        RETURNING id AS user_id;`,
         [first, last, email, hashedPass]
     );
 };
@@ -28,7 +28,7 @@ module.exports.getUserPass = (email) => {
     return db.query(
         `SELECT password as stored_pass
         FROM users
-        WHERE email = $1`,
+        WHERE email = $1;`,
         [email]
     );
 };
@@ -37,7 +37,7 @@ module.exports.getUserId = (email) => {
     return db.query(
         `SELECT id AS user_id
             FROM users
-            WHERE email = $1`,
+            WHERE email = $1;`,
         [email]
     );
 };
@@ -48,7 +48,7 @@ module.exports.getUserData = (user_id) => {
     return db.query(
         `SELECT id AS user_id, first, last, email, profile_pic, bio
         FROM users
-        WHERE id = $1`,
+        WHERE id = $1;`,
         [user_id]
     );
 };
@@ -59,7 +59,7 @@ module.exports.storeSecretCode = (email, secretCode) => {
     return db.query(
         `INSERT INTO secret_codes (email, code)
         VALUES ($1, $2)
-        RETURNING email`,
+        RETURNING email;`,
         [email, secretCode]
     );
 };
@@ -71,7 +71,7 @@ module.exports.getSecretCode = (email) => {
         FROM secret_codes
         WHERE email = $1
         ORDER BY id DESC
-        LIMIT 1`,
+        LIMIT 1;`,
         [email]
     );
 };
@@ -81,7 +81,7 @@ module.exports.updatePass = (email, newPass) => {
         `UPDATE users
         SET password = $2
         WHERE email = $1
-        RETURNING email`,
+        RETURNING email;`,
         [email, newPass]
     );
 };
@@ -94,7 +94,7 @@ module.exports.storeProfilePic = (user_id, newPicInput) => {
         `UPDATE users
         SET profile_pic = $2
         WHERE id = $1
-        RETURNING profile_pic`,
+        RETURNING profile_pic;`,
         [user_id, newPicInput]
     );
 };
@@ -106,7 +106,7 @@ module.exports.upsertBio = (user_id, bio) => {
         `UPDATE users
         SET bio = $2
         WHERE id = $1
-        RETURNING bio`,
+        RETURNING bio;`,
         [user_id, bio]
     );
 };
@@ -116,7 +116,7 @@ module.exports.updateUserInfo = (first, last, email, user_id) => {
         `UPDATE users
         SET first = $1, last = $2, email = $3
         WHERE id = $4
-        RETURNING first, last, email`,
+        RETURNING first, last, email;`,
         [first, last, email, user_id]
     );
 };
@@ -128,7 +128,7 @@ module.exports.findRecentUsers = () => {
         `SELECT id AS user_id, first, last, email, profile_pic, bio
         FROM users
         ORDER BY id DESC
-        LIMIT 4`
+        LIMIT 4;`
     );
 };
 
@@ -137,7 +137,7 @@ module.exports.findMatchingUsers = (searchInput) => {
         `SELECT id AS user_id, first, last, email, profile_pic, bio
         FROM users
         WHERE (first ILIKE $1) OR (last ILIKE $1) OR (id = $2)
-        LIMIT 4`,
+        LIMIT 4;`,
         ["%" + searchInput + "%", +searchInput]
     );
 };
@@ -153,7 +153,7 @@ module.exports.getFriendshipStatus = (my_id, other_user_id) => {
     return db.query(
         `SELECT * FROM friendships
         WHERE (sender_id = $1 AND recipient_id = $2) 
-        OR (sender_id = $2 AND recipient_id = $1)`,
+        OR (sender_id = $2 AND recipient_id = $1);`,
         [my_id, other_user_id]
     );
 };
@@ -162,7 +162,7 @@ module.exports.makeFriendshipRequest = (my_id, other_user_id) => {
     return db.query(
         `INSERT INTO friendships (sender_id, recipient_id, accepted)
             VALUES ($1, $2, false)
-            RETURNING sender_id, recipient_id, accepted`,
+            RETURNING sender_id, recipient_id, accepted;`,
         // RETURNING *`,
         [my_id, other_user_id]
     );
@@ -173,7 +173,7 @@ module.exports.acceptFriendshipRequest = (my_id, other_user_id) => {
         `UPDATE friendships
             SET accepted = true
             WHERE recipient_id = $1 AND sender_id = $2
-            RETURNING sender_id, recipient_id, accepted`,
+            RETURNING sender_id, recipient_id, accepted;`,
         // RETURNING *`,
         [my_id, other_user_id]
     );
@@ -184,7 +184,7 @@ module.exports.cancelFriendship = (my_id, other_user_id) => {
     return db.query(
         `DELETE FROM friendships
         WHERE (sender_id = $1 AND recipient_id = $2) 
-        OR (sender_id = $2 AND recipient_id = $1)`,
+        OR (sender_id = $2 AND recipient_id = $1);`,
         // RETURNING id`,
         [my_id, other_user_id]
     );
@@ -198,7 +198,7 @@ module.exports.getAllFriendsAndPending = (my_id) => {
         FROM friendships
         JOIN users
         ON (sender_id = $1 AND recipient_id = users.id)
-        OR (sender_id = users.id AND recipient_id = $1)`,
+        OR (sender_id = users.id AND recipient_id = $1);`,
         [my_id]
     );
 };
@@ -211,7 +211,7 @@ module.exports.getUserFriends = (user_id) => {
         JOIN friendships
         ON (friendships.accepted = true AND sender_id = $1 AND recipient_id = users.id)
         OR (friendships.accepted = true AND sender_id = users.id AND recipient_id = $1)
-        `,
+        ;`,
         [user_id]
     );
 };
@@ -230,7 +230,7 @@ module.exports.getMutualFriends = (my_id, other_user_id) => {
         JOIN friendships
         ON (friendships.accepted = true AND sender_id = $2 AND recipient_id = users.id)
         OR (friendships.accepted = true AND sender_id = users.id AND recipient_id = $2)
-        )`,
+        );`,
         [other_user_id, my_id]
     );
 };
@@ -245,24 +245,31 @@ module.exports.getLatestMessages = () => {
         JOIN users
         ON users.id = chat.id_sender
         ORDER BY chat.id DESC
-        LIMIT 10
-        `
+        LIMIT 3;`
     );
 };
 
 //! =========================================================================
 // --- Insert New Messages
-module.exports.storeNewMsg = (id_sender, newMsg) => {
+module.exports.storeNewMsg = (id_sender, newMsg, id_recipient=null) => {
     // ---opt for later-- recipient_id
     return db.query(
-        `INSERT INTO chat (id_sender, message)
-    VALUES ($1, $2)
-    RETURNING *`, // TODO --- add also user stuff
-        //! -- this query is not good yet i think
-        [id_sender, newMsg]
+        `INSERT INTO chat (id_sender, message, id_recipient)
+    VALUES ($1, $2, $3)
+    RETURNING *`,
+        [id_sender, newMsg, id_recipient]
     );
 };
 
+// --- Get user name and Pic
+module.exports.getUserNameAndPic = (user_id) => {
+    return db.query(
+        `SELECT users.id AS user_id, users.profile_pic, users.first, users.last
+        FROM users
+        WHERE users.id = $1;`,
+        [user_id]
+    );
+};
 //! =========================================================================
 
 //    `SELECT chat.* , users.id AS user_id, users.profile_pic, users.first, users.last

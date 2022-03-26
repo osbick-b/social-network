@@ -167,7 +167,18 @@ nav.main {
 
 .messages-log {
     gap: 1vh;
+    flex-direction: column-reverse;
+    
 }
 .one-msg {
     background-color: var(--c-details);
+    height: 10vh;
+    display: flex;
+ 
+    /* position: relative; */
+}
+
+.one-msg .profile-pic {
+    height: 50%;
+    object-fit: cover;
 }

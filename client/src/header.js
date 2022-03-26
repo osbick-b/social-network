@@ -33,6 +33,7 @@ export class MainHeader extends Component {
 
                 <Link to={"/find-people"}>Find People</Link>
                 <Link to={"/me/friendships"}>My Friendships</Link>
+                <Link to={"/chat"}>Chat</Link>
                 
                 <div onClick={this.toggleMainNav}>
                     <ProfilePic userInfo={this.props.userInfo} />
