@@ -252,7 +252,6 @@ module.exports.getLatestMessages = () => {
 //! =========================================================================
 // --- Insert New Messages
 module.exports.storeNewMsg = (id_sender, newMsg, id_recipient=null) => {
-    // ---opt for later-- recipient_id
     return db.query(
         `INSERT INTO chat (id_sender, message, id_recipient)
     VALUES ($1, $2, $3)

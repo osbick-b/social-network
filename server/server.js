@@ -5,8 +5,6 @@ const compression = require("compression");
 const path = require("path");
 const mw = require("../route_middleware");
 
-// // const db = require("../db");
-
 
 // --- Cookie Session setup
 const cookieSession = require("cookie-session");
@@ -58,16 +56,13 @@ io.use(function (socket, next) {
 // ============================    START    ==================================== //
 
 app.get("/start/id.json", (req, res) => {
-    res.json({ userCookie: req.session }); // --- ??? can i access session (cookie) from client side??
-});
+    res.json({ userCookie: req.session }); 
 
 
 //================================= SOCKET CHAT ROUTE =========================================//
 
 
-require("./routes/chat-routes")(io); // calls fn in chat-routes.js passing "io" created here at the top
-// that is where the connection is established
-//? is this the handshake then?
+require("./routes/chat-routes")(io);
 
 
 // ============================ ROUTER ROUTES ========================================= //
@@ -94,7 +89,3 @@ server.listen(3001, function () {
     console.log("I'm listening. --- http://localhost:3000");
 });
 
-// // app.listen(process.env.PORT || 3001, function () {
-// //     console.log("I'm listening. --- http://localhost:3000");
-// // });
-// * we only need one listener! the normal routes will be handled by server (declared at the top)

@@ -49,7 +49,6 @@ export function Chat() {
                         </div>
                     ))}
             </section>
-            {/* // TODO ---- aria invisible label or sth */}
             <textarea
                 name="newMsg"
                 id="newMsg"

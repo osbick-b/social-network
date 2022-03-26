@@ -14,10 +14,9 @@ module.exports = (io) => {
             return socket.disconnect(true);
         }
 
+
         const user_id = socket.request.session.user_id;
 
-        // First query to get the most recent messages
-        // --- Getting messages from db and emit them
         db.getLatestMessages()
             .then(({ rows }) => {
                 rows = rows.map((row) => row = {userInfo:{user_id: row.user_id, first: row.first, last:row.last, profile_pic: row.profile_pic}, ...row});
@@ -43,7 +42,6 @@ module.exports = (io) => {
                 .then(({ rows }) => {
                     newMsgObj = { ...newMsgObj, userInfo: rows[0] };
                     io.emit("displayNewMsg", newMsgObj); //* --- here is server emitting its event
-                    // ? -- whats the difference of using socket.emit and io.emit??
                 })
                 
                 
