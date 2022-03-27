@@ -10,6 +10,7 @@ import { CheckSecretCode } from "./pass_reset_2_check_code";
 import { SetNewPass } from "./pass_reset_3_set_new_pass";
 
 import { Component } from "react";
+import { Link } from "react-router-dom";
 
 export class PassReset extends Component {
     constructor(props) {
@@ -72,18 +73,21 @@ export class PassReset extends Component {
 
                 {/* st 1 */}
                 {!this.state.hasSecretCode && (
-                    <form>
-                        <label htmlFor="email">email</label>
-                        <input
-                            name="email"
-                            id="email"
-                            type="email"
-                            placeholder=""
-                            onChange={this.handleInputChange}
-                        />
+                    <>
+                        <form>
+                            <label htmlFor="email">email</label>
+                            <input
+                                name="email"
+                                id="email"
+                                type="email"
+                                placeholder=""
+                                onChange={this.handleInputChange}
+                            />
 
-                        <button onClick={this.handleSubmit}>Submit</button>
-                    </form>
+                            <button onClick={this.handleSubmit}>Submit</button>
+                        </form>
+                        <Link to={"/"}>Back</Link>
+                    </>
                 )}
 
                 {/* st 2 */}

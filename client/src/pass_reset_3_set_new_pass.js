@@ -1,5 +1,6 @@
 const fln = "pass_reset_2.js";
 ///////////////////////////////////
+import { Link } from "react-router-dom";
 
 import { Component } from "react";
 import ErrorMsg from "./error_msg";
@@ -71,6 +72,7 @@ export class SetNewPass extends Component {
                     />
                     <button>Submit</button>
                 </form>
+                <Link to={"/"}>Back</Link>
             </>
         );
     }

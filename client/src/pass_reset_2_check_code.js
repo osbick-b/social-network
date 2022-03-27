@@ -1,6 +1,7 @@
 const fln = "pass_reset_2.js";
 ///////////////////////////////////
 
+import { Link } from "react-router-dom";
 
 import { Component } from "react";
 import ErrorMsg from "./error_msg";
@@ -74,6 +75,7 @@ export class CheckSecretCode extends Component {
                     />
                     <button>Submit</button>
                 </form>
+                <Link to={"/password/reset"}>Back</Link>
             </>
         );
     }

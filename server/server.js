@@ -5,6 +5,8 @@ const compression = require("compression");
 const path = require("path");
 const mw = require("../route_middleware");
 
+// // const db = require("../db");
+
 
 // --- Cookie Session setup
 const cookieSession = require("cookie-session");
@@ -57,12 +59,13 @@ io.use(function (socket, next) {
 
 app.get("/start/id.json", (req, res) => {
     res.json({ userCookie: req.session }); 
+});
 
 
 //================================= SOCKET CHAT ROUTE =========================================//
 
 
-require("./routes/chat-routes")(io);
+require("./routes/chat-routes")(io); 
 
 
 // ============================ ROUTER ROUTES ========================================= //
