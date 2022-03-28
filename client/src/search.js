@@ -4,10 +4,13 @@ const fln = "find-people.js";
 import { useState, useEffect } from "react";
 import { useStatefulFields } from "./hooks/useStatefulFields";
 import { Link } from "react-router-dom";
+import { ProfilePic } from "./profile_pic";
+// import { Loading } from "./loading";
+
+
 
 export function FindPeople() {
     const [{ searchInput = "" }, handleChange] = useStatefulFields();
-    // const [[users], handleChange] = useStatefulFields(); // useStatefulFields uses an obj, and we need an array
     const [noResults, setNoResults] = useState(false);
     const [users, setUsers] = useState([]);
 
@@ -31,7 +34,7 @@ export function FindPeople() {
     }, [searchInput]);
 
     return (
-        <>
+        <main className="search">
             <h1>FindPeople</h1>
             <label htmlFor="searchInput">Find your buddies</label>
             <input
@@ -40,15 +43,12 @@ export function FindPeople() {
                 type="text"
                 onChange={handleChange}
             />
-            <section>
+            <section className="search-results flex-column">
                 {noResults && <h4>Sorry, no users found 😑</h4>}
                 {users.map((user) => (
                     <div key={user.user_id} className="one-user">
                         <Link to={`/users/${user.user_id}`}>
-                            <img
-                                alt={`${user.first} ${user.last}`}
-                                src={user.profile_pic}
-                            />
+                            <ProfilePic userInfo={user}/>
                             <h4>
                                 {user.first} {user.last}
                             </h4>
@@ -56,6 +56,6 @@ export function FindPeople() {
                     </div>
                 ))}
             </section>
-        </>
+        </main>
     );
 }

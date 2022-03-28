@@ -35,9 +35,12 @@ export function MyProfile({
                     toggleEditMode={toggleEditMode}
                 />
             ) : (
-                <section>
+                <section className="u-prof">
                     <h2>Profile</h2>
-                    <button onClick={() => toggleEditMode("profile")}>
+                    <button
+                        className="btn-edit"
+                        onClick={() => toggleEditMode("profile")}
+                    >
                         Edit Profile
                     </button>
                     <p>
@@ -59,11 +62,14 @@ export function MyProfile({
                     toggleEditMode={toggleEditMode}
                 />
             ) : (
-                <section>
+                <section className="bio">
                     <h1>Bio</h1>
                     {userInfo.bio ? (
                         <>
-                            <button className="btn secondary" onClick={() => toggleEditMode("bio")}>
+                            <button
+                                className="btn-edit"
+                                onClick={() => toggleEditMode("bio")}
+                            >
                                 Edit Bio
                             </button>
                             <p>

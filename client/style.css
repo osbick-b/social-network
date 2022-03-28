@@ -1,21 +1,27 @@
 /* background: rgb(70,230,255);
 background: linear-gradient(211deg, rgba(70,230,255,1) 6%, rgba(70,135,255,1) 47%, rgba(143,70,255,1) 89%); */
 
-
-
 * {
     box-sizing: border-box;
     margin: 0;
 }
 
 :root {
-    --gradient-main: linear-gradient(211deg, rgba(70,230,255,1) 6%, rgba(70,135,255,1) 47%, rgba(143,70,255,1) 89%);
+    --gradient-main: linear-gradient(
+        211deg,
+        rgba(70, 230, 255, 1) 6%,
+        rgba(70, 135, 255, 1) 47%,
+        rgba(143, 70, 255, 1) 89%
+    );
     --c-main-bg: palevioletred;
     --c-main-white: rgb(242, 237, 235);
     --c-el-detail: hotpink;
     --c-el-bg: pink;
     --c-details: white;
-    --c-pal-dark: #25283D;
+    --c-pal-dark: #25283d;
+
+    --c-main-white-0-5: rgb(242, 237, 235, 0.5);
+
     /* sizes */
     --height-input: 6vh;
     /* borders */
@@ -23,15 +29,15 @@ background: linear-gradient(211deg, rgba(70,230,255,1) 6%, rgba(70,135,255,1) 47
     --border-test: 2px solid pink;
 
     /* font */
-    --f-display: 'Bungee', cursive;
-    --f-regular: 'Red Hat Mono', monospace;
+    --f-display: "Bungee", cursive;
+    --f-regular: "Red Hat Mono", monospace;
 
     /* button */
     --btn-bradius: 2.5vh;
 
     /* mini prof pic  */
     --h-main-header: 15vh;
-    --sz-profile-pic-mini: calc(var(--h-main-header)*0.5);
+    --sz-profile-pic-mini: calc(var(--h-main-header) * 0.5);
 }
 
 body {
@@ -48,40 +54,52 @@ span {
     /* font-weight: 500; */
     background: var(--gradient-main);
     -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
 }
 
-h1,h2,h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
     font-family: var(--f-display);
+}
+
+h1:not(.rev),
+h2,
+h3,
+h4,
+h5 {
     background: var(--gradient-main);
     -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
 }
 
 a {
     text-decoration: none;
-
 }
 
-a, button {
+a,
+button {
     cursor: pointer;
 }
 
 button {
     color: var(--c-main-white);
-    padding: 5% 8%;
+    padding: 1.3em;
     background: var(--gradient-main);
     box-shadow: 3px 3px 0 1px var(--c-pal-dark);
     border-radius: var(--btn-bradius);
     border: 2px solid var(--c-pal-dark);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
 button:hover {
     background: var(--c-main-white);
     color: var(--c-pal-dark);
 }
-
 
 main {
     padding: 0;
@@ -92,20 +110,133 @@ main {
     gap: 2vh;
 }
 
+main.app {
+}
+
 img {
     max-width: 100%;
 }
 
-main.main {
-    width: 90vw;
+main#main {
+    min-height: 100vh;
+    /* width: 90vw; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10vh;
+}
+/* ============ WELCOME ======================*/
+
+main.welcome {
+    background: var(--gradient-main);
+    min-height: 100vh;
+    width: 100%;
 }
 
+.rev {
+    color: var(--c-main-white);
+}
+
+img.profile-pic {
+    border: 2px solid var(--c-pal-dark);
+    max-height: 100%;
+}
+
+/* ================== SEARCH =======================*/
+.search-results {
+    gap: 3vh;
+}
+
+.one-user {
+    background: var(--gradient-main);
+    padding: 3vh;
+    border-radius: 3vh;
+    height: 15vh;
+    position: relative;
+}
+.one-user img.profile-pic {
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* ================== MAIN APP LAYOUT =======================*/
+
+main.app {
+    width: 90vw;
+    display: grid;
+    /* padding: 0 10vw; */
+    border: 3px solid hotpink;
+    grid-template-columns: repeat(4, 1fr);
+    /* grid-template-rows: 10vh 1fr 1fr; */
+    align-items: flex-start;
+    gap: 3vh;
+    /* justify-content: center; */
+    grid-column: 2/-1;
+}
+
+main.app .profile-pic {
+    grid-row: 2/3;
+    grid-column: 1/2;
+}
+
+.user-name {
+    grid-row: 1/2;
+    grid-column: 1/3;
+}
+
+.user-sect {
+    grid-row: 2/3;
+}
+
+.u-prof,
+.bio {
+    grid-column: 2/-1;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    /* grid-template-columns: repeat(3,1fr);
+    grid-template-rows: 5vh, 1fr; */
+}
+
+.bio {
+    grid-row: 2/3;
+}
+
+.u-prof {
+    grid-row: 3/4;
+}
+
+.mutuals {
+    grid-column: 2/-1;
+    grid-row: 4/5;
+}
+
+/* .u-prof h2 {
+    grid-row: 1/2;
+    grid-column: 1/3;
+} */
+
+.btn-edit {
+    display: inline-block;
+    /* grid-column: 3/-1; */
+    /* width: 10vw; */
+}
+
+main#friends-wannabes,
+main.search {
+    grid-column: 1/-1;
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+    align-items: center;
+    justify-content: center;
+}
 
 /* ============ GENERAL LAYOUT CLASSES ======================*/
 .flex-column {
     display: flex;
     flex-direction: column;
-
 }
 
 /* ////// Forms ////// */
@@ -116,25 +247,24 @@ form {
     gap: 2vh;
 }
 
-form button {
+/* form button {
     padding: 5%;
     background-color: var(--c-el-bg);
     border: 1px solid var(--c-el-detail);
     color: var(--c-el-detail);
     text-transform: uppercase;
     font-weight: bold;
-}
+} */
 
 input {
     border: none;
     padding: 5%;
     height: var(--height-input);
-    border-radius: calc(var(--height-input)*0.5);
+    border-radius: calc(var(--height-input) * 0.5);
 }
 
-
 .modal-bg {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--c-main-white-0-5);
     height: 100vh;
     width: 100vw;
     position: fixed;
@@ -148,7 +278,7 @@ input {
 
 .modal {
     padding: 3vh;
-    background-color: var(--c-el-bg);
+    background-color: var(--c-main-white);
 }
 
 .app .profile-pic {
@@ -159,30 +289,43 @@ input {
 
 .profile-pic img {
     max-height: 100%;
+    max-width: 100%;
 }
 
 /* ////////// Profile pages etc ////////////// */
 h1.user-name {
-    font-size: ;
 }
-
-
 
 /* ////////// Header ////////////// */
 
-footer, header.main {
+footer,
+header.main,
+header.main-rev {
     width: 100vw;
     height: var(--h-main-header);
     padding: 3vh 10vw;
     /* box-shadow: 1vh 1vh 2vh 0 var(--c-pal-dark); */
-position: relative;
     display: flex;
+}
+
+header.main,
+header.main-rev {
+    position: relative;
     align-items: center;
 }
 
 footer {
-    justify-content: center;
-    border-top: var(--border-thin) var(--gradient-main);
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    /* text-align: center; */
+    /* position: sticky; */
+    /* bottom: 0; */
+}
+
+footer p {
+    margin-top: 5vh;
+    text-align: center;
 }
 
 .divider {
@@ -205,12 +348,16 @@ header.main {
     background: var(--gradient-main);
 }
 
-header h1.logo {
+header.main .logo {
     background: var(--c-main-white);
     -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-right: 10vw;
-  
+    -webkit-text-fill-color: transparent;
+    margin-right: 10vw;
+}
+
+header.main-rev {
+    background-color: var(--c-main-white);
+    justify-content: flex-start;
 }
 
 header .profile-pic {
@@ -243,6 +390,7 @@ nav.main {
     top: var(--h-main-header);
     right: 5vw;
     padding: 2rem;
+    z-index: 99;
 }
 
 nav.main button {
@@ -250,47 +398,61 @@ nav.main button {
     color: var(--c-pal-dark);
 }
 
-
 /* ///////// Friendships ///////// */
 .friendships-group {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 5vw;
     padding: 3vh 0;
     margin-bottom: 7vh;
 }
 
-
 /* ================== CHAT =======================*/
-.chat {
-    background-color: var(--c-el-bg);
+.chat,
+.msg-input {
+    background: var(--gradient-main);
+    border-radius: 3vh;
     padding: 3vh;
-    position: fixed;
+    /* position: fixed;
     bottom: 0;
-    right: 5vw;
-    min-height: 40vh;
-    width: 40vw;
+    right: 5vw; */
+    /* min-height: 40vh; */
+    /* width: 40vw; */
 }
 
-.chat.flex-column {
+.chat.flex-column,
+.msg-input.flex-column {
     justify-content: flex-end;
-    gap: 1vh;
+    gap: 3vh;
 }
 
 .messages-log {
     gap: 1vh;
-    flex-direction: column-reverse;
-    
+    flex-direction: column;
+    grid-column: 2/5;
 }
+
+textarea {
+    min-height: 20vh;
+    padding: 3vh;
+}
+
+.msg-input {
+}
+
 .one-msg {
-    background-color: var(--c-details);
-    height: 10vh;
+    background-color: var(--c-main-white-0-5);
+    /* height: 10vh; */
     display: flex;
- 
+    padding: 3vh;
+    gap: 3vh;
+
     /* position: relative; */
 }
 
 .one-msg .profile-pic {
-    height: 50%;
+    height: 5vw;
+    width: 5vw;
     object-fit: cover;
+    border-radius: 50%;
 }

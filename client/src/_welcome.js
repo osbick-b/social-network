@@ -7,10 +7,12 @@ import { PassReset } from "./pass_reset_0";
 export default function Welcome() {
     return (
         <>
-            <h1>🤍 Welcome! 🤍</h1>
+            <header className="main-rev">
+                <h1 className="logo ">fakebook</h1>
+            </header>
 
             <BrowserRouter>
-                <main className="main welcome">
+                <main className="welcome">
                     <Route exact path="/">
                         <Login />
                         {/* <Registration /> */}

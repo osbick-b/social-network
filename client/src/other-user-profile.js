@@ -50,8 +50,8 @@ export function OtherUserProfile({ myId }) {
 
             {userInfo.user_id && (
                 <>
-                    <h3>OtherUserProfile</h3>
-                    <h1>
+                    {/* <h3>OtherUserProfile</h3> */}
+                    <h1 className="user-name">
                         {userInfo.first} {userInfo.last}
                     </h1>
                     <FriendshipButton
@@ -61,7 +61,7 @@ export function OtherUserProfile({ myId }) {
 
                     <ProfilePic userInfo={userInfo} />
 
-                    <section>
+                    <section className="u-prof">
                         <h2>Profile</h2>
                         <p>
                             First Name:<span>{userInfo.first}</span>
@@ -74,15 +74,14 @@ export function OtherUserProfile({ myId }) {
                         </p>
                     </section>
 
-                    <section>
+                    <section className="bio">
                         <h2>Bio</h2>
-
                         <p>
                             Bio:<span>{userInfo.bio}</span>
                         </p>
                     </section>
 
-                    <section>
+                    <section className="mutuals">
                         <h2>Friend&apos;s Friends</h2>
                         {/* <h2>Mutual Friends</h2> */}
                         <FriendsSetDisplay

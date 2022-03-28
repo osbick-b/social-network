@@ -58,7 +58,7 @@ export default class Login extends Component {
     render() {
         return (
             <>
-                <h1>Login</h1>
+                <h1 className="rev">Login</h1>
                 {this.state.error && <ErrorMsg />}
                 <form>
                     <label htmlFor="email">email</label>

@@ -77,7 +77,7 @@ export class App extends Component {
 
                     <MainHeader userInfo={this.state.userInfo} />
 
-                    <main className="main app">
+                    <main className="app">
                         {/* <h2>🧶 App 🧶</h2> */}
 
                         <Route exact path={"/"}>
@@ -116,11 +116,11 @@ export class App extends Component {
                                 showUpdatedValue={this.showUpdatedValue}
                             />
                         )}
-                            <div className="divider"></div>
-                        <footer>
-                            <h5>copyright ♥ fakebook 2022</h5>
-                        </footer>
                     </main>
+                    <footer>
+                        <div className="divider"></div>
+                        <h5>copyright ♥ fakebook 2022</h5>
+                    </footer>
                 </BrowserRouter>
             </>
         );

@@ -14,7 +14,7 @@ export function ProfilePic({ userInfo, toggleUploader }) {
             <img
                 alt={`${userInfo.first} ${userInfo.last}`}
                 src={url}
-                className={"profile-pic"}
+                className="profile-pic"
                 onClick={toggleUploader}
             />
         </>

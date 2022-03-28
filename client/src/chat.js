@@ -8,16 +8,12 @@ import { Link } from "react-router-dom";
 
 import { socket } from "./socket";
 
-
 // ======= Chat Component ======//
 
 export function Chat() {
-    const [newMsg, setNewMsg]  = useState("");
+    const [newMsg, setNewMsg] = useState("");
 
-    const messages = useSelector(
-        (state) => state.messages && state.messages
-    );
-
+    const messages = useSelector((state) => state.messages && state.messages);
 
     //! =========================================================================
 
@@ -29,8 +25,20 @@ export function Chat() {
     };
 
     return (
-        <section className="chat flex-column">
-            <section className="messages-log flex-column">
+        <>
+            <section className="msg-input flex-column">
+                <textarea
+                    name="newMsg"
+                    id="newMsg"
+                    type="text"
+                    value={newMsg}
+                    placeholder=""
+                    onChange={({ target }) => setNewMsg(target.value)}
+                ></textarea>
+                <button onClick={handleSubmit}>Send</button>
+            </section>
+
+            <section className=" chat messages-log flex-column">
                 {messages &&
                     messages.map((msg) => (
                         <div key={msg.id} className="one-msg">
@@ -41,7 +49,7 @@ export function Chat() {
                             )}
                             <div className="content">
                                 <h4>
-                                    {msg.id}
+                                    {/* {msg.id} */}
                                     {msg.userInfo.first} {msg.userInfo.last}
                                 </h4>
                                 <p>{msg.message}</p>
@@ -49,15 +57,6 @@ export function Chat() {
                         </div>
                     ))}
             </section>
-            <textarea
-                name="newMsg"
-                id="newMsg"
-                type="text"
-                value={newMsg}
-                placeholder=""
-                onChange={({ target }) => setNewMsg(target.value)}
-            ></textarea>
-            <button onClick={handleSubmit}>Send</button>
-        </section>
+        </>
     );
 }

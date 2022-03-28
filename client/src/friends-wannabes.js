@@ -71,8 +71,8 @@ export default function FriendsAndWannabes({ myId }) {
     };
 
     return (
-        <>
-            <h1>🎅 Friendships 🎅</h1>
+        <main id="friends-wannabes">
+            {/* <h1>🎅 Friendships 🎅</h1> */}
             <h2>Friends</h2>
             <FriendsSetDisplay
                 group={friends}
@@ -112,6 +112,6 @@ export default function FriendsAndWannabes({ myId }) {
                     },
                 }}
             />
-        </>
+        </main>
     );
 }
