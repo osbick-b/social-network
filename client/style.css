@@ -1,18 +1,33 @@
+/* background: rgb(70,230,255);
+background: linear-gradient(211deg, rgba(70,230,255,1) 6%, rgba(70,135,255,1) 47%, rgba(143,70,255,1) 89%); */
+
+
+
 * {
     box-sizing: border-box;
     margin: 0;
 }
 
 :root {
+    --gradient-main: linear-gradient(211deg, rgba(70,230,255,1) 6%, rgba(70,135,255,1) 47%, rgba(143,70,255,1) 89%);
     --c-main-bg: palevioletred;
+    --c-main-white: rgb(242, 237, 235);
     --c-el-detail: hotpink;
     --c-el-bg: pink;
     --c-details: white;
+    --c-pal-dark: #25283D;
     /* sizes */
     --height-input: 6vh;
     /* borders */
     --border-thin: 1px solid;
     --border-test: 2px solid pink;
+
+    /* font */
+    --f-display: 'Bungee', cursive;
+    --f-regular: 'Red Hat Mono', monospace;
+
+    /* button */
+    --btn-bradius: 2.5vh;
 
     /* mini prof pic  */
     --h-main-header: 15vh;
@@ -20,12 +35,53 @@
 }
 
 body {
-    background-color: var(--c-main-bg);
+    font-family: var(--f-regular);
+    background-color: var(--c-main-white);
+    font-size: 1.2rem;
+}
+
+p {
+    font-family: var(--f-regular);
+}
+
+span {
+    /* font-weight: 500; */
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h1,h2,h3, h4, h5 {
+    font-family: var(--f-display);
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+a {
+    text-decoration: none;
+
 }
 
 a, button {
     cursor: pointer;
 }
+
+button {
+    color: var(--c-main-white);
+    padding: 5% 8%;
+    background: var(--gradient-main);
+    box-shadow: 3px 3px 0 1px var(--c-pal-dark);
+    border-radius: var(--btn-bradius);
+    border: 2px solid var(--c-pal-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+button:hover {
+    background: var(--c-main-white);
+    color: var(--c-pal-dark);
+}
+
 
 main {
     padding: 0;
@@ -34,6 +90,10 @@ main {
     flex-direction: column;
     align-items: center;
     gap: 2vh;
+}
+
+img {
+    max-width: 100%;
 }
 
 main.main {
@@ -101,34 +161,81 @@ input {
     max-height: 100%;
 }
 
+/* ////////// Profile pages etc ////////////// */
+h1.user-name {
+    font-size: ;
+}
+
+
+
 /* ////////// Header ////////////// */
 
-header.main {
+footer, header.main {
     width: 100vw;
     height: var(--h-main-header);
-    /* height: 15vh; */
+    padding: 3vh 10vw;
+    /* box-shadow: 1vh 1vh 2vh 0 var(--c-pal-dark); */
+position: relative;
+    display: flex;
+    align-items: center;
+}
+
+footer {
+    justify-content: center;
+    border-top: var(--border-thin) var(--gradient-main);
+}
+
+.divider {
+    width: 100%;
+    height: 3px;
+    background: var(--gradient-main);
+}
+
+header.main {
+    /* width: 100vw;
+    height: var(--h-main-header);
     padding: 3vh 10vw;
     position: relative;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; */
+    box-shadow: 0.5vh 0 2vh 0 var(--c-pal-dark);
     border-bottom: var(--border-thin) var(--c-details);
+    justify-content: space-between;
+    background: var(--gradient-main);
+}
+
+header h1.logo {
+    background: var(--c-main-white);
+    -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-right: 10vw;
+  
 }
 
 header .profile-pic {
     height: var(--sz-profile-pic-mini);
     width: var(--sz-profile-pic-mini);
+    border: 3px solid var(--c-main-white);
+    /* box-shadow: 2px 1.5px 0 1px var(--c-main-white); */
     /* height: 90%; */
     /* width: 10vh; */
     border-radius: 50%;
     object-fit: cover;
     overflow: hidden;
-    position: relative;
-    border: var(--border-test);
+    /* position: relative; */
+    /* box-shadow: 3px 3px 0 1px var(--c-pal-dark); */
+    border-radius: 50%;
+}
+
+header.main a {
+    color: var(--c-main-white);
+    text-decoration: none;
+    letter-spacing: 0.6px;
 }
 
 nav.main {
-    background-color: var(--c-el-bg);
+    background: var(--gradient-main);
     display: flex;
     flex-direction: column;
     gap: 2vh 0;
@@ -136,6 +243,11 @@ nav.main {
     top: var(--h-main-header);
     right: 5vw;
     padding: 2rem;
+}
+
+nav.main button {
+    background: var(--c-main-white);
+    color: var(--c-pal-dark);
 }
 
 

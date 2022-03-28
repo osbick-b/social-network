@@ -8,15 +8,9 @@ const { sendEmail } = require("../ses");
 const cryptoRandomString = require("crypto-random-string");
 
 module.exports = router;
-// const cookieSession = require("cookie-session");
 
 const { compare, hash } = require("../bc");
 
-// // -- the ones that were already here
-// const compression = require("compression");
-// const path = require("path");
-
-// const mw = require("../route_middleware");
 
 const resetPassEmail = (secretCode) => ({
     message: `Here is the secret code that you need to reset your password. 
@@ -64,7 +58,7 @@ router.post("/checkcode.json", (req, res) => {
             const storedSecretCode = rows[0].stored_code;
             storedSecretCode === inputSecretCode
                 ? res.json({ serverSuccess: true })
-                : res.json({ serverSuccess: false });
+                : res.json({ serverSuccess: false, errMsg: "Sorry, code doesn't match" });
         })
         .catch((err) => {
             console.log(`>>> ${fln} >> Error in /checkcode`, err);

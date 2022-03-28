@@ -21,8 +21,8 @@ export function MyProfile({
     // console.log(`${fln} > userInfo`, userInfo);
     return (
         <>
-            <h1>🌵 Profile 🌵</h1>
-            <h1>
+            {/* <h1>🌵 Profile 🌵</h1> */}
+            <h1 className="user-name">
                 {userInfo.first} {userInfo.last}
             </h1>
 
@@ -63,7 +63,7 @@ export function MyProfile({
                     <h1>Bio</h1>
                     {userInfo.bio ? (
                         <>
-                            <button onClick={() => toggleEditMode("bio")}>
+                            <button className="btn secondary" onClick={() => toggleEditMode("bio")}>
                                 Edit Bio
                             </button>
                             <p>

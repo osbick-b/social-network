@@ -78,7 +78,7 @@ export class App extends Component {
                     <MainHeader userInfo={this.state.userInfo} />
 
                     <main className="main app">
-                        <h2>🧶 App 🧶</h2>
+                        {/* <h2>🧶 App 🧶</h2> */}
 
                         <Route exact path={"/"}>
                             {this.state.dataAlreadyArrived && (
@@ -105,7 +105,7 @@ export class App extends Component {
                         </Route>
 
                         <Route exact path={"/chat"}>
-                            <Chat/>
+                            <Chat />
                         </Route>
 
                         {this.state.uploaderVisible && (
@@ -116,6 +116,10 @@ export class App extends Component {
                                 showUpdatedValue={this.showUpdatedValue}
                             />
                         )}
+                            <div className="divider"></div>
+                        <footer>
+                            <h5>copyright ♥ fakebook 2022</h5>
+                        </footer>
                     </main>
                 </BrowserRouter>
             </>

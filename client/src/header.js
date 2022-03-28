@@ -29,10 +29,9 @@ export class MainHeader extends Component {
     render() {
         return (
             <header className="main">
-                <h1>MainHeader</h1>
+                <h1 className="logo">fakebook</h1>
 
-                <Link to={"/find-people"}>Find People</Link>
-                <Link to={"/me/friendships"}>My Friendships</Link>
+                <Link to={"/find-people"}>Search</Link>
                 <Link to={"/chat"}>Chat</Link>
                 
                 <div onClick={this.toggleMainNav}>
@@ -42,6 +41,7 @@ export class MainHeader extends Component {
                 {this.state.showMainNav && (
                     <nav className="main" onClick={this.toggleMainNav}>
                         {/* <Link to="/home">My Profile</Link> */}
+                        <Link to={"/me/friendships"}>Friends</Link>
                         <Link to="/">My Profile</Link>
                         {/* <Link to="/user/profile/edit">Edit Profile</Link> */}
                         <Logout />
