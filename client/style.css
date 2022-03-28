@@ -166,7 +166,7 @@ main.app {
     width: 90vw;
     display: grid;
     /* padding: 0 10vw; */
-    border: 3px solid hotpink;
+    /* border: 3px solid hotpink; */
     grid-template-columns: repeat(4, 1fr);
     /* grid-template-rows: 10vh 1fr 1fr; */
     align-items: flex-start;
